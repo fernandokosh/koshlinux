@@ -1,0 +1,33 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Automake
+  type: normal_system
+  version: 1.11.1
+  filename: automake-1.11.1.tar.bz2
+  size: 1,042
+  homepage: http://www.gnu.org/software/automake/
+  download: http://ftp.gnu.org/gnu/automake/automake-1.11.1.tar.bz2
+  md5: c2972c4d9b3e29c03d5f2af86249876f
+  patches:
+    name_of_path:
+      name: 
+      size:
+      download: 
+      md5: 
+    name_of_other_path:
+      name: 
+      size:
+      download: 
+      md5: 
+
+build:
+  
+
+defaults:
+  
+file_list:
+  
+  
+

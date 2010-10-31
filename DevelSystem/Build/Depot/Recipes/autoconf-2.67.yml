@@ -1,7 +1,11 @@
-package:
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
   name: Autoconf
   type: normal_system
   version: 2.67
+  filename: autoconf-2.67.tar.bz2
   size: 1,338
   homepage: http://www.gnu.org/software/autoconf/
   download: http://people.redhat.com/eblake/autoconf/autoconf-2.67.tar.bz2
@@ -18,7 +22,7 @@ package:
       download: 
       md5: 
 
-build_info:
+build:
   
 
 defaults:

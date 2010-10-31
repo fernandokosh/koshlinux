@@ -1,0 +1,18 @@
+package:
+  name: Autoconf
+  type: normal_system
+  version: 2.67
+  size: 1,338
+  homepage: http://www.gnu.org/software/autoconf/
+  download: http://people.redhat.com/eblake/autoconf/autoconf-2.67.tar.bz2
+  md5: 3fbf92eb8eaca1e0d33dff9710edb5f0
+
+build_info:
+  
+
+defaults:
+  
+file_list:
+  
+  
+

@@ -1,8 +1,14 @@
+profile:
+  name: Kosh Linux Baisc System
+  release: 2010.10.31
+  
 system:
   os: Linux
   class: GNU/Linux
   name: Kosh Linux
-  codename: RubyLinux
+  codename: RubyDesktop
+  logo:
+  homepage: http://koshlinux.com/rubydesktop
   release: Desktop
   version: 0.0.1
   lsb_release: 4.0
@@ -10,11 +16,6 @@ system:
   licence: CDDL 1.0 (http://www.opensource.org/licenses/cddl1.php)
   
 base_system:
-  prefix: /Applications
-  bin: /Applications/All
-  boot: /System/Boot
-  etc: /System/Settings
-  sbin: /System/Programs/All
-  tmp: /System/Temporary
+
 
 packages: 'autoconf '

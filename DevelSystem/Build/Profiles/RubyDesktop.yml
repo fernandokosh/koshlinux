@@ -1,0 +1,21 @@
+profile:
+  name: RubyDesktop
+  release: 2010.10.31
+  
+system:
+  os: Linux
+  class: GNU/Linux
+  name: Kosh Linux
+  codename: RubyDesktop
+  logo:
+  homepage: http://koshlinux.com/rubydesktop
+  release: Desktop
+  version: 0.0.1
+  lsb_release: 4.0
+  lfs_release: 6.7
+  licence: CDDL 1.0 (http://www.opensource.org/licenses/cddl1.php)
+  
+base_system:
+
+
+packages: 'autoconf '

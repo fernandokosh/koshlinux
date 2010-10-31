@@ -1,0 +1,10 @@
+
+variables:
+  build: /home/kosh/Projects/KoshLinux/DevelSystem/Build/Work
+  work: /home/kosh/Projects/KoshLinux/DevelSystem/Build/Work
+  lfs: /home/kosh/Projects/KoshLinux/DevelSystem/Build/Work
+  lc_all: POSIX
+  arch: x86_64
+  lfs_tgt: x86_64-lfs-linux-gnu
+  linux_target: x86_64-kosh-linux-gnu
+

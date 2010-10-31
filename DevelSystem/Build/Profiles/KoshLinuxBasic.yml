@@ -19,9 +19,8 @@ base_system:
 
 
 packages: [ 
-  build-binutils-2.20.1
-  autoconf-2.67, 
+  build-binutils-2.20.1,
+  autoconf-2.67,
   automake-1.11.1,
-  bash-4.1,
-  
+  bash-4.1  
 ]

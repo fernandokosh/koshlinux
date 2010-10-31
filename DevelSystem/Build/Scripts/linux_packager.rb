@@ -1,26 +1,24 @@
 require 'net/http'
 
-module Linux
-  module Packager
 
-    def self.packages
-      @@packages = Linux::Config.profile_settings['packages']
+  class Packager
+
+    def package_list     
+      @@packages = Config.new().profile_settings['packages']
     end
 
-    def self.fetch_files
-      self.packages.each do | file_name |
-        
-        package = self.load_package(file_name)
-        puts "Loading package #{file_name}... "
-        self.fetch_file(package)
+    def fetch_files
+      package_list.each do | file_name |
+        package = load_package(file_name)
+        fetch_file(package)
       end
     end
 
-    def self.load_package(file_name)
-      return Linux::Config.load_package(file_name)
+    def load_package(file_name)
+      return Config.new().load_package(file_name)
     end
 
-    def self.fetch_file(package)
+    def fetch_file(package)
       file_name = package['info']['filename']
       file_path = "#{SOURCES}/#{file_name}"
       download_url = package['info']['download']
@@ -33,7 +31,7 @@ module Linux
       end
     end
 
-    def self.download_source(file_name, download_url)
+    def download_source(file_name, download_url)
     
       url = URI.parse(download_url)
       res = Net::HTTP.start(url.host, url.port) do |http|
@@ -42,6 +40,7 @@ module Linux
           http.request_get(url.path) do |resp|
             resp.read_body do |segment|
               source_file_name.write(segment)
+              print '.'
             end
           end
         ensure
@@ -52,4 +51,4 @@ module Linux
     end 
   
   end
-end
+

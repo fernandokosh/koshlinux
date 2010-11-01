@@ -5,12 +5,14 @@ require 'Scripts/linux_packager'
 
 class KoshLinux
 
-  def packager
-    @@packager = Packager.new
-  end
-
   def config
     @@config = Config.new
+  end
+
+  def packager
+    @@packager = Packager.new
+    @@packager.config = @@config
+    @@packager
   end
 
 end

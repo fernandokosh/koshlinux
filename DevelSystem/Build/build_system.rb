@@ -4,9 +4,7 @@ require 'yaml'
 require 'md5'
 require 'Scripts/kosh_linux'
 
-
-
-KOSH_LINUX_ROOT = "#{File.dirname(__FILE__)}" unless defined?(KOSH_LINUX_ROOT)
+KOSH_LINUX_ROOT = FileUtils.pwd() unless defined?(KOSH_LINUX_ROOT)
 PROFILES = "#{KOSH_LINUX_ROOT}/Profiles"
 WORK = "#{KOSH_LINUX_ROOT}/Work"
 PACKAGES = "#{KOSH_LINUX_ROOT}/Depot/Recipes"
@@ -22,5 +20,6 @@ linux = KoshLinux.new
 if linux.config.ok?
   puts 'running...'
   linux.packager.fetch_files
+  linux.packager.unpack_files
 end
 

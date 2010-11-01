@@ -20,6 +20,6 @@ linux = KoshLinux.new
 if linux.config.ok?
   puts 'running...'
   linux.packager.fetch_files
-  linux.packager.unpack_files
+  linux.packager.build_all
 end
 

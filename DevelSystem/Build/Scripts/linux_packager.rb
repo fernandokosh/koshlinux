@@ -11,12 +11,13 @@ class Packager
     @@config
   end
   
-  def unpack_files
+  def build_all
     package_list.each do | file_name |
       package = load_package(file_name)
       unpack_file(package)
       configure_package(package)
       make_package(package)
+      make_install_package(package)
     end      
   end
 
@@ -42,36 +43,44 @@ class Packager
       compile_path = "."
     end
     
-    puts "dir:: #{unpack_folder} == #{FileUtils.pwd()}"
     options = package['build']['options']
     target = "--target=#{config.linux_basic_settings['variables']['linux_target']}"
     prefix = "--prefix=/tools"
-    
-    puts "#{compile_path}/configure #{prefix} #{target} #{options}"
-    #compile = system("./configure #{target} #{options}")
+    #eprefix = "--exec-prefix=/usr"
+    configure = system("#{compile_path}/configure #{target} #{prefix} #{options}")
 
-    configure = `./configure #{target} #{options}`
-    puts "=========> compile :: #{configure}"
     FileUtils.cd(KOSH_LINUX_ROOT)
+    return configure
   end
 
   def make_package(package)
     unpack_folder = "#{WORK}/#{package['info']['unpack_folder']}"
     compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
-    
-    puts "CCC======> #{compile_folder.inspect}"
-    
+
     if File.exists?(compile_folder)
       FileUtils.cd(compile_folder)
     else
       FileUtils.cd(unpack_folder)
     end
-    
-    puts "make"
-    #compile = system("./make")
-    make = `make`
-    puts "=========> compile :: #{make}"
+
+    make = system("make")
     FileUtils.cd(KOSH_LINUX_ROOT)
+    return make
+  end
+
+  def make_install_package(package)
+    unpack_folder = "#{WORK}/#{package['info']['unpack_folder']}"
+    compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
+
+    if File.exists?(compile_folder)
+      FileUtils.cd(compile_folder)
+    else
+      FileUtils.cd(unpack_folder)
+    end
+
+    make_install = system("make install")
+    FileUtils.cd(KOSH_LINUX_ROOT)
+    return make_install
   end
 
   def unpack_file(package)

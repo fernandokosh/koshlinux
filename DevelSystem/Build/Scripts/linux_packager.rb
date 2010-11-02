@@ -117,12 +117,14 @@ class Packager
     unpack_folder = "#{WORK}/#{pack_unpack_folder(package)}"
     compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
 
-    if File.exists?(compile_folder)
+    unless compile_folder
       FileUtils.cd(compile_folder)
+      puts "== make_package: running on compile_folder: #{compile_folder}"
     else
       FileUtils.cd(unpack_folder)
+      puts "== make_package: running on unpack_folder: #{unpack_folder}"
     end
-
+    
     make = system("make")
     FileUtils.cd(KOSH_LINUX_ROOT)
     return make
@@ -132,10 +134,12 @@ class Packager
     unpack_folder = "#{WORK}/#{pack_unpack_folder(package)}"
     compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
 
-    if File.exists?(compile_folder)
+    unless compile_folder
       FileUtils.cd(compile_folder)
+      puts "== make_install_package: running on compile_folder: #{compile_folder}"
     else
       FileUtils.cd(unpack_folder)
+      puts "== make_install_package: running on unpack_folder: #{unpack_folder}"
     end
 
     make_install = system("make install")

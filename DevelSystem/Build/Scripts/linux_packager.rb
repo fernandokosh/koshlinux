@@ -107,7 +107,7 @@ class Packager
     prefix = "--prefix=/tools"
     #eprefix = "--exec-prefix=/usr"
     log_file = "#{WORK}/logs/configure_#{package['info']['pack_folder']}.out"
-    configure_line = "#{compile_path}/configure #{prefix} #{target} #{options} 2>&1 > #{log_file}"
+    configure_line = "#{compile_path}/configure #{prefix} #{target} #{options} >#{log_file} 2>&1"
     puts "== Configure line: #{configure_line}"
     puts "Output command configure => #{log_file}"
     sleep(2)
@@ -133,7 +133,7 @@ class Packager
       puts "== make_package: running on unpack_folder: #{unpack_path}"
     end
     log_file = "#{WORK}/logs/make_#{package['info']['pack_folder']}.out"
-    make_line = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make 2>&1 > #{log_file}"
+    make_line = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make >#{log_file} 2>&1"
     puts "== Line of make: #{make_line}"
     puts "Output command make => #{log_file}"
     make = system(make_line)
@@ -156,7 +156,7 @@ class Packager
       puts "== make_install_package: running on unpack_folder: #{unpack_path}"
     end
     log_file = "#{WORK}/logs/make_install_#{package['info']['pack_folder']}.out"
-    make_install_line = "make install 2>&1 > #{log_file}"
+    make_install_line = "make install >#{log_file} 2>&1 "
     puts "== Line of make_install: #{make_install_line}"
     puts "Output command make install => #{log_file}"
     make_install = system(make_install_line)

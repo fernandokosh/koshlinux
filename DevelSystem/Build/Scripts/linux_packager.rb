@@ -22,20 +22,20 @@ class Packager
     fetch_file(package)
     unpack_file(package)
     check_dependencies(package)
-    puts "build_package: configure start ::..:: "
+    puts "build_package: configure start ::.#{package['info']['name']}.:: "
     sleep(5)
     configure_package(package)
-    puts "build_package: configure end ::..:: "
+    puts "build_package: configure end ::.#{package['info']['name']}.:: "
     sleep(5)
     if operation == "build" || operation == "run"
       make_package(package)
-      puts "build_package:make_package: stop... "
+      puts "build_package:make_package: stop... ::.#{package['info']['name']}.:: "
       sleep(5)
     end
     
     unless operation=="source_only"
       make_install_package(package)
-      puts "build_package:make_install_package: stop... "
+      puts "build_package:make_install_package: stop... ::.#{package['info']['name']}.::"
       sleep(5)
     end
 
@@ -114,33 +114,38 @@ class Packager
   end
 
   def make_package(package)
-    unpack_folder = "#{WORK}/#{pack_unpack_folder(package)}"
-    compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
+    unpack_folder = pack_unpack_folder(package)
+    unpack_path = "#{WORK}/#{unpack_folder}"
+    compile_folder = package['info']['compile_folder']
+    compile_path = "#{WORK}/#{compile_folder}"
 
-    unless compile_folder
-      FileUtils.cd(compile_folder)
-      puts "== make_package: running on compile_folder: #{compile_folder}"
+    puts "compile_folder: #{compile_path} & unpack_folder: #{unpack_path}"
+    unless compile_folder.nil?
+      FileUtils.cd(compile_path)
+      puts "== make_package: running on compile_folder: #{compile_path}"
     else
-      FileUtils.cd(unpack_folder)
-      puts "== make_package: running on unpack_folder: #{unpack_folder}"
+      FileUtils.cd(unpack_path)
+      puts "== make_package: running on unpack_folder: #{unpack_path}"
     end
     
-    make = system("make")
+    make = system("LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make")
     exit() unless make
     FileUtils.cd(KOSH_LINUX_ROOT)
     return make
   end
 
   def make_install_package(package)
-    unpack_folder = "#{WORK}/#{pack_unpack_folder(package)}"
-    compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
+    unpack_folder = pack_unpack_folder(package)
+    unpack_path = "#{WORK}/#{unpack_folder}"
+    compile_folder = package['info']['compile_folder']
+    compile_path = "#{WORK}/#{compile_folder}"
 
-    unless compile_folder
-      FileUtils.cd(compile_folder)
-      puts "== make_install_package: running on compile_folder: #{compile_folder}"
+    unless compile_folder.nil?
+      FileUtils.cd(compile_path)
+      puts "== make_install_package: running on compile_folder: #{compile_path}"
     else
-      FileUtils.cd(unpack_folder)
-      puts "== make_install_package: running on unpack_folder: #{unpack_folder}"
+      FileUtils.cd(unpack_path)
+      puts "== make_install_package: running on unpack_folder: #{unpack_path}"
     end
 
     make_install = system("make install")

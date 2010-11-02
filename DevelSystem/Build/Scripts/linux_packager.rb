@@ -23,20 +23,23 @@ class Packager
     unpack_file(package)
     check_dependencies(package)
     puts "build_package: configure start ::.#{package['info']['name']}.:: "
-    sleep(5)
     configure_package(package)
     puts "build_package: configure end ::.#{package['info']['name']}.:: "
-    sleep(5)
+    sleep(3)
     if operation == "build" || operation == "run"
+      puts "build_package:make_package: start... ::.#{package['info']['name']}.:: "
+      sleep(2)
       make_package(package)
-      puts "build_package:make_package: stop... ::.#{package['info']['name']}.:: "
-      sleep(5)
+      puts "build_package:make_package: end... ::.#{package['info']['name']}.:: "
+      sleep(3)
     end
     
     unless operation=="source_only"
+      puts "build_package:make_install_package: start... ::.#{package['info']['name']}.::"
+      sleep(2)
       make_install_package(package)
-      puts "build_package:make_install_package: stop... ::.#{package['info']['name']}.::"
-      sleep(5)
+      puts "build_package:make_install_package: end... ::.#{package['info']['name']}.::"
+      sleep(3)
     end
 
   end
@@ -92,10 +95,10 @@ class Packager
     unless compile_folder.nil?
       FileUtils.cd(compile_path)
       compile_path = "../#{unpack_folder}"
-      puts "== vai rodar em compile_path com unpack_folder"
+      puts "== configure_package: compile_path:{#{compile_path}} with unpack_folder:{#{unpack_path}}"
     else
       FileUtils.cd(unpack_path)
-      puts "== vai rodar em unpack_path com ."
+      puts "== configure_package: running on unpack_path:{#{unpack_path}} with ."
       compile_path = "."
     end
     
@@ -103,8 +106,12 @@ class Packager
     target = build_target(package) 
     prefix = "--prefix=/tools"
     #eprefix = "--exec-prefix=/usr"
-    configure_line = "#{compile_path}/configure #{prefix} #{target} #{options}"
-    puts "== Linha do configure #{configure_line}"
+    log_file = "#{WORK}/logs/configure_#{package['info']['pack_folder']}.out"
+    configure_line = "#{compile_path}/configure #{prefix} #{target} #{options} 2>&1 > #{log_file}"
+    puts "== Configure line: #{configure_line}"
+    puts "Output command configure => #{log_file}"
+    puts "'tail -F #{log_file}'"
+    sleep(2)
     configure = system(configure_line)
     exit() unless configure
     FileUtils.cd(KOSH_LINUX_ROOT)
@@ -127,8 +134,11 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_package: running on unpack_folder: #{unpack_path}"
     end
-    make_line = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make"
+    log_file = "#{WORK}/logs/make_#{package['info']['pack_folder']}.out"
+    make_line = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make 2>&1 > #{log_file}"
     puts "== Line of make: #{make_line}"
+    puts "Output command make => #{log_file}"
+    puts "'tail -F #{log_file}'"
     make = system(make_line)
     exit() unless make
     FileUtils.cd(KOSH_LINUX_ROOT)
@@ -148,8 +158,11 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_install_package: running on unpack_folder: #{unpack_path}"
     end
-    make_install_line = "make install"
+    log_file = "#{WORK}/logs/make_install_#{package['info']['pack_folder']}.out"
+    make_install_line = "make install 2>&1 > #{log_file}"
     puts "== Line of make_install: #{make_install_line}"
+    puts "Output command make install => #{log_file}"
+    puts "'tail -F #{log_file}'"
     make_install = system(make_install_line)
     exit() unless make_install
     FileUtils.cd(KOSH_LINUX_ROOT)

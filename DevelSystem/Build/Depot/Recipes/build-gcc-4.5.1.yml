@@ -37,10 +37,10 @@ build:
 #   --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs 
 
 dependencies:
-  build: [ build-gmp-5.0.1 ]
+  build: [ build-gmp-5.0.1, build-mpfr-3.0.0]
     
   
-  source_only: [ build-mpfr-3.0.0, build-mpc-0.8.2 ]
+  source_only: [ build-mpc-0.8.2 ]
   
   run:
   

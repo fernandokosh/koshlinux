@@ -28,7 +28,7 @@ info:
       md5: 
 
 build:
-  options: --with-gmp=../gmp/
+  options: --with-gmp=/tools/
 
 dependencies:
   build:

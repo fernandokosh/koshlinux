@@ -123,16 +123,21 @@ class Packager
     
     case packer
       when 'tar.bz2' then
+        puts "Archive type: tar.bz2"
         unpack_tar_bz2(archive_path)
       when 'tar.gz' then
+        puts "Archive type: tar.gz"
         unpack_tar_gz(archive_path)
       else
         puts "Error: Unreconized packer type: #{packer}"
         exit
     end
-    FileUtils.cd(WORK)
-    FileUtils.mv(pack_folder, unpack_folder) unless pack_folder == unpack_folder
-    FileUtils.cd(KOSH_LINUX_ROOT)
+    unless pack_folder == unpack_folder
+      puts "Renaming file: #{pack_folder} => #{unpack_folder}"
+      FileUtils.cd(WORK)
+      FileUtils.mv(pack_folder, unpack_folder) 
+      FileUtils.cd(KOSH_LINUX_ROOT)
+    end
   end
   
   def unpack_tar_bz2(file_path)

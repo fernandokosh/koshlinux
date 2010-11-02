@@ -28,10 +28,9 @@ info:
 
 build:
   options: --disable-nls --disable-werror
+  pre_install: case $(uname -m) in x86_64) mkdir -v /tools/lib ; ln -sv lib /tools/lib64 ;; esac
 
 defaults:
   
 file_list:
   
-  
-

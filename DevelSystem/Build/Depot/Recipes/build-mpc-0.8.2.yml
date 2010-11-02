@@ -13,7 +13,7 @@ info:
   md5: e98267ebd5648a39f881d66797122fb6
   packer: tar.gz
   pack_folder: mpc-0.8.2
-  unpack_folder: gcc-build/mpc
+  unpack_folder: gcc-4.5.1/mpc
   compile_folder: 
   patches:
     name_of_path:

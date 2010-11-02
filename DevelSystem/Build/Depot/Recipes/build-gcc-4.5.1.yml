@@ -33,22 +33,16 @@ build:
     --disable-libmudflap --disable-libssp 
     --disable-libgomp --enable-languages=c 
     --without-ppl --without-cloog
+    --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs \
     "
 
 dependencies:
-#  build: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2]
-  build: # build dependecies from host system if none especified build::options   
-  
-  source_only: [ ]
-  
+#  build: # build dependecies from host system if none especified build::options
+  build: [ ]
+  source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]
   run:
   
-  
-
-
 defaults:
   
 file_list:
-  
-  
 

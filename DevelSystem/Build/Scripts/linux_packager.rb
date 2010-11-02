@@ -22,11 +22,12 @@ class Packager
     fetch_file(package)
     unpack_file(package)
     check_dependencies(package)
-    puts "build_package: configure start ::.#{package['info']['name']}.:: "
-    configure_package(package)
-    puts "build_package: configure end ::.#{package['info']['name']}.:: "
-    sleep(3)
+
     if operation == "build" || operation == "run"
+      puts "build_package: configure start ::.#{package['info']['name']}.:: "
+      configure_package(package)
+      puts "build_package: configure end ::.#{package['info']['name']}.:: "
+      sleep(3)
       puts "build_package:make_package: start... ::.#{package['info']['name']}.:: "
       sleep(2)
       make_package(package)

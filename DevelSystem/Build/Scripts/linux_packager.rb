@@ -19,22 +19,43 @@ class Packager
   end
   
   def build_package(package, operation="run")
-    check_dependencies(package)
     fetch_file(package)
     unpack_file(package)
-    unless operation=="source_only"
-      configure_package(package)
+    check_dependencies(package)
+    puts "build_package: configure start ::..:: "
+    sleep(5)
+    configure_package(package)
+    puts "build_package: configure end ::..:: "
+    sleep(5)
+    if operation == "build" || operation == "run"
       make_package(package)
-      make_install_package(package)
+      puts "build_package:make_package: stop... "
+      sleep(5)
     end
+    
+    unless operation=="source_only"
+      make_install_package(package)
+      puts "build_package:make_install_package: stop... "
+      sleep(5)
+    end
+
   end
   
   def check_dependencies(source_package)
-    puts source_package['info']['name'].inspect
-    puts source_package['dependencies'].inspect unless source_package['dependencies'].nil? 
+    puts "Checking Dependency for: #{source_package['info']['name']} "
+    puts "Recipe Dependencies: #{source_package['dependencies'].inspect}" unless source_package['dependencies'].nil? 
+    source_package['dependencies']['build'].each do |dependency|
+      package = load_package(dependency)
+      puts "Dependency->Build: #{package['info']['name']} "
+      build_package(package, "build")
+      puts "Dependency->Build->END: #{package['info']['name']}"
+    end unless source_package['dependencies'].nil? || source_package['dependencies']['build'].nil?
+    
     source_package['dependencies']['source_only'].each do |dependency|
       package = load_package(dependency)
+      puts "Dependency->Build: #{package['info']['name']} "
       build_package(package, "source_only")
+      puts "Dependency->Build->END: #{package['info']['name']}"
     end unless source_package['dependencies'].nil? || source_package['dependencies']['source_only'].nil?
   end
 
@@ -52,6 +73,14 @@ class Packager
       unpack_folder = package['info']['unpack_folder']
     end
   end
+
+  def build_target(package)
+    if package['build']['target'].nil? || package['build']['target'] == 'yes'
+      "--target=#{config.linux_basic_settings['variables']['linux_target']}"
+    elsif package['build']['target'] == 'no'
+      ""
+    end
+  end
   
   def configure_package(package)
     
@@ -60,21 +89,27 @@ class Packager
     compile_folder = package['info']['compile_folder']
     compile_path = "#{WORK}/#{compile_folder}"
     
-    if File.exists?(compile_path)
+    unless compile_folder.nil?
       FileUtils.cd(compile_path)
       compile_path = "../#{unpack_folder}"
+      puts "== vai rodar em compile_path com unpack_folder"
     else
       FileUtils.cd(unpack_path)
+      puts "== vai rodar em unpack_path com ."
       compile_path = "."
     end
     
     options = package['build']['options']
-    target = "--target=#{config.linux_basic_settings['variables']['linux_target']}"
+    target = build_target(package) 
     prefix = "--prefix=/tools"
     #eprefix = "--exec-prefix=/usr"
-    configure = system("#{compile_path}/configure #{target} #{prefix} #{options}")
+    configure_line = "#{compile_path}/configure #{prefix} #{target} #{options}"
+    puts "== Linha do configure #{configure_line}"
+    configure = system(configure_line)
 
     FileUtils.cd(KOSH_LINUX_ROOT)
+    puts "------------------------======================"
+    puts configure
     return configure
   end
 

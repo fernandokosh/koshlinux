@@ -33,14 +33,14 @@ build:
     --disable-libmudflap --disable-libssp 
     --disable-libgomp --enable-languages=c 
     --without-ppl --without-cloog
-    --with-gmp-include=$WORK/gmp --with-gmp-lib=$WORK/gmp/.libs"
+    --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs"
 #   --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs 
 
 dependencies:
-  build:
+  build: [ build-gmp-5.0.1 ]
     
   
-  source_only: [ build-mpfr-3.0.0, build-gmp-5.0.1, build-mpc-0.8.2 ]
+  source_only: [ build-mpfr-3.0.0, build-mpc-0.8.2 ]
   
   run:
   

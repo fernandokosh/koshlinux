@@ -13,7 +13,7 @@ info:
   md5: 6bac6df75c192a13419dfd71d19240a7
   packer: tar.bz2
   pack_folder: gmp-5.0.1
-  unpack_folder: gmp
+  unpack_folder: gcc-build/gmp
   compile_folder: 
   patches:
     name_of_path:
@@ -29,6 +29,7 @@ info:
 
 build:
   options: 
+  target: no
 
 dependencies:
   build:

@@ -13,7 +13,7 @@ info:
   md5: f45bac3584922c8004a10060ab1a8f9f
   packer: tar.bz2
   pack_folder: mpfr-3.0.0
-  unpack_folder: mpfr
+  unpack_folder: gcc-build/mpfr
   compile_folder: 
   patches:
     name_of_path:
@@ -28,7 +28,7 @@ info:
       md5: 
 
 build:
-  options: 
+  options: --with-gmp=../gmp/
 
 dependencies:
   build:

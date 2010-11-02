@@ -133,7 +133,7 @@ class Packager
       puts "== make_package: running on unpack_folder: #{unpack_path}"
     end
     log_file = "#{WORK}/logs/make_#{package['info']['pack_folder']}.out"
-    make_line = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make >#{log_file} 2>&1"
+    make_line = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make -j1 >#{log_file} 2>&1"
     puts "== Line of make: #{make_line}"
     puts "Output command make => #{log_file}"
     make = system(make_line)

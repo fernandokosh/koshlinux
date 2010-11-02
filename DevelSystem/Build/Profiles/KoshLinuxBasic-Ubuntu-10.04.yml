@@ -1,0 +1,40 @@
+profile:
+  name: Kosh Linux Baisc System
+  release: 2010.10.31
+  
+system:
+  os: Linux
+  class: GNU/Linux
+  name: Kosh Linux
+  codename: RubyDesktop
+  logo:
+  homepage: http://koshlinux.com/rubydesktop
+  release: Desktop
+  version: 0.0.1
+  lsb_release: 4.0
+  lfs_release: 6.7
+  licence: CDDL 1.0 (http://www.opensource.org/licenses/cddl1.php)
+  
+base_system:
+
+
+packages: [ 
+  build-binutils-2.20.1,
+  build-gcc-4.5.1,
+  linux-2.6.35.4,
+  glibc-2.12.1,
+  autoconf-2.67,
+  automake-1.11.1,
+  bash-4.1  
+]
+
+###
+#  I suggest, maybe the stage thing os packages can be one this section folling the order.
+#  Ex.: 
+#      * We got a build_system section which define the packages for make the stage-1 packages
+#      * The base_system section maybe for the base_system, maybe the stage-2 thing
+#      * With packages section we use for define like final package and installed system need.
+# 
+#         
+##
+

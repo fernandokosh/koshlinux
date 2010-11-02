@@ -110,13 +110,11 @@ class Packager
     configure_line = "#{compile_path}/configure #{prefix} #{target} #{options} 2>&1 > #{log_file}"
     puts "== Configure line: #{configure_line}"
     puts "Output command configure => #{log_file}"
-    puts "'tail -F #{log_file}'"
     sleep(2)
     configure = system(configure_line)
     exit() unless configure
     FileUtils.cd(KOSH_LINUX_ROOT)
     puts "------------------------======================"
-    puts configure
     return configure
   end
 
@@ -138,7 +136,6 @@ class Packager
     make_line = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make 2>&1 > #{log_file}"
     puts "== Line of make: #{make_line}"
     puts "Output command make => #{log_file}"
-    puts "'tail -F #{log_file}'"
     make = system(make_line)
     exit() unless make
     FileUtils.cd(KOSH_LINUX_ROOT)
@@ -162,7 +159,6 @@ class Packager
     make_install_line = "make install 2>&1 > #{log_file}"
     puts "== Line of make_install: #{make_install_line}"
     puts "Output command make install => #{log_file}"
-    puts "'tail -F #{log_file}'"
     make_install = system(make_install_line)
     exit() unless make_install
     FileUtils.cd(KOSH_LINUX_ROOT)

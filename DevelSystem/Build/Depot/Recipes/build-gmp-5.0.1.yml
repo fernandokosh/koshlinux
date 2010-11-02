@@ -12,6 +12,7 @@ info:
   download: http://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2
   md5: 6bac6df75c192a13419dfd71d19240a7
   packer: tar.bz2
+  pack_folder: gmp-5.0.1
   unpack_folder: gmp
   compile_folder: 
   patches:

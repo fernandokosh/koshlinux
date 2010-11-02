@@ -12,6 +12,7 @@ info:
   download: http://www.mpfr.org/mpfr-3.0.0/mpfr-3.0.0.tar.bz2
   md5: f45bac3584922c8004a10060ab1a8f9f
   packer: tar.bz2
+  pack_folder: mpfr-3.0.0
   unpack_folder: mpfr
   compile_folder: 
   patches:

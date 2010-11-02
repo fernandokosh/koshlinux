@@ -14,11 +14,28 @@ class Packager
   def build_all
     package_list.each do | file_name |
       package = load_package(file_name)
-      unpack_file(package)
+      build_package(package)
+    end      
+  end
+  
+  def build_package(package, operation="run")
+    check_dependencies(package)
+    fetch_file(package)
+    unpack_file(package)
+    unless operation=="source_only"
       configure_package(package)
       make_package(package)
       make_install_package(package)
-    end      
+    end
+  end
+  
+  def check_dependencies(source_package)
+    puts source_package['info']['name'].inspect
+    puts source_package['dependencies'].inspect unless source_package['dependencies'].nil? 
+    source_package['dependencies']['source_only'].each do |dependency|
+      package = load_package(dependency)
+      build_package(package, "source_only")
+    end unless source_package['dependencies'].nil? || source_package['dependencies']['source_only'].nil?
   end
 
   def fetch_files
@@ -85,13 +102,15 @@ class Packager
 
   def unpack_file(package)
     file_name = package['info']['filename']
-    file_path = "#{SOURCES}/#{file_name}"
-    unpack_folder = "#{WORK}/#{package['info']['unpack_folder']}"
+    archive_path = "#{SOURCES}/#{file_name}"
+    pack_folder = "#{WORK}/#{package['info']['pack_folder']}"
+    unpack_folder = "#{WORK}/#{package['info']['unpack_folder']}" unless package['info']['unpack_folder'].nil?
+    unpack_folder ||= pack_folder
     compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
     packer = package['info']['packer']
     
-    unless package['info']['unpack_folder'].nil?
-      puts "Createging sub dir"
+    unless package['info']['compile_folder'].nil?
+      puts "Creating compile folder: #{compile_folder}"
       FileUtils.mkdir_p(compile_folder)
     end
     
@@ -104,15 +123,18 @@ class Packager
     
     case packer
       when 'tar.bz2' then
-        unpack_tar_bz2(file_path)
+        unpack_tar_bz2(archive_path)
       when 'tar.gz' then
-        unpack_tar_gz(file_path)
+        unpack_tar_gz(archive_path)
       else
         puts "Error: Unreconized packer type: #{packer}"
         exit
     end
+    FileUtils.cd(WORK)
+    FileUtils.mv(pack_folder, unpack_folder) unless pack_folder == unpack_folder
+    FileUtils.cd(KOSH_LINUX_ROOT)
   end
-
+  
   def unpack_tar_bz2(file_path)
     FileUtils.cd(WORK)
     system("tar -xjf #{file_path}")

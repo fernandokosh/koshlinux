@@ -11,7 +11,8 @@ info:
   download: http://ftp.gnu.org/gnu/automake/automake-1.11.1.tar.bz2
   md5: c2972c4d9b3e29c03d5f2af86249876f
   packer: tar.bz2
-  unpack_folder: automake-1.11.1
+  pack_folder: automake-1.11.1
+  unpack_folder:
   patches:
     name_of_path:
       name: 

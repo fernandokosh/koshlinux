@@ -12,8 +12,9 @@ info:
   download: http://ftp.gnu.org/gnu/gcc/gcc-4.5.1/gcc-4.5.1.tar.bz2
   md5: 48231a8e33ed6e058a341c53b819de1a
   packer: tar.bz2
-  unpack_folder: gcc-4.5.1
-  compile_folder: 
+  pack_folder: gcc-4.5.1
+  unpack_folder:
+  compile_folder: gcc-build
   patches:
     name_of_path:
       name: 
@@ -31,7 +32,8 @@ build:
     --disable-decimal-float --disable-threads 
     --disable-libmudflap --disable-libssp 
     --disable-libgomp --enable-languages=c 
-    --without-ppl --without-cloog"
+    --without-ppl --without-cloog
+    --with-gmp-include=$WORK/gmp --with-gmp-lib=$WORK/gmp/.libs"
 #   --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs 
 
 dependencies:

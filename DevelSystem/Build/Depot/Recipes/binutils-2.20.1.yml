@@ -11,7 +11,7 @@ info:
   download: http://ftp.gnu.org/gnu/binutils/binutils-2.20.1.tar.bz2
   md5: 9cdfb9d6ec0578c166d3beae5e15c4e5
   packer: tar.bz2
-  unpack_folder: binutils-2.20.1
+  pack_folder: binutils-2.20.1
   patches:
     name_of_path:
       name: 

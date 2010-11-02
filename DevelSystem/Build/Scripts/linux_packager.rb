@@ -45,9 +45,17 @@ class Packager
     end
   end
 
+  def pack_unpack_folder(package)
+    if package['info']['unpack_folder'].nil?
+      unpack_folder = package['info']['pack_folder']
+    else
+      unpack_folder = package['info']['unpack_folder']
+    end
+  end
+  
   def configure_package(package)
     
-    unpack_folder = package['info']['unpack_folder']
+    unpack_folder = pack_unpack_folder(package)
     unpack_path = "#{WORK}/#{unpack_folder}"
     compile_folder = package['info']['compile_folder']
     compile_path = "#{WORK}/#{compile_folder}"
@@ -71,7 +79,7 @@ class Packager
   end
 
   def make_package(package)
-    unpack_folder = "#{WORK}/#{package['info']['unpack_folder']}"
+    unpack_folder = "#{WORK}/#{pack_unpack_folder(package)}"
     compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
 
     if File.exists?(compile_folder)
@@ -86,7 +94,7 @@ class Packager
   end
 
   def make_install_package(package)
-    unpack_folder = "#{WORK}/#{package['info']['unpack_folder']}"
+    unpack_folder = "#{WORK}/#{pack_unpack_folder(package)}"
     compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
 
     if File.exists?(compile_folder)
@@ -104,8 +112,7 @@ class Packager
     file_name = package['info']['filename']
     archive_path = "#{SOURCES}/#{file_name}"
     pack_folder = "#{WORK}/#{package['info']['pack_folder']}"
-    unpack_folder = "#{WORK}/#{package['info']['unpack_folder']}" unless package['info']['unpack_folder'].nil?
-    unpack_folder ||= pack_folder
+    unpack_folder = "#{WORK}/#{pack_unpack_folder(package)}"
     compile_folder = "#{WORK}/#{package['info']['compile_folder']}"
     packer = package['info']['packer']
     

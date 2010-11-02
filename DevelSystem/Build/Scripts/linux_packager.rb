@@ -127,8 +127,9 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_package: running on unpack_folder: #{unpack_path}"
     end
-    
-    make = system("LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make")
+    make_line = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/tools/lib make"
+    puts "== Line of make: #{make_line}"
+    make = system(make_line)
     exit() unless make
     FileUtils.cd(KOSH_LINUX_ROOT)
     return make
@@ -147,8 +148,9 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_install_package: running on unpack_folder: #{unpack_path}"
     end
-
-    make_install = system("make install")
+    make_install_line = "make install"
+    puts "== Line of make_install: #{make_install_line}"
+    make_install = system(make_install_line)
     exit() unless make_install
     FileUtils.cd(KOSH_LINUX_ROOT)
     return make_install

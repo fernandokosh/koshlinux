@@ -1,0 +1,24 @@
+KoshLinux
+
+A Linux from scratch built-in with tools written in ruby language.
+
+Its currently in development of tool chain build system, that will be used to build a linux system it self.
+
+Some of major changes will be implemented in init and run levels systems.
+
+In an second redesign, I plan to redefine the linux file system, using an modern and intuitive fs layout, like GoboLinux, but I have no plans to maintain any compatibility or standards.
+
+
+My modifications will includes:
+
+- RubyInitd, a intelligent init and monitoring system
+
+- KoshLinux package manager system, based on YML recipes to build and tar bz files for compiled packages.
+
+- Ruby Web Interface to system admin and user preferences.
+
+- All using SqLite to store configurations and service informations.
+
+- And also managed by command line tools.
+
+[WIP]

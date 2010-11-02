@@ -1,0 +1,49 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: GMP
+  type: normal_system
+  version: 5.0.1
+  filename: gmp-5.0.1.tar.bz2
+  size: 1,959
+  homepage: http://www.gnu.org/software/gmp/
+  description: ""
+  download: http://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2
+  md5: 6bac6df75c192a13419dfd71d19240a7
+  packer: tar.bz2
+  unpack_folder: gmp
+  compile_folder: 
+  patches:
+    name_of_path:
+      name: 
+      size:
+      download: 
+      md5: 
+    name_of_other_path:
+      name: 
+      size:
+      download: 
+      md5: 
+
+build:
+  options: 
+
+dependencies:
+  build:
+    
+  
+  source_only:
+    
+  
+  run:
+  
+  
+
+
+defaults:
+  
+file_list:
+  
+  
+

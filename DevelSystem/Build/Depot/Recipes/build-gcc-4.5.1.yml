@@ -34,7 +34,8 @@ build:
     --disable-libgomp --enable-languages=c 
     --without-ppl --without-cloog
     --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs \
-    "
+  "
+  post_install: cd /tools/lib && ln -vs libgcc.a libgcc_eh.a
 
 dependencies:
 #  build: # build dependecies from host system if none especified build::options

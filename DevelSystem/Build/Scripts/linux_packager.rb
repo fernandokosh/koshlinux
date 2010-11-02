@@ -106,7 +106,7 @@ class Packager
     configure_line = "#{compile_path}/configure #{prefix} #{target} #{options}"
     puts "== Linha do configure #{configure_line}"
     configure = system(configure_line)
-
+    exit() unless configure
     FileUtils.cd(KOSH_LINUX_ROOT)
     puts "------------------------======================"
     puts configure
@@ -126,6 +126,7 @@ class Packager
     end
     
     make = system("make")
+    exit() unless make
     FileUtils.cd(KOSH_LINUX_ROOT)
     return make
   end
@@ -143,6 +144,7 @@ class Packager
     end
 
     make_install = system("make install")
+    exit() unless make_install
     FileUtils.cd(KOSH_LINUX_ROOT)
     return make_install
   end

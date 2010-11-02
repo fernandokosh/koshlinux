@@ -1,0 +1,42 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Glibc
+  type: normal_system
+  version: 2.12.1
+  filename: glibc-2.12.1.tar.bz2
+  size: 15,300
+  homepage: http://www.gnu.org/software/libc/
+  description: ""
+  download: http://ftp.gnu.org/gnu/glibc/glibc-2.12.1.tar.bz2
+  md5: be0ea9e587f08c87604fe10a91f72afd
+  packer: tar.bz2
+  pack_folder: 
+  unpack_folder:
+  compile_folder: 
+  patches:
+    name_of_path:
+      name: 
+      size:
+      download: 
+      md5: 
+    name_of_other_path:
+      name: 
+      size:
+      download: 
+      md5: 
+
+build:
+  options: 
+  post_install: 
+
+dependencies:
+  build: [ ]
+  source_only: [ ]
+  run:
+  
+defaults:
+  
+file_list:
+

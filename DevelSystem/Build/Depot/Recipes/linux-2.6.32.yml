@@ -1,0 +1,42 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Linux
+  type: normal_system
+  version: 2.6.32
+  filename: linux-source-2.6.32.tar.bz2
+  size: 0
+  homepage: http://www.kernel.org/
+  description: ""
+  download: http://www.kernel.org/pub/linux/kernel/v2.6/linux-source-2.6.32.tar.bz2
+  md5: 13849b8e2b9c5afcebfb18b44fe9b24e
+  packer: tar.bz2
+  pack_folder: linux-source-2.6.32
+  unpack_folder:
+  compile_folder: 
+  patches:
+    name_of_path:
+      name: 
+      size:
+      download: 
+      md5: 
+    name_of_other_path:
+      name: 
+      size:
+      download: 
+      md5: 
+
+build:
+  options: 
+  post_install: 
+
+dependencies:
+  build: [ ]
+  source_only: [ ]
+  run:
+  
+defaults:
+  
+file_list:
+

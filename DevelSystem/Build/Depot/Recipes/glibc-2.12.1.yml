@@ -12,24 +12,29 @@ info:
   download: http://ftp.gnu.org/gnu/glibc/glibc-2.12.1.tar.bz2
   md5: be0ea9e587f08c87604fe10a91f72afd
   packer: tar.bz2
-  pack_folder: 
+  pack_folder: glibc-2.12.1
   unpack_folder:
   compile_folder: 
   patches:
-    name_of_path:
-      name: 
-      size:
-      download: 
-      md5: 
-    name_of_other_path:
-      name: 
-      size:
-      download: 
-      md5: 
+    glibc_2_12_1_gcc_fix_1:
+      name: Glibc GCC Build Fix Patch
+      size: 2.5
+      download: http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-gcc_fix-1.patch
+      md5: d1f28cb98acb9417fe52596908bbb9fd
+    glibc_2_12_1_makefile_fix_1:
+      name: Glibc Makefile Fix Patch
+      size: 1
+      download: http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-makefile_fix-1.patch
+      md5: 0ef634ac78e582f45d0e7643bfda7505
 
 build:
-  options: 
-  post_install: 
+  options: "../glibc-2.12.1/configure --prefix=/tools \
+    --host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) \
+    --disable-profile --enable-add-ons \
+    --enable-kernel=2.6.22.5 --with-headers=/tools/include \
+    libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
+  pre_configure: case `uname -m` in i?86) echo "CFLAGS += -march=i486 -mtune=native" > configparms ;; esac
+  post_install: SPECS=`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/specs $LFS_TGT-gcc -dumpspecs | sed -e 's@/lib\(64\)\?/ld@/tools&@g' -e "/^\*cpp:$/{n;s,$, -isystem /tools/include,}" > $SPECS ; echo "New specs file is: $SPECS" ; unset SPECS
 
 dependencies:
   build: [ ]

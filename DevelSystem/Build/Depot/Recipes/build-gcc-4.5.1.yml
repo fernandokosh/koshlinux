@@ -15,17 +15,6 @@ info:
   pack_folder: gcc-4.5.1
   unpack_folder:
   compile_folder: gcc-build
-  patches:
-    name_of_path:
-      name: 
-      size:
-      download: 
-      md5: 
-    name_of_other_path:
-      name: 
-      size:
-      download: 
-      md5: 
 
 build:
   options: "--disable-nls --disable-shared --disable-multilib 

@@ -14,23 +14,8 @@ info:
   packer: tar.bz2
   pack_folder: binutils-2.20.1
   compile_folder: binutils-2.20.1-build
-  patches:
-    name_of_path:
-      name: 
-      size:
-      download: 
-      md5: 
-    name_of_other_path:
-      name: 
-      size:
-      download: 
-      md5: 
 
 build:
   options: --disable-nls --disable-werror
   pre_install: case $(uname -m) in x86_64) mkdir -v /tools/lib ; ln -sv lib /tools/lib64 ;; esac
 
-defaults:
-  
-file_list:
-  

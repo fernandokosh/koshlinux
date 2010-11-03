@@ -23,9 +23,10 @@ packages: [
   build-gcc-4.5.1,
   linux-2.6.35.4,
   glibc-2.12.1,
+  binutils-2.20.1,
   autoconf-2.67,
   automake-1.11.1,
-  bash-4.1  
+  bash-4.1
 ]
 
 ###

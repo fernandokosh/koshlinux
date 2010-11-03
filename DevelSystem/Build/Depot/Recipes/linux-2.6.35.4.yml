@@ -12,7 +12,7 @@ info:
   download: http://www.kernel.org/pub/linux/kernel/v2.6/linux-2.6.35.4.tar.bz2
   md5: 0bb2cd59c13d7412f813c8fbc0769eec
   packer: tar.bz2
-  pack_folder: 
+  pack_folder: linux-2.6.35.4
   unpack_folder:
   compile_folder: 
   patches:
@@ -30,6 +30,12 @@ info:
 build:
   options: 
   post_install: 
+
+# this recipe does only need to have source unpacked 
+# and run these commands
+#make headers_check
+#make INSTALL_HDR_PATH=dest headers_install
+#cp -rv dest/include/* /tools/include
 
 dependencies:
   build: [ ]

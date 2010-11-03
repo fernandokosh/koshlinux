@@ -45,7 +45,7 @@ build:
   "
   post_configure: "
     cd Work/glibc-build;
-    CPPFLAGS=\"-O2 -U_FORTIFY_SOURCE -fno-stack-protector\" ../glibc-2.12.1/configure --prefix=/tools --target=$LINUX_TARGET --host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.35.4 --with-headers=/tools/include     libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes >../logs/configure_glibc-2.12.1.out 2>&1;
+    CFLAGS=\"-O2 -U_FORTIFY_SOURCE -fno-stack-protector\" ../glibc-2.12.1/configure --prefix=/tools --target=$LINUX_TARGET --host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.35.4 --with-headers=/tools/include     libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes >../logs/configure_glibc-2.12.1.out 2>&1;
     cd -;
   "
   do_make: no

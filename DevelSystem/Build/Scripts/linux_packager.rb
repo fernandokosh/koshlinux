@@ -283,7 +283,6 @@ class Packager
      puts "_== Running hook(#{hook}): #{current_hook}"
      system("#{current_hook}") unless current_hook.nil?
      puts "_== End hook(#{hook}) ==__"
-     exit
   end
   
   

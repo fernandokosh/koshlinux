@@ -278,9 +278,9 @@ class Packager
   
   def hook_package(hook)
      current_hook = @package['build'][hook]
-     puts "Running hook: #{current_hook}"
+     puts "Running hook(#{hook}): #{current_hook}"
      system(current_hook) unless current_hook.nil?
-     puts "End hook: #{current_hook}"
+     puts "End hook(#{hook}): #{current_hook}"
   end
   
   

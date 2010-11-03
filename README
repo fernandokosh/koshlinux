@@ -27,4 +27,10 @@ features:
   - create a complete bootstrap system for compile a base system GNU
   ...
 
+requirements:
+  You need somes packages installed on your system for start build a KoshLinux systems
+  - git
+  - ruby
+  - some other packages
+
 [WIP]

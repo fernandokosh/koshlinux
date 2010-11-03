@@ -33,13 +33,14 @@ class Packager
     end
 
     if operation == "build" || operation == "run"
-
+      hook_package('pre_configure')
       unless package['build']['do_configure'] == false
         puts "build_package: configure start ::.#{package['info']['name']}.:: "
         configure_package(package)
         puts "build_package: configure end ::.#{package['info']['name']}.:: "
         sleep(3)
       end
+      hook_package('post_configure')
       
       hook_package('pre_make')
       unless package['build']['do_make'] == false
@@ -53,6 +54,7 @@ class Packager
     end
     
     unless operation=="source_only"
+      hook_package('pre_make_install')
       unless package['build']['do_make_install'] == false
         puts "build_package:make_install_package: start... ::.#{package['info']['name']}.::"
         sleep(2)
@@ -60,6 +62,7 @@ class Packager
         puts "build_package:make_install_package: end... ::.#{package['info']['name']}.::"
         sleep(3)
       end
+      hook_package('post_make_install')
     end
 
   end

@@ -22,7 +22,7 @@ build:
   pre_make: cd Work/linux-2.6.35.4 && make headers_check && make INSTALL_HDR_PATH=dest headers_install
   do_make: no
   do_make_install: no
-  post_make: cd Work/linux-2.6.35.4 && cp -rv dest/include/* /tools/include >Work/logs/post_make_linux-2.6.35.4.out 2>&1
+  post_make: cd Work/linux-2.6.35.4 && cp -rv dest/include/* /tools/include
 
 dependencies:
   build: [ ]

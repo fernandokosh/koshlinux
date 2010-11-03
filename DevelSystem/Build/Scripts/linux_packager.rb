@@ -279,15 +279,14 @@ class Packager
   end
   
   def hook_package(hook)
-     current_hook = @package['build'][hook]
-     puts "_== Running hook(#{hook}): #{current_hook}"
-     unless current_hook.nil? || current_hook.empty?
-       result = system(current_hook)
-       exit if result.nil?
-     end
-     puts "_== End hook(#{hook}) ==__"
+    current_hook = @package['build'][hook]
+    unless current_hook.nil? || current_hook.empty?
+      puts "_== Running hook(#{hook}): #{current_hook}"
+      result = system(current_hook)
+      exit if result.nil?
+      puts "_== End hook(#{hook}) ==__"
+    end
   end
-  
-  
+
 end
 

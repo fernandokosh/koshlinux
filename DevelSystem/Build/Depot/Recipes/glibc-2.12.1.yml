@@ -8,7 +8,7 @@ info:
   filename: glibc-2.12.1.tar.bz2
   size: 15,300
   homepage: http://www.gnu.org/software/libc/
-  description: ""
+  description: "The Glibc package contains the main C library. This library provides the basic routines for allocating memory, searching directories, opening and closing files, reading and writing files, string handling, pattern matching, arithmetic, and so on."
   download: http://ftp.gnu.org/gnu/glibc/glibc-2.12.1.tar.bz2
   md5: be0ea9e587f08c87604fe10a91f72afd
   packer: tar.bz2
@@ -28,11 +28,7 @@ info:
       md5: 0ef634ac78e582f45d0e7643bfda7505
 
 build:
-  options: "../glibc-2.12.1/configure --prefix=/tools \
-    --host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) \
-    --disable-profile --enable-add-ons \
-    --enable-kernel=2.6.22.5 --with-headers=/tools/include \
-    libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
+  options: "../glibc-2.12.1/configure --prefix=/tools --host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.22.5 --with-headers=/tools/include     libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
   pre_configure: case `uname -m` in i?86) echo "CFLAGS += -march=i486 -mtune=native" > configparms ;; esac
   post_install: SPECS=`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/specs $LFS_TGT-gcc -dumpspecs | sed -e 's@/lib\(64\)\?/ld@/tools&@g' -e "/^\*cpp:$/{n;s,$, -isystem /tools/include,}" > $SPECS ; echo "New specs file is: $SPECS" ; unset SPECS
 

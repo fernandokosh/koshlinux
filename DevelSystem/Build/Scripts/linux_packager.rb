@@ -13,34 +13,52 @@ class Packager
   
   def build_all
     package_list.each do | file_name |
-      package = load_package(file_name)
-      build_package(package)
+      @package = load_package(file_name)
+      build_package(@package)
     end      
   end
   
   def build_package(package, operation="run")
-    fetch_file(package)
-    unpack_file(package)
-    check_dependencies(package)
+  
+    unless package['build']['fetch'] == false
+      fetch_file(package)
+    end
+    
+    unless package['build']['unpack'] == false
+      unpack_file(package)
+    end
+    
+    unless package['build']['dependency'] == false
+      check_dependencies(package)
+    end
 
     if operation == "build" || operation == "run"
-      puts "build_package: configure start ::.#{package['info']['name']}.:: "
-      configure_package(package)
-      puts "build_package: configure end ::.#{package['info']['name']}.:: "
-      sleep(3)
-      puts "build_package:make_package: start... ::.#{package['info']['name']}.:: "
-      sleep(2)
-      make_package(package)
-      puts "build_package:make_package: end... ::.#{package['info']['name']}.:: "
-      sleep(3)
+
+      unless package['build']['configure'] == false
+        puts "build_package: configure start ::.#{package['info']['name']}.:: "
+        configure_package(package)
+        puts "build_package: configure end ::.#{package['info']['name']}.:: "
+        sleep(3)
+      end
+      
+      unless package['build']['make'] == false
+        hook_package('pre_make')
+        puts "build_package:make_package: start... ::.#{package['info']['name']}.:: "
+        sleep(2)
+        make_package(package)
+        puts "build_package:make_package: end... ::.#{package['info']['name']}.:: "
+        sleep(3)
+      end
     end
     
     unless operation=="source_only"
-      puts "build_package:make_install_package: start... ::.#{package['info']['name']}.::"
-      sleep(2)
-      make_install_package(package)
-      puts "build_package:make_install_package: end... ::.#{package['info']['name']}.::"
-      sleep(3)
+      unless package['build']['make_install'] == false
+        puts "build_package:make_install_package: start... ::.#{package['info']['name']}.::"
+        sleep(2)
+        make_install_package(package)
+        puts "build_package:make_install_package: end... ::.#{package['info']['name']}.::"
+        sleep(3)
+      end
     end
 
   end
@@ -256,6 +274,12 @@ class Packager
     end
       
   end
+  
+  def hook_package(hook)
+     current_hook = @package['build'][hook]
+     puts "Running system hook: #{current_hook}"
+  end
+  
   
 end
 

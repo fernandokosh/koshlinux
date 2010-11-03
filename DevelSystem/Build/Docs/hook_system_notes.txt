@@ -1,0 +1,27 @@
+
+
+recipe
+
+fetch
+  pre
+  post
+
+unpack
+  pre
+  post
+
+patch
+  pre
+  post
+
+configure
+  pre
+  post
+  
+make
+  pre
+  post
+  
+make_install
+  pre
+  post

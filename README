@@ -21,4 +21,10 @@ My modifications will includes:
 
 - And also managed by command line tools.
 
+features: 
+  - Compile source code for package from a Recipe
+  - Really Simple Stupid dependency system implemented current Recipe
+  - create a complete bootstrap system for compile a base system GNU
+  ...
+
 [WIP]

@@ -280,9 +280,10 @@ class Packager
   
   def hook_package(hook)
      current_hook = @package['build'][hook]
-     puts "Running hook(#{hook}): #{current_hook}"
-     system(current_hook) unless current_hook.nil?
-     puts "End hook(#{hook}): #{current_hook}"
+     puts "_== Running hook(#{hook}): #{current_hook}"
+     system("#{current_hook}") unless current_hook.nil?
+     puts "_== End hook(#{hook}) ==__"
+     exit
   end
   
   

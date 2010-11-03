@@ -20,39 +20,40 @@ class Packager
   
   def build_package(package, operation="run")
   
-    unless package['build']['fetch'] == false
+    unless package['build']['do_fetch'] == false
       fetch_file(package)
     end
     
-    unless package['build']['unpack'] == false
+    unless package['build']['do_unpack'] == false
       unpack_file(package)
     end
     
-    unless package['build']['dependency'] == false
+    unless package['build']['do_dependency'] == false
       check_dependencies(package)
     end
 
     if operation == "build" || operation == "run"
 
-      unless package['build']['configure'] == false
+      unless package['build']['do_configure'] == false
         puts "build_package: configure start ::.#{package['info']['name']}.:: "
         configure_package(package)
         puts "build_package: configure end ::.#{package['info']['name']}.:: "
         sleep(3)
       end
       
-      unless package['build']['make'] == false
-        hook_package('pre_make')
+      hook_package('pre_make')
+      unless package['build']['do_make'] == false
         puts "build_package:make_package: start... ::.#{package['info']['name']}.:: "
         sleep(2)
         make_package(package)
         puts "build_package:make_package: end... ::.#{package['info']['name']}.:: "
         sleep(3)
       end
+      hook_package('post_make')
     end
     
     unless operation=="source_only"
-      unless package['build']['make_install'] == false
+      unless package['build']['do_make_install'] == false
         puts "build_package:make_install_package: start... ::.#{package['info']['name']}.::"
         sleep(2)
         make_install_package(package)
@@ -277,7 +278,9 @@ class Packager
   
   def hook_package(hook)
      current_hook = @package['build'][hook]
-     puts "Running system hook: #{current_hook}"
+     puts "Running hook: #{current_hook}"
+     system(current_hook) unless current_hook.nil?
+     puts "End hook: #{current_hook}"
   end
   
   

@@ -28,30 +28,33 @@ info:
       md5: 0ef634ac78e582f45d0e7643bfda7505
 
 build:
-  options: "--host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.35.4 --with-headers=/tools/include     libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
-
+  options: ""
+  do_configure: no
   pre_configure: "
     case `uname -m` in 
       i?86) echo \"CFLAGS += -march=i486 -mtune=native\" > configparms ;;
     esac;
-    
+ 
     cd Work/glibc-2.12.1;
     patch_file='http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-gcc_fix-1.patch';
     /usr/bin/wget -O- $patch_file | patch -Np1 ;
     patch_file='http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-makefile_fix-1.patch';
     /usr/bin/wget -O- $patch_file | patch -Np1 ;
     cd -;
-    
+
+  "
+  post_configure: "
+    cd Work/glibc-build;
+    CPPFLAGS=\"-O2 -U_FORTIFY_SOURCE -fno-stack-protector\" ../glibc-2.12.1/configure --prefix=/tools --target=$LINUX_TARGET --host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.35.4 --with-headers=/tools/include     libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes >../logs/configure_glibc-2.12.1.out 2>&1;
+    cd -;
   "
   do_make: no
   pre_make: "
     cd Work/glibc-build;
-    CC=\"gcc -B/usr/bin\";
-    CPPFLAGS=\"-D_FORTIFY_SOURCE=0 $CPPFLAGS\";
-    export CC CPPFLAGS ;
-    make >Works/logs/make_glibc-2.12.1.out 2&>1 ;
+    make >../logs/make_glibc-2.12.1.out 2>&1 ;
     cd -
   "
+
   post_install: "
     SPECS=`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/specs $LFS_TGT-gcc -dumpspecs | sed -e 's@/lib\(64\)\?/ld@/tools&@g' -e \"/^\*cpp:$/{n;s,$, -isystem /tools/include,}\" > $SPECS ; echo \"New specs file is: $SPECS\" ; unset SPECS
   "

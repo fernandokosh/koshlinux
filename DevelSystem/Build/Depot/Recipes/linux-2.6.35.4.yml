@@ -29,7 +29,7 @@ info:
 
 build:
   options: 
-  post_install: 
+  post_make_install: 
 
 # this recipe does only need to have source unpacked 
 # and run these commands

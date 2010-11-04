@@ -62,7 +62,7 @@ build:
       ;;
     esac
   "
-  post_install: ln -vs gcc /tools/bin/cc
+  post_make_install: ln -vs gcc /tools/bin/cc
   
 dependencies:
   source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]

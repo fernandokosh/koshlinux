@@ -5,7 +5,7 @@
     @@config = {}
     
     def ok?
-      load_basic_profile && load_profile
+      load_profile
     end
  
     def load_package(file_name)
@@ -19,31 +19,6 @@
       return true
     end
  
-    def load_basic_profile(linux_basic_name = 'LinuxBasic')
-
-      linux_basic = "#{PROFILES}/#{linux_basic_name}.yml"
-      self.linux_basic_settings = YAML::load( File.open( linux_basic ) )
-
-      variables = self.linux_basic_settings['variables']
-
-      puts "You may need correct set these environments variables before continue:"
-      variables.each do | variable |
-        puts "  export #{variable[0].upcase}=#{variable[1]}"
-      end
-
-      puts "And run "
-      puts "  sudo ln -sv $WORK/tools /"
-
-      variables.each do | variable |
-        unless ENV[variable[0].upcase] == variable[1]
-          puts "Please run "
-          puts "  export #{variable[0].upcase}=#{variable[1]}"
-          return false
-        end
-      end
-      return true
-    end
-
     def profile_settings
       @@config['profile_settings']
     end

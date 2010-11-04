@@ -102,7 +102,7 @@ class Packager
 
   def build_target(package)
     if package['build']['target'].nil? || package['build']['target'] == 'yes'
-      "--target=#{config.linux_basic_settings['variables']['linux_target']}"
+      "--target=$LINUX_TARGET"
     elsif package['build']['target'] == 'no'
       ""
     end
@@ -134,7 +134,7 @@ class Packager
     puts "== Configure line: #{configure_line}"
     puts "Output command configure => #{log_file}"
     sleep(2)
-    configure = system(configure_line)
+    configure = environment_box(configure_line)
     exit() unless configure
     FileUtils.cd(KOSH_LINUX_ROOT)
     puts "------------------------======================"
@@ -159,7 +159,7 @@ class Packager
     make_line = "make >#{log_file} 2>&1"
     puts "== Line of make: #{make_line}"
     puts "Output command make => #{log_file}"
-    make = system(make_line)
+    make = environment_box(make_line)
     exit() unless make
     FileUtils.cd(KOSH_LINUX_ROOT)
     return make
@@ -182,7 +182,7 @@ class Packager
     make_install_line = "make install >#{log_file} 2>&1 "
     puts "== Line of make_install: #{make_install_line}"
     puts "Output command make install => #{log_file}"
-    make_install = system(make_install_line)
+    make_install = environment_box(make_install_line)
     exit() unless make_install
     FileUtils.cd(KOSH_LINUX_ROOT)
     return make_install
@@ -282,11 +282,27 @@ class Packager
     current_hook = @package['build'][hook]
     unless current_hook.nil? || current_hook.empty?
       puts "_== Running hook(#{hook}): #{current_hook}"
-      result = system(current_hook)
+      result = environment_box(current_hook)
       exit if result.nil?
       puts "_== End hook(#{hook}) ==__"
     end
   end
 
+  def environment_box(which_command)
+    #create a file and call from bash, that it, we need bash.
+    variables = YAML::load(File.open("#{PROFILES}/LinuxBasic.yml"))['variables']
+    basic_variables=variables.inject("") do |vars, variable|
+      vars+="export #{variable[0].upcase}=#{variable[1]}\n"
+    end
+    bash_script=<<END_OF_SCRIPT
+#!/usr/bin/env -i HOME=#{WORK} TERM=$TERM PS1='\u:\w\$ ' /bin/bash
+set +h
+umask 022
+#{basic_variables}
+#{which_command}
+END_OF_SCRIPT
+  File.open("environment_box.sh", 'w') {|f| f.write(bash_script) }
+  system("/bin/bash environment_box.sh")
+  end
 end
 

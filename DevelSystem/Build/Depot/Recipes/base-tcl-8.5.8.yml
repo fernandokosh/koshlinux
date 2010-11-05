@@ -1,0 +1,50 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Tcl
+  type: normal_system
+  version: 8.5.8
+  filename: tcl8.5.8-src.tar.gz
+  size: 4,348
+  homepage: http://tcl.sourceforge.net/
+  description: "The Tcl package contains the Tool Command Language."
+  download: http://prdownloads.sourceforge.net/tcl/tcl8.5.8-src.tar.gz
+  md5: 7f123e53b3daaaba2478d3af5a0752e3
+  packer: tar.gz
+  pack_folder: tcl8.5.8
+  unpack_folder:
+  compile_folder: 
+  patches:
+      
+build:
+  options: 
+  after_patch: 
+  pre_configure: "
+    cd Work/tcl8.5.8/unix ;
+    ./configure --prefix=/tools ;
+  "
+  do_configure: no
+  do_make: no
+  pre_make: "
+    cd Work/tcl8.5.8/unix ;
+    make ;
+  "
+  post_make: "
+    cd Work/tcl8.5.8/unix ;
+    TZ=UTC make test ;
+  "
+  post_make_install: "
+    cd Work/tcl8.5.8/unix ;
+    chmod -v u+w /tools/lib/libtcl8.5.so ;
+    make install-private-headers ;
+    ln -sv tclsh8.5 /tools/bin/tclsh ;
+  "
+  
+dependencies:
+
+defaults:
+  
+file_list:
+
+

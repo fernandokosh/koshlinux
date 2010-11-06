@@ -9,7 +9,13 @@ PROFILES = "#{KOSH_LINUX_ROOT}/Profiles"
 WORK = "#{KOSH_LINUX_ROOT}/Work"
 PACKAGES = "#{KOSH_LINUX_ROOT}/Depot/Recipes"
 SOURCES = "#{KOSH_LINUX_ROOT}/Depot/Sources"
+TOOLS = "#{WORK}/tools"
+LOGS = "#{WORK}/logs"
 
+[WORK, SOURCES, TOOLS, LOGS].each do |folder|
+  puts "Creating #{folder}"
+  FileUtils.mkdir_p(folder)
+end
 
 def print_echo(msg='')
   puts msg

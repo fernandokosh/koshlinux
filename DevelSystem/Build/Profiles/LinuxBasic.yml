@@ -1,13 +1,10 @@
 
 variables:
-  build: /home/kosh/Projects/KoshLinux/DevelSystem/Build
-  work: /home/kosh/Projects/KoshLinux/DevelSystem/Build/Work
-  lfs: /home/kosh/Projects/KoshLinux/DevelSystem/Build/Work
+  lfs: $WORK
   lc_all: POSIX
   arch: x86_64
   linux_target: x86_64-pc-linux-gnu
   platform: i686-pc-linux-gnu
   lfs_tgt: x86_64-pc-linux-gnu
-  path: "/tools/bin:/bin:/usr/bin"
 #  makeflags: -j2
   

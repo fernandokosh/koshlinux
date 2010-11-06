@@ -127,7 +127,7 @@ class Packager
     
     options = package['build']['options']
     target = build_target(package) 
-    prefix = "--prefix=/tools"
+    prefix = "--prefix=$TOOLS"
     #eprefix = "--exec-prefix=/usr"
     log_file = "#{WORK}/logs/configure_#{package['info']['pack_folder']}.out"
     configure_line = "#{compile_path}/configure #{prefix} #{target} #{options} >#{log_file} 2>&1"
@@ -296,9 +296,19 @@ class Packager
     end
     bash_script=<<END_OF_SCRIPT
 #!/usr/bin/env -i HOME=#{WORK} TERM=$TERM PS1='\u:\w\$ ' /bin/bash
+
+## Base settings ##
 set +h
 umask 022
+export BUILD=#{KOSH_LINUX_ROOT}
+export TOOLS=#{TOOLS}
+export WORK=#{WORK}
+export PATH=$TOOLS/bin:/bin:/usr/bin
+
+### Setting from LinuxBasic.xml ###
 #{basic_variables}
+
+#### Command to execute ####
 #{which_command}
 END_OF_SCRIPT
   File.open("environment_box.sh", 'w') {|f| f.write(bash_script) }

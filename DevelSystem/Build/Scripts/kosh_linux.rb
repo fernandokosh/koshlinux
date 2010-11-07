@@ -6,28 +6,25 @@ class KoshLinux
   SOURCES = "#{KOSH_LINUX_ROOT}/Depot/Sources"
   TOOLS = "#{WORK}/tools"
   LOGS = "#{WORK}/logs"
+  require 'linux_config'
+  require 'linux_packager'
+  attr_reader :config, :packager, :options
+  
+  def initialize(options)
+    @options = options
+    @config = Config.create
+    @packager = Packager.create
+    @packager.config = @config
+    @packager.options = @options
 
-  def initialize
     [WORK, SOURCES, TOOLS, LOGS].each do |folder|
       puts "Creating #{folder}" && FileUtils.mkdir_p(folder) unless File.exist?(folder)
     end
     puts "Need create /tools symbolic links" && system("sudo ln -sv #{WORK}/tools /") unless File.exist?('/tools')
   end
 
-  def config
-    require 'linux_config'
-    @@config = Config.new
-  end
-
-  def packager
-    require 'linux_packager'
-    @@packager = Packager.new
-    @@packager.config = @@config
-    @@packager
-  end
-
-  def cleaner(options)
+  def cleaner
     require 'cleaner'
-    Cleaner.clean(options)
+    Cleaner.clean(@options)
   end
 end

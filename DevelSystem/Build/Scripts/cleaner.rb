@@ -48,7 +48,7 @@ class Cleaner
 
   def Cleaner.clean(options)
     option = options[:clear]
-    option = "tools" if option.nil?
+    option = "work" if option.nil? # Default option
     puts "Cleaner: #{option}"
     send("clean_#{option}")
     puts "Cleanup: end."

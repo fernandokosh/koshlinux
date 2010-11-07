@@ -7,9 +7,9 @@ OptionParser.new do |opts|
 
   clear_description=<<END_OF_DESCRIPTION
 Clean the system before build with (TYPE):
-   tools: Clear builder tools folder (default)
+   tools: Clear builder tools folder
    logs: Clear build logs
-   work: Clear work folder
+   work: Clear work folder (default)
    sources: Clear the sources files
    all: Clear all except the sources
    all_sources: Clear all files and source. with this you got a clean repository

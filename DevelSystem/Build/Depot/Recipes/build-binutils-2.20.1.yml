@@ -6,7 +6,7 @@ info:
   type: normal_system
   version: 2.20.1
   filename: binutils-2.20.1.tar.bz2
-  size: 17,091
+  size: "17,091"
   homepage: http://sources.redhat.com/binutils/
   description: "The Binutils package contains a linker, an assembler, and other tools for handling object files. This package is used ot build a base system."
   download: http://ftp.gnu.org/gnu/binutils/binutils-2.20.1.tar.bz2

@@ -6,7 +6,7 @@ info:
   type: normal_system
   version: 2.12.1
   filename: glibc-2.12.1.tar.bz2
-  size: 15,300
+  size: "15,300"
   homepage: http://www.gnu.org/software/libc/
   description: "The Glibc package contains the main C library. This library provides the basic routines for allocating memory, searching directories, opening and closing files, reading and writing files, string handling, pattern matching, arithmetic, and so on."
   download: http://ftp.gnu.org/gnu/glibc/glibc-2.12.1.tar.bz2
@@ -53,7 +53,7 @@ build:
     echo \"GLIBC minitest at folder: $(pwd)\"
     echo 'main(){}' > dummy.c ;
     $LFS_TGT-gcc -B/tools/lib dummy.c ;
-    readelf -l a.out | grep ': /tools' ;
+    readelf -l a.out | grep ': $TOOLS' ;
     rm -v dummy.c a.out ;
   "
 

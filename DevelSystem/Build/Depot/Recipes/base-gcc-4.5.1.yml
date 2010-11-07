@@ -6,7 +6,7 @@ info:
   type: normal_system
   version: 4.5.1
   filename: gcc-4.5.1.tar.bz2
-  size: 64,572
+  size: "64,572"
   homepage: http://gcc.gnu.org/
   description: "The GCC package contains the GNU compiler collection, which includes the C and C++ compilers."
   download: http://ftp.gnu.org/gnu/gcc/gcc-4.5.1/gcc-4.5.1.tar.bz2
@@ -65,7 +65,7 @@ build:
       ;;
     esac
   "
-  post_make_install: ln -vs gcc /tools/bin/cc
+  post_make_install: ln -vs gcc $TOOLS/bin/cc
   
 dependencies:
   source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]

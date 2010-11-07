@@ -200,10 +200,6 @@ class Packager
     compile_folder = "#{KoshLinux::WORK}/#{package['info']['compile_folder']}"
     packer = package['info']['packer']
 
-    unless package['info']['compile_folder'].nil?
-      puts "Creating compile folder: #{compile_folder}"
-      FileUtils.mkdir_p(compile_folder)
-    end
     if File.exists?(unpack_folder)
       puts "Using previsouly unpacked #{unpack_folder}"
       return true
@@ -219,6 +215,10 @@ class Packager
       else
         puts "Error: Unreconized packer type: #{packer}"
         exit
+    end
+    unless package['info']['compile_folder'].nil?
+      puts "Creating compile folder: #{compile_folder}"
+      FileUtils.mkdir_p(compile_folder)
     end
     unless pack_folder == unpack_folder
       puts "Renaming file: #{pack_folder} => #{unpack_folder}"

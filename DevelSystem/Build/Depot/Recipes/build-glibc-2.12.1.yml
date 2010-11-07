@@ -14,7 +14,7 @@ info:
   packer: tar.bz2
   pack_folder: glibc-2.12.1
   unpack_folder:
-  compile_folder: glibc-build
+  compile_folder: glibc-2.12.1_build
   patches:
     glibc_2_12_1_gcc_fix_1:
       name: Glibc GCC Build Fix Patch

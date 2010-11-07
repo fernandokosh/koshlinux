@@ -3,16 +3,22 @@ require 'md5'
 require 'fileutils'
 
 class Packager
-  def config=(config)
-    @@config=config
+  attr_accessor :config, :options
+  private_class_method :new
+  @@packager = nil
+
+  def Packager.create
+    @@packager = new unless @@packager
+    @@packager
   end
 
-  def config
-    @@config
+  def initialize
+    @config = Config.create
+    @packages = @config.profile_settings['packages']
   end
-  
+
   def build_all
-    package_list.each do | file_name |
+    @packages.each do | file_name |
       @package = load_package(file_name)
       build_package(@package)
     end      
@@ -86,7 +92,7 @@ class Packager
   end
 
   def fetch_files
-    package_list.each do | file_name |
+    @package.each do | file_name |
       package = load_package(file_name)
       fetch_file(package)
     end
@@ -134,7 +140,7 @@ class Packager
     puts "Output command configure => #{log_file}"
     sleep(2)
     configure = environment_box(configure_line)
-    abort("Exiting on configure: #{package['name']}") unless configure
+    abort("Exiting on configure: #{package['name']}") if configure.nil?
     FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
     return configure
   end
@@ -158,7 +164,7 @@ class Packager
     puts "== Line of make: #{make_line}"
     puts "Output command make => #{log_file}"
     make = environment_box(make_line)
-    abort("Exiting on make: #{package['name']}") unless make
+    abort("Exiting on make: #{package['name']}") if make.nil?
     FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
     return make
   end
@@ -181,7 +187,7 @@ class Packager
     puts "== Line of make_install: #{make_install_line}"
     puts "Output command make install => #{log_file}"
     make_install = environment_box(make_install_line)
-    abort("Exiting on make_install: #{package['name']}") unless make_install
+    abort("Exiting on make_install: #{package['name']}") if make_install.nil?
     FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
     return make_install
   end
@@ -235,7 +241,8 @@ class Packager
   end
 
   def load_package(file_name)
-    package = config.load_package(file_name)
+    file_path = "#{KoshLinux::PACKAGES}/#{file_name}.yml"
+    package = YAML::load( File.open( file_path ) )
     package['name'] = file_name
     puts "Loading Recipe (#{package['name']}): #{package.inspect}"
     return package
@@ -252,10 +259,6 @@ class Packager
     else
       puts "Previously downloaded package #{file_name}... Skip"
     end
-  end
-
-  def package_list     
-    @@packages = Config.new().profile_settings['packages']
   end
 
   def download_source(file_name, download_url)
@@ -290,35 +293,27 @@ class Packager
   end
 
   def environment_box(which_command)
-    #create a file and call from bash, that it, we need bash. soon we
-    #don't nned bash anymore
-    variables = YAML::load(File.open("#{KoshLinux::PROFILES}/LinuxBasic.yml"))['variables']
-    basic_variables=variables.inject("") do |vars, variable|
-      vars+="export #{variable[0].upcase}=#{variable[1]}\n"
+    ENV['HOME']  = KoshLinux::WORK
+    ENV['TERM']  = 'ansi'
+    ENV['BUILD'] = KoshLinux::KOSH_LINUX_ROOT
+    ENV['WORK']  = KoshLinux::WORK
+    ENV['TOOLS'] = KoshLinux::TOOLS
+    ENV['PATH']  = "#{KoshLinux::TOOLS}/bin:/bin:/usr/bin"
+
+    file_path = "#{KoshLinux::PROFILES}/LinuxBasic.yml"
+    variables = YAML::load( File.open( file_path ))['variables']
+    variables.inject("") do |vars, variable|
+      ENV[variable[0].upcase] = variable[1]
     end
-    bash_script=<<END_OF_SCRIPT
-#!/usr/bin/env -i HOME="#{KoshLinux::WORK}" TERM=$TERM /bin/bash
-
-## Base settings ##
-set +h
-set +x
-umask 022
-export BUILD=#{KoshLinux::KOSH_LINUX_ROOT}
-export TOOLS=#{KoshLinux::TOOLS}
-export WORK=#{KoshLinux::WORK}
-export PATH=$TOOLS/bin:/bin:/usr/bin
-
-### Setting from LinuxBasic.xml ###
-#{basic_variables}
-
-#### Command to execute ####
-echo "Starting at folder: $(pwd)"
-sleep 1
-#{which_command}
-echo "Command leave at folder: $(pwd)"
-sleep 1
-END_OF_SCRIPT
-    File.open("#{KoshLinux::WORK}/environment_box.sh", 'w') {|f| f.write(bash_script) }
-    system("/bin/bash #{KoshLinux::WORK}/environment_box.sh")
+    extra_options = ""
+    extra_options += "set -x && " if @options[:debug]
+    extra_options += "set +h && "
+    extra_options += "umask 022 && "
+    command_line = "bash -c \" (#{extra_options} #{which_command}) \""
+    puts "Starting at folder: #{FileUtils.pwd}"
+    puts "Command Line: #{extra_options} #{which_command}"
+    result = system(command_line)
+    puts "Leaving at folder: #{FileUtils.pwd}"
+    return result
   end
 end

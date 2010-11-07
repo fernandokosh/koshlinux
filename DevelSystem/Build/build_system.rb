@@ -18,11 +18,15 @@ END_OF_DESCRIPTION
   opts.on("-c [TYPE]", "--clear [TYPE]", clear_description) do |v|
     options[:clear] = v
   end
+
+  opts.on("-d", "--debug", "Show commands executed on EnvironmentBox") do |d|
+    options[:debug] = true
+  end
 end.parse!
 
 require 'kosh_linux'
-linux = KoshLinux.new
-linux.cleaner(options) if options.include?(:clear)
+linux = KoshLinux.new(options)
+linux.cleaner if options.include?(:clear)
 if linux.config.ok?
   puts "Starting up..."
   linux.packager.build_all

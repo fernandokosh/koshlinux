@@ -15,11 +15,11 @@ Clean the system before build with (TYPE):
    all_sources: Clear all files and source. with this you got a clean repository
 END_OF_DESCRIPTION
   
-  opts.on("-c [TYPE]", "--clear [TYPE]", clear_description) do |v|
-    options[:clear] = v
+  opts.on("-c [TYPE]", "--clear [TYPE]", clear_description) do |clear|
+    options[:clear] = clear
   end
 
-  opts.on("-d", "--debug", "Show commands executed on EnvironmentBox") do |d|
+  opts.on("-d", "--debug", "Show commands executed on EnvironmentBox") do
     options[:debug] = true
   end
 end.parse!

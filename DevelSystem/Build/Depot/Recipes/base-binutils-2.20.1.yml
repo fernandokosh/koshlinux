@@ -13,7 +13,7 @@ info:
   md5: 9cdfb9d6ec0578c166d3beae5e15c4e5
   packer: tar.bz2
   pack_folder: binutils-2.20.1
-  compile_folder: binutils-2.20.1-base
+  compile_folder: binutils-2.20.1_base
 
 build:
   options: ""

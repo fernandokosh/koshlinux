@@ -195,33 +195,32 @@ class Packager
   def unpack_file(package)
     file_name = package['info']['filename']
     archive_path = "#{KoshLinux::SOURCES}/#{file_name}"
-    pack_folder = "#{KoshLinux::WORK}/#{package['info']['pack_folder']}"
-    unpack_folder = "#{KoshLinux::WORK}/#{pack_unpack_folder(package)}"
+    pack_folder = package['info']['pack_folder']
+    pack_path = "#{KoshLinux::WORK}/#{pack_folder}"
+    unpack_folder = pack_unpack_folder(package)
+    unpack_path = "#{KoshLinux::WORK}/#{unpack_folder}"
     compile_folder = "#{KoshLinux::WORK}/#{package['info']['compile_folder']}"
     packer = package['info']['packer']
 
-    if File.exists?(unpack_folder)
-      puts "Using previsouly unpacked #{unpack_folder}"
+    if options[:keep_work] && File.exists?(unpack_path)
+      puts "Using previously unpacked: #{unpack_path}"
+      check_compile_path
       return true
     end
     puts "Unpacking #{file_name}"
     case packer
       when 'tar.bz2' then
         puts "Archive type: tar.bz2"
-        unpack_tar_bz2(archive_path)
+        unpack_tar_bz2(archive_path) if FileUtils.rm_rf(unpack_folder)
       when 'tar.gz' then
         puts "Archive type: tar.gz"
-        unpack_tar_gz(archive_path)
+        unpack_tar_gz(archive_path) if FileUtils.rm_rf(unpack_folder)
       else
-        puts "Error: Unreconized packer type: #{packer}"
-        exit
+       abort("Error: Unreconized packer type: #{packer}")
     end
-    unless package['info']['compile_folder'].nil?
-      puts "Creating compile folder: #{compile_folder}"
-      FileUtils.mkdir_p(compile_folder)
-    end
+    check_compile_path
     unless pack_folder == unpack_folder
-      puts "Renaming file: #{pack_folder} => #{unpack_folder}"
+      puts "Renaming file: #{pack_path} => #{unpack_path}"
       FileUtils.cd(KoshLinux::WORK)
       FileUtils.mv(pack_folder, unpack_folder)
       FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
@@ -238,6 +237,15 @@ class Packager
     FileUtils.cd(KoshLinux::WORK)
     system("tar -xzf #{file_path}")
     FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
+  end
+
+  def check_compile_path
+    compile_folder = @package['info']['compile_folder']
+    compile_path   = "#{KoshLinux::WORK}/#{compile_folder}"
+    unless compile_folder.nil?
+      puts "Creating compile folder: #{compile_folder} on: #{compile_path}"
+      FileUtils.mkdir_p(compile_path)
+    end
   end
 
   def load_package(file_name)
@@ -265,7 +273,7 @@ class Packager
    
     url = URI.parse(download_url)
     res = Net::HTTP.start(url.host, url.port) do |http|
-      source_file_name = open("#{SOURCES}/#{file_name}", "wb")
+      source_file_name = open("#{KoshLinux::SOURCES}/#{file_name}", "wb")
       begin
         http.request_get(url.path) do |resp|
           resp.read_body do |segment|

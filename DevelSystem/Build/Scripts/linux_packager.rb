@@ -242,9 +242,12 @@ class Packager
 
   def load_package(file_name)
     file_path = "#{KoshLinux::PACKAGES}/#{file_name}.yml"
-    package = YAML::load( File.open( file_path ) )
-    package['name'] = file_name
-    puts "Loading Recipe (#{package['name']}): #{package.inspect}"
+    if package = YAML::load( File.open( file_path ) )
+      puts "Loading Recipe (#{file_name}): #{package.inspect}"
+    else
+      puts "ERROR Loading Recipe (#{file_name})"
+    end
+    package["name"] = file_name
     return package
   end
 

@@ -6,7 +6,7 @@ info:
   type: normal_system
   version: 8.5.8
   filename: tcl8.5.8-src.tar.gz
-  size: 4,348
+  size: "4,348"
   homepage: http://tcl.sourceforge.net/
   description: "The Tcl package contains the Tool Command Language."
   download: http://prdownloads.sourceforge.net/tcl/tcl8.5.8-src.tar.gz
@@ -14,36 +14,23 @@ info:
   packer: tar.gz
   pack_folder: tcl8.5.8
   unpack_folder:
-  compile_folder: /tcl8.5.8/unix
+  compile_folder: tcl8.5.8/unix
   patches:
       
 build:
   options: 
   after_patch: 
-  pre_configure: "
-  ./configure --prefix=/tools ;
-    cd - ;
-  "
+  pre_configure: "./configure --prefix=$TOOLS"
   do_configure: no
   do_make: no
-  pre_make: "
-  make ;
-    cd - ;
+  pre_make: "make"
+  post_make: "TZ=UTC make test"
+  pre_make_install: "TZ=UTC make install"
+  post_make_install: "chmod -v u+w $TOOLS/lib/libtcl8.5.so && 
+    TZ=UTC make install-private-headers &&
+    ln -sv tclsh8.5 $TOOLS/bin/tclsh
   "
-  post_make: "
-  TZ=UTC make test ;
-  "
-  pre_make_install: "
-  TZ=UTC make install ;
-    pwd ;
-  "
-  post_make_install: "
-    chmod -v u+w /tools/lib/libtcl8.5.so ;
-    TZ=UTC make install-private-headers ;
-    ln -sv tclsh8.5 /tools/bin/tclsh ;
-    pwd ;
-  "
-  
+
 dependencies:
 
 defaults:

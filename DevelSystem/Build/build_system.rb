@@ -1,31 +1,29 @@
-#!/usr/bin/ruby
+#!/usr/bin/ruby -IScripts -wv
 
-require 'yaml'
-require 'md5'
-require 'Scripts/kosh_linux'
+require 'optparse'
+options = {}
+OptionParser.new do |opts|
+  opts.banner = "Usage: ./build_system.rb [options]"
 
-KOSH_LINUX_ROOT = FileUtils.pwd() unless defined?(KOSH_LINUX_ROOT)
-PROFILES = "#{KOSH_LINUX_ROOT}/Profiles"
-WORK = "#{KOSH_LINUX_ROOT}/Work"
-PACKAGES = "#{KOSH_LINUX_ROOT}/Depot/Recipes"
-SOURCES = "#{KOSH_LINUX_ROOT}/Depot/Sources"
-TOOLS = "#{WORK}/tools"
-LOGS = "#{WORK}/logs"
+  clear_description=<<END_OF_DESCRIPTION
+Clean the system before build with (TYPE):
+   tools: Clear builder tools folder (default)
+   logs: Clear build logs
+   work: Clear work folder
+   sources: Clear the sources files
+   all: Clear all except the sources
+   all_sources: Clear all files and source. with this you got a clean repository
+END_OF_DESCRIPTION
+  
+  opts.on("-c [TYPE]", "--clear [TYPE]", clear_description) do |v|
+    options[:clear] = v
+  end
+end.parse!
 
-[WORK, SOURCES, TOOLS, LOGS].each do |folder|
-  puts "Creating #{folder}"
-  FileUtils.mkdir_p(folder)
-end
-
-def print_echo(msg='')
-  puts msg
-end
-
+require 'kosh_linux'
 linux = KoshLinux.new
-
+linux.cleaner(options) if options.include?(:clear)
 if linux.config.ok?
-  puts 'running...'
-  # linux.packager.fetch_files
+  puts "Starting up..."
   linux.packager.build_all
 end
-

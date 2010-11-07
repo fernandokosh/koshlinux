@@ -23,7 +23,12 @@ info:
       md5: 799ef1971350d2e3c794f2123f247cc6
       
 build:
-  options: CC="$LFS_TGT-gcc -B/tools/lib/" \
+  options: 
+    
+  after_patch: cp -v gcc/Makefile.in{,.orig} sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
+  pre_configure: "
+  
+    CC=\"$LFS_TGT-gcc -B/tools/lib/\" \
     AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib \
     ../gcc-4.5.1/configure --prefix=/tools \
     --with-local-prefix=/tools --enable-clocale=gnu \
@@ -33,9 +38,7 @@ build:
     --disable-bootstrap --disable-libgomp \
     --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs \
     --without-ppl --without-cloog
-    
-  after_patch: cp -v gcc/Makefile.in{,.orig} sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
-  pre_configure: "
+  
     cp -v gcc/Makefile.in{,.tmp} sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/akefile.in.tmp > gcc/Makefile.in
     
     for file in \
@@ -47,8 +50,8 @@ build:
       echo '
     #undef STANDARD_INCLUDE_DIR
     #define STANDARD_INCLUDE_DIR 0
-    #define STANDARD_STARTFILE_PREFIX_1 ""
-    #define STANDARD_STARTFILE_PREFIX_2 ""' >> $file
+    #define STANDARD_STARTFILE_PREFIX_1 \"\"
+    #define STANDARD_STARTFILE_PREFIX_2 \"\"' >> $file
       touch $file.orig
     done
     

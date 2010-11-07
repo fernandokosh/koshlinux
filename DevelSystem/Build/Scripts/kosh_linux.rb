@@ -27,4 +27,15 @@ class KoshLinux
     require 'cleaner'
     Cleaner.clean(@options)
   end
+
+  def KoshLinux.timer
+    raise "I need a code to run, put it on block" unless block_given?
+    @@start = Time.now
+    puts "Starting at: #{@@start}"
+    yield
+    @@end = Time.now
+    puts "Ended at: #{@@end}"
+    @@elapsed = @@end - @@start
+    puts "Elapsed Time: #{@@elapsed}s"
+  end
 end

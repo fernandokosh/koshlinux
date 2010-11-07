@@ -23,7 +23,9 @@ packages: [
   build-linux-2.6.35.4,
   build-glibc-2.12.1,
   base-binutils-2.20.1,
-  base-gcc-4.5.1
+  base-gcc-4.5.1,
+  base-tcl-8.5.8,
+  base-expect-5.44.1.15 
 ]
 
 ###

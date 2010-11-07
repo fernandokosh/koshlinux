@@ -1,0 +1,54 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Expect
+  type: normal_system
+  version: 5.44.1.15
+  filename: expect-5.44.1.15.tar.bz2
+  size: 534
+  homepage: http://expect.sourceforge.net/
+  description: "The Expect package contains a program for carrying out scripted dialogues with other interactive programs."
+  download: http://prdownloads.sourceforge.net/expect/expect-5.44.1.15.tar.bz2
+  md5: 9307bbf67e19125036ce34544a78dadf
+  packer: tar.bz2
+  pack_folder: expect-5.44.1.15
+  unpack_folder:
+  compile_folder: 
+  patches:
+    Expect_tk_configure_patch_1:
+      name: Expect Tk Configure Patch
+      size: 4.4
+      download: http://www.linuxfromscratch.org/patches/lfs/6.7/expect-5.44.1.15-no_tk-1.patch
+      md5: ba1b2c5841eea6c62b7522dfde412e65
+            
+build:
+  options: 
+  after_patch: 
+  pre_configure: "
+    cd Work/expect-5.44.1.15 ;
+    patch_file='http://www.linuxfromscratch.org/patches/lfs/6.7/expect-5.44.1.15-no_tk-1.patch' ;
+    /usr/bin/wget -O- $patch_file | patch -Np1 ;
+    cp -v configure{,.orig} ;
+    sed 's:/usr/local/bin:/bin:' configure.orig > configure ;
+    ./configure --prefix=/tools --with-tcl=/tools/lib --with-tclinclude=/tools/include --with-tk=no ;
+  "
+  do_configure: no
+  do_make: yes
+  pre_make: 
+  post_make: "
+    cd Work/expect-5.44.1.15 ;
+    make test ;
+  "
+  post_make_install: "
+    cd Work/expect-5.44.1.15 ;
+    make SCRIPTS='' install ;
+  "
+  
+dependencies:
+
+defaults:
+  
+file_list:
+
+

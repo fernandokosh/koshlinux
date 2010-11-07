@@ -25,9 +25,11 @@ END_OF_DESCRIPTION
 end.parse!
 
 require 'kosh_linux'
-linux = KoshLinux.new(options)
-linux.cleaner if options.include?(:clear)
-if linux.config.ok?
-  puts "Starting up..."
-  linux.packager.build_all
+KoshLinux.timer do
+  linux = KoshLinux.new(options)
+  linux.cleaner if options.include?(:clear)
+  if linux.config.ok?
+    puts "Starting up..."
+    linux.packager.build_all
+  end
 end

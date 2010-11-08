@@ -126,7 +126,7 @@ class Packager
     options = package['build']['options']
     target = build_target(package)
     prefix = "--prefix=$TOOLS"
-    log_file = "#{KoshLinux::LOGS}/configure_#{package['info']['pack_folder']}.out"
+    log_file = "#{KoshLinux::LOGS}/configure_#{@package['name']}.out"
     configure_line = "#{compile_path}/configure #{prefix} #{target} #{options} >#{log_file} 2>&1"
     puts "== Configure line: #{configure_line}"
     puts "Output command configure => #{log_file}"
@@ -151,7 +151,7 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_package: running on unpack_folder: #{unpack_path}"
     end
-    log_file = "#{KoshLinux::WORK}/logs/make_#{package['info']['pack_folder']}.out"
+    log_file = "#{KoshLinux::WORK}/logs/make_#{@package['name']}.out"
     make_line = "make >#{log_file} 2>&1"
     puts "== Line of make: #{make_line}"
     puts "Output command make => #{log_file}"
@@ -174,7 +174,7 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_install_package: running on unpack_folder: #{unpack_path}"
     end
-    log_file = "#{KoshLinux::LOGS}/make_install_#{package['info']['pack_folder']}.out"
+    log_file = "#{KoshLinux::LOGS}/make_install_#{@package['name']}.out"
     make_install_line = "make install >#{log_file} 2>&1 "
     puts "== Line of make_install: #{make_install_line}"
     puts "Output command make install => #{log_file}"

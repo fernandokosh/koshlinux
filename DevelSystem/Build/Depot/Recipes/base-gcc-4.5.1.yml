@@ -14,7 +14,7 @@ info:
   packer: tar.bz2
   pack_folder: gcc-4.5.1
   unpack_folder:
-  compile_folder: gcc-4.5.1_build
+  compile_folder: gcc-4.5.1_base
   patches:
     gcc_4_5_1_startfiles_fix_1:
       name: GCC Startfiles Fix Patch

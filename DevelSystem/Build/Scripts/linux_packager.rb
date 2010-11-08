@@ -91,13 +91,6 @@ class Packager
     end unless source_package['dependencies'].nil? || source_package['dependencies']['source_only'].nil?
   end
 
-  def fetch_files
-    @package.each do | file_name |
-      package = load_package(file_name)
-      fetch_file(package)
-    end
-  end
-
   def pack_unpack_folder(package)
     if package['info']['unpack_folder'].nil?
       unpack_folder = package['info']['pack_folder']
@@ -133,7 +126,6 @@ class Packager
     options = package['build']['options']
     target = build_target(package)
     prefix = "--prefix=$TOOLS"
-    #eprefix = "--exec-prefix=/usr"
     log_file = "#{KoshLinux::LOGS}/configure_#{package['info']['pack_folder']}.out"
     configure_line = "#{compile_path}/configure #{prefix} #{target} #{options} >#{log_file} 2>&1"
     puts "== Configure line: #{configure_line}"

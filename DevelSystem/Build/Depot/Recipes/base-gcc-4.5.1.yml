@@ -27,7 +27,6 @@ build:
     
   after_patch: cp -v gcc/Makefile.in{,.orig} sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
   pre_configure: "
-  
     CC=\"$LFS_TGT-gcc -B/tools/lib/\" \
     AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib \
     ../gcc-4.5.1/configure --prefix=/tools \
@@ -39,7 +38,7 @@ build:
     --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs \
     --without-ppl --without-cloog
   
-    cp -v gcc/Makefile.in{,.tmp} sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/akefile.in.tmp > gcc/Makefile.in
+    cp -vf gcc/Makefile.in{,.tmp} sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/akefile.in.tmp > gcc/Makefile.in
     
     for file in \
      $(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
@@ -55,17 +54,17 @@ build:
       touch $file.orig
     done
     
-    ### On x86_64, unsetting the multilib spec for GCC ensures that it won't attempt to link against libraries on the host:
+    ### On x86_64, unsetting the multilib spec for GCC ensures that it won't attempt to link against libraries on the host
     case $(uname -m) in
       x86_64)
         for file in $(find gcc/config -name t-linux64) ; do \
-          cp -v $file{,.orig}
+          cp -vf $file{,.orig}
           sed '/MULTILIB_OSDIRNAMES/d' $file.orig > $file
         done
       ;;
     esac
   "
-  post_make_install: ln -vs gcc $TOOLS/bin/cc
+  post_make_install: ln -vfs gcc $TOOLS/bin/cc
   
 dependencies:
   source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]
@@ -73,5 +72,4 @@ dependencies:
 defaults:
   
 file_list:
-
 

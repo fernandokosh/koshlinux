@@ -6,7 +6,7 @@ system:
   os: Linux
   class: GNU/Linux
   name: Kosh Linux
-  codename: RubyDesktop
+  codename: Vorlon
   logo:
   homepage: http://koshlinux.com/rubydesktop
   release: Desktop

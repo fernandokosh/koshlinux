@@ -36,6 +36,6 @@ class KoshLinux
     @@end = Time.now
     puts "Ended at: #{@@end}"
     @@elapsed = @@end - @@start
-    puts "Elapsed Time: #{@@elapsed}s"
+    puts "Elapsed Time: #{@@elapsed}s #{@@elapsed / 60}m"
   end
 end

@@ -28,13 +28,3 @@ packages: [
   base-expect-5.44.1.15 
 ]
 
-###
-#  I suggest, maybe the stage thing os packages can be one this section folling the order.
-#  Ex.: 
-#      * We got a build_system section which define the packages for make the stage-1 packages
-#      * The base_system section maybe for the base_system, maybe the stage-2 thing
-#      * With packages section we use for define like final package and installed system need.
-# 
-#         
-##
-

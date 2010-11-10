@@ -19,6 +19,6 @@ build:
   options: --disable-nls --disable-werror
   pre_make_install: "
     case $(uname -m) in
-      x86_64) mkdir -v $TOOLS/lib ; ln -sv lib $TOOLS/lib64 ;;
+      x86_64) mkdir -pv $TOOLS/lib ; ln -sfv lib $TOOLS/lib64 ;;
     esac ;
   "

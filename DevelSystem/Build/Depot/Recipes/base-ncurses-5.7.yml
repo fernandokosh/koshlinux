@@ -1,0 +1,21 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Ncurses
+  type: normal_system
+  version: 5.7
+  filename: ncurses-5.7.tar.gz
+  size: "2,388"
+  homepage: http://www.gnu.org/software/ncurses/
+  description: "The Ncurses package contains libraries for terminal-independent handling of character screens."
+  download: ftp://ftp.gnu.org/gnu/ncurses/ncurses-5.7.tar.gz
+  md5: cce05daf61a64501ef6cd8da1f727ec6
+  packer: tar.gz
+  pack_folder: ncurses-5.7
+  unpack_folder:
+  compile_folder: 
+  patches:  
+            
+build:
+  options: " --prefix=/tools --with-shared --without-debug --without-ada --enable-overwrite"

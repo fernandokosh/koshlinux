@@ -1,0 +1,33 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Bash
+  type: normal_system
+  version: 4.1
+  filename: bash-4.1.tar.gz
+  size: 6,444
+  homepage: http://www.gnu.org/software/bash/
+  download: http://ftp.gnu.org/gnu/bash/bash-4.1.tar.gz
+  md5: 9800d8724815fd84994d9be65ab5e7b8
+  packer: tar.gz
+  pack_folder: bash-4.1
+  patches:
+    bash_4_1_fixes_2:
+      name: Bash Upstream Fixes Patch
+      size: 5.1
+      download: http://www.linuxfromscratch.org/patches/lfs/6.7/bash-4.1-fixes-2.patch
+      md5: 7813f0e42d41dc4443dc3d161ad24987
+
+build:
+  options: "--prefix=/tools --without-bash-malloc"
+  pre_configure: "cd $WORK/bash-4.1; wget -O- 'http://www.linuxfromscratch.org/patches/lfs/6.7/bash-4.1-fixes-2.patch' | patch -Np1"
+  post_make: "cd $WORK/bash-4.1; make tests"
+  post_make_install: "cd $WORK/bash-4.1; ln -vsf bash /tools/bin/sh"
+
+defaults:
+  
+file_list:
+  
+  
+

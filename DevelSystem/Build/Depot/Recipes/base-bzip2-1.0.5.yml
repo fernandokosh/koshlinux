@@ -1,0 +1,24 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Bzip2
+  type: normal_system
+  version: 1.0.5
+  filename: bzip2-1.0.5.tar.gz
+  size: 822
+  homepage: http://www.bzip.org/
+  description: "The Bzip2 package contains programs for compressing and decompressing files. Compressing text files with bzip2 yields a much better compression percentage than with the traditional gzip."
+  download: http://www.bzip.org/1.0.5/bzip2-1.0.5.tar.gz
+  md5: 3c15a0c8d1d3ee1c46a1634d00617b1a
+  packer: tar.gz
+  pack_folder: bzip2-1.0.5
+  unpack_folder:
+  compile_folder: 
+  patches:
+    
+build:
+  options: 
+  do_configure: no
+  do_make_install: no
+  post_make_install: "cd $WORK/bzip2-1.0.5; make PREFIX=/tools install"

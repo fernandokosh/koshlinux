@@ -18,5 +18,7 @@ info:
 build:
   options: ""
   do_configure: no
+  do_make: no
+  do_make_install: no
   post_configure: "CC=\"$LFS_TGT-gcc -B/tools/lib/\" AR=\"$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib\" ../binutils-2.20.1/configure --prefix=$TOOLS --disable-nls --with-lib-path=$TOOLS/lib"
   post_make_install: "make -C ld clean && make -C ld LIB_PATH=/usr/lib:/lib && cp -v ld/ld-new $TOOLS/bin"

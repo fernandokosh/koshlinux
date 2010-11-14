@@ -23,18 +23,10 @@ build:
   pre_configure: "./configure --prefix=$TOOLS"
   do_configure: no
   do_make: no
-  pre_make: "make"
-  post_make: "TZ=UTC make test"
-  pre_make_install: "TZ=UTC make install"
-  post_make_install: "chmod -v u+w $TOOLS/lib/libtcl8.5.so && 
+  pre_make: "cd $WORK/tcl8.5.8/unix ; make"
+  post_make: "cd $WORK/tcl8.5.8/unix ; TZ=UTC make test"
+  pre_make_install: "cd $WORK/tcl8.5.8/unix ; TZ=UTC make install"
+  post_make_install: "cd $WORK/tcl8.5.8/unix ; chmod -v u+w $TOOLS/lib/libtcl8.5.so &&
     TZ=UTC make install-private-headers &&
     ln -sv tclsh8.5 $TOOLS/bin/tclsh
   "
-
-dependencies:
-
-defaults:
-  
-file_list:
-
-

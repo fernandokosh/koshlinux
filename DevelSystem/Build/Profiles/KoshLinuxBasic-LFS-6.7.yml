@@ -25,6 +25,10 @@ packages: [
   base-binutils-2.20.1,
   base-gcc-4.5.1,
   base-tcl-8.5.8,
-  base-expect-5.44.1.15 
+  base-expect-5.44.1.15,
+  base-dejagnu-1.4.4,
+  base-ncurses-5.7,
+  base-bash-4.1,
+  base-bzip2-1.0.5,
+  base-coreutils-8.5
 ]
-

@@ -5,7 +5,7 @@ info:
   name: DejaGNU
   type: normal_system
   version: 1.4.4
-  filename: tcl8.5.8-src.tar.gz
+  filename: dejagnu-1.4.4.tar.gz
   size: 1,055
   homepage: http://www.gnu.org/software/dejagnu/
   description: "The DejaGNU package contains a framework for testing other programs."
@@ -16,34 +16,19 @@ info:
   unpack_folder:
   compile_folder: 
   patches:
+    dejagnu_1_4_4_consolidated_1:
+      name: Dejagnu Consolidated Patch
+      size: 6
+      download: http://www.linuxfromscratch.org/patches/lfs/6.7/dejagnu-1.4.4-consolidated-1.patch
+      md5: b9949a8abcc210d1dc9cdda06821c199
       
 build:
   options: 
-  after_patch: 
-  pre_configure: "
-    cd Work/tcl8.5.8/unix ;
-    ./configure --prefix=/tools ;
-  "
   do_configure: no
   do_make: no
-  pre_make: "
-    cd Work/tcl8.5.8/unix ;
-    make ;
-  "
-  post_make: "
-    cd Work/tcl8.5.8/unix ;
-    TZ=UTC make test ;
-  "
-  pre_make_install: "
-    cd Work/tcl8.5.8/unix ;
-    make install
-  "
-  post_make_install: "
-    cd Work/tcl8.5.8/unix ;
-    chmod -v u+w /tools/lib/libtcl8.5.so ;
-    make install-private-headers ;
-    ln -sv tclsh8.5 /tools/bin/tclsh ;
-  "
+  pre_configure: "cd $WORK/dejagnu-1.4.4; wget -O- 'http://www.linuxfromscratch.org/patches/lfs/6.7/dejagnu-1.4.4-consolidated-1.patch' | patch -Np1 ; ./configure --prefix=/tools"  
+  pre_make_install: "cd $WORK/dejagnu-1.4.4;make install"
+  post_make_install: "cd $WORK/dejagnu-1.4.4;make check"
   
 dependencies:
 

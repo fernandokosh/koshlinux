@@ -25,13 +25,10 @@ info:
 build:
   options: "--with-tcl=$TOOLS/lib --with-tclinclude=$TOOLS/include --with-tk=no"
   after_patch: 
-  pre_configure: "
-    patch_file='http://www.linuxfromscratch.org/patches/lfs/6.7/expect-5.44.1.15-no_tk-1.patch' ;
-    cd $WORK/expect-5.44.1.15 ; 
-    wget -O- $patch_file | patch -Np1 ;
-    cp -vf configure{,.orig} ;
-    sed 's:/usr/local/bin:/bin:' configure.orig > configure ;    
-  "
+  do_configure: no
+  pre_configure: " cd $WORK/expect-5.44.1.15 ; wget -O- 'http://www.linuxfromscratch.org/patches/lfs/6.7/expect-5.44.1.15-no_tk-1.patch' | patch -Np1 ; cp -vf configure{,.orig} ; sed 's:/usr/local/bin:/bin:' configure.orig > configure ;   
+    ./configure --prefix=/tools --with-tcl=/tools/lib --with-tclinclude=/tools/include --with-tk=no"
+  pre_make: "cd $WORK/expect-5.44.1.15 ; make
   post_make: "cd $WORK/expect-5.44.1.15 && make test"
   post_make_install: "cd $WORK/expect-5.44.1.15 && make SCRIPTS='' install"
   

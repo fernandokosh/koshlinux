@@ -310,14 +310,17 @@ class Packager
     extra_options += "set -x && " if @options[:debug]
     extra_options += "set +h && "
     extra_options += "umask 022 && "
-    command_line = "bash -c \" #{extra_options} #{which_command} \""
-    puts "Starting at folder: #{FileUtils.pwd}"
+    command_line = "#{extra_options} #{which_command}"
+    echo_start = '   echo "Starting at folder: $(pwd) " && '
+    echo_leave = '&& echo "Leaving at folder: $(pwd) "'
     puts "Command Line: #{extra_options} #{which_command}"
-    system(command_line)
+    system("bash", "-c", command_line, "\n")
     command_status = $?.exitstatus
-    puts "Command status(#{command_status}) Leaving at folder: #{FileUtils.pwd}"
-    unless command_status > 0
+    puts "Command exitstatus(#{command_status})"
+    if command_status > 0
       puts "Command line was: #{command_line}"
+      result = nil
+    else
       result = true
     end
     result

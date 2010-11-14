@@ -16,18 +16,45 @@ info:
   unpack_folder:
   compile_folder: gcc-4.5.1_base
   patches:
-    gcc_4_5_1_startfiles_fix_1:
-      name: GCC Startfiles Fix Patch
-      size: 1.5
-      download: http://www.linuxfromscratch.org/patches/lfs/6.7/gcc-4.5.1-startfiles_fix-1.patch
-      md5: 799ef1971350d2e3c794f2123f247cc6
+   gcc_4_5_1_startfiles_fix_1:
+    name: GCC Startfiles Fix Patch
+    size: 1.5
+    download: http://www.linuxfromscratch.org/patches/lfs/6.7/gcc-4.5.1-startfiles_fix-1.patch
+    md5: 799ef1971350d2e3c794f2123f247cc6
       
 build:
   options: 
-    
-  after_patch: cp -v gcc/Makefile.in{,.orig} sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
   pre_configure: "
-    CC=\"$LFS_TGT-gcc -B/tools/lib/\" \
+    cd $WORK/gcc-4.5.1 ;
+    wget -O- http://www.linuxfromscratch.org/patches/lfs/6.7/gcc-4.5.1-startfiles_fix-1.patch | patch -Np1;
+    cp -v gcc/Makefile.in{,.orig} ;
+    sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in ;
+    cp -v gcc/Makefile.in{,.tmp} ;
+    sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp gcc/Makefile.in ;
+    
+    for file in $(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
+    do
+      cp -uv $file{,.orig}
+      sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
+      -e 's@/usr@/tools@g' $file.orig > $file
+      echo '
+        #undef STANDARD_INCLUDE_DIR
+        #define STANDARD_INCLUDE_DIR 0
+        #define STANDARD_STARTFILE_PREFIX_1 \"\"
+        #define STANDARD_STARTFILE_PREFIX_2 \"\"' >> $file
+      touch $file.orig
+    done
+    
+    case $(uname -m) in
+      x86_64)
+        for file in $(find gcc/config -name t-linux64) ; do \
+        cp -v $file{,.orig}
+        sed '/MULTILIB_OSDIRNAMES/d' $file.orig > $file
+      done
+      ;;
+    esac
+
+    CC="$LFS_TGT-gcc -B/tools/lib/" \
     AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib \
     ../gcc-4.5.1/configure --prefix=/tools \
     --with-local-prefix=/tools --enable-clocale=gnu \
@@ -37,34 +64,10 @@ build:
     --disable-bootstrap --disable-libgomp \
     --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs \
     --without-ppl --without-cloog
-  
-    cp -vf gcc/Makefile.in{,.tmp} sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/akefile.in.tmp > gcc/Makefile.in
-    
-    for file in \
-     $(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
-    do
-      cp -uv $file{,.orig}
-      sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
-      -e 's@/usr@/tools@g' $file.orig > $file
-      echo '
-    #undef STANDARD_INCLUDE_DIR
-    #define STANDARD_INCLUDE_DIR 0
-    #define STANDARD_STARTFILE_PREFIX_1 \"\"
-    #define STANDARD_STARTFILE_PREFIX_2 \"\"' >> $file
-      touch $file.orig
-    done
-    
-    ### On x86_64, unsetting the multilib spec for GCC ensures that it won't attempt to link against libraries on the host
-    case $(uname -m) in
-      x86_64)
-        for file in $(find gcc/config -name t-linux64) ; do \
-          cp -vf $file{,.orig}
-          sed '/MULTILIB_OSDIRNAMES/d' $file.orig > $file
-        done
-      ;;
-    esac
   "
-  post_make_install: ln -vfs gcc $TOOLS/bin/cc
+  pre_make: "make"
+  pre_make_install: "make install"
+  post_make_install: "ln -vfs gcc $TOOLS/bin/cc"
   
 dependencies:
   source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]

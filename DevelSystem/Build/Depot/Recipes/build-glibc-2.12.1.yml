@@ -30,42 +30,12 @@ info:
 build:
   options: ""
   do_configure: no
-  pre_configure: "
-    case `uname -m` in 
-      i?86) echo \"CFLAGS += -march=i486 -mtune=native\" > configparms ;;
-    esac;
-    cd $WORK/glibc-2.12.1 ;
-    patch_file='http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-gcc_fix-1.patch';
-    wget -O- $patch_file | patch -Np1 ;
-    patch_file='http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-makefile_fix-1.patch';
-    wget -O- $patch_file | patch -Np1 ;
-  "
-  post_configure: "
-    cd $WORK/glibc-2.12.1_build ;
-    CFLAGS="-O2 -U_FORTIFY_SOURCE -fno-stack-protector" ../glibc-2.12.1/configure --prefix=$TOOLS --target=$LINUX_TARGET --host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.35.4 --with-headers=$TOOLS/include     libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes >../logs/configure_glibc-2.12.1.out 2>&1;
-  "
-
-  post_make_install: "
-    cd $WORK/glibc-2.12.1_build ;
-    SPECS=`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/specs ;
-    $LFS_TGT-gcc -dumpspecs | sed -e 's@/lib\(64\)\?/ld@/tools&@g' -e \"/^\*cpp:$/{n;s,$, -isystem /tools/include,}\" > $SPECS ;
-    echo \"New specs file is: $SPECS\" ;
-    unset SPECS ;
-
-    echo \"GLIBC minitest at folder: $(pwd)\"
-    echo 'main(){}' > dummy.c ;
-    $LFS_TGT-gcc -B/tools/lib dummy.c ;
-    readelf -l a.out | grep ': $TOOLS' ;
-    rm -v dummy.c a.out ;
-  "
+  do_make: no
+  do_make_install: no
+  pre_configure: "cd $WORK/glibc-2.12.1_build ; case `uname -m` in i?86) echo 'CFLAGS += -march=i486 -mtune=native' > configparms ;; esac; wget -O- http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-gcc_fix-1.patch | patch -Np1 ; wget -O- http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-makefile_fix-1.patch | patch -Np1 ; exit 0"
+  post_configure: "cd $WORK/glibc-2.12.1_build ; CFLAGS=\"-O2 -U_FORTIFY_SOURCE -fno-stack-protector\" ../glibc-2.12.1/configure --prefix=$TOOLS  --target=$LINUX_TARGET --host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.35.4 --with-headers=$TOOLS/include libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes >../logs/configure_glibc-2.12.1.out 2>\&1 ;"
+  pre_make: "cd $WORK/glibc-2.12.1_build ; make >../logs/make_glibc-2.12.1.out 2>&1; exit 0"
+  post_make: "cd $WORK/glibc-2.12.1_build ; make install >../logs/make_glibc-2.12.1.out 2>&1 ; cd .. ; export SPECS=`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/specs ; $LFS_TGT-gcc -dumpspecs | sed -e 's@/lib\(64\)\?/ld@/tools&@g' -e '/^\*cpp:$/{n;s,$, -isystem /tools/include,}' > $SPECS ; echo 'New specs file is: $SPECS' ; unset SPECS ;"
+  post_make_install: ""
 
 dependencies:
-  build: [ ]
-  source_only: [ ]
-  run:
-  
-defaults:
-  
-file_list:
-
-

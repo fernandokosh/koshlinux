@@ -30,6 +30,7 @@ class Packager
       fetch_file(package)
     end
     
+    hook_package('pre_unpack')
     unless package['build']['do_unpack'] == false
       unpack_file(package)
     end

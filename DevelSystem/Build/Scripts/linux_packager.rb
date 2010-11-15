@@ -255,10 +255,10 @@ class Packager
     download_url = package['info']['download']
 
     unless File.exists?(file_path) && Digest::MD5.hexdigest(File.read(file_path)) == package['info']['md5']
-      puts "Downloading package #{file_name}... "
+      puts "Downloading archive #{file_name}... "
       self.download_source(file_name, download_url)
     else
-      puts "Previously downloaded package #{file_name}... Skip"
+      puts "Skip download, using previously downloaded archive #{file_name}..."
     end
   end
 

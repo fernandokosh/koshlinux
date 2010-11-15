@@ -29,13 +29,14 @@ info:
       download: http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-makefile_fix-1.patch
       md5: 0ef634ac78e582f45d0e7643bfda7505
 
-build:
+configure:
   options: "--host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.35.4 --with-headers=$TOOLS/include libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
-  pre_configure_nope: "
-    case `uname -m` in i?86) echo 'CFLAGS += -march=i486 -mtune=native' > configparms ;; esac;"
-  post_configure: "
-    CFLAGS='-O2 -U_FORTIFY_SOURCE -fno-stack-protector' ./config.status --recheck  > $LOGS/configure_build-glibc-2.12.1.out 2>&1"
-  post_make_install: "
+  variables: "CFLAGS='-O2 -U_FORTIFY_SOURCE -fno-stack-protector'"
+  pre_disabled: "case `uname -m` in i?86) echo 'CFLAGS += -march=i486 -mtune=native' > configparms ;; esac;"
+  post_disabled: " ./config.status --recheck  > $LOGS/configure_build-glibc-2.12.1.out 2>&1"
+
+make_install:
+  post: "
   SPECS=`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/specs && 
   $LFS_TGT-gcc -dumpspecs | sed \
   -e 's@/lib\(64\)\?/ld@/tools&@g' \
@@ -43,5 +44,7 @@ build:
   echo \"New specs file is: $SPECS\" &&
   unset SPECS
 "
+
+build:
 
 dependencies:

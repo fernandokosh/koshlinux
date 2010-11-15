@@ -16,13 +16,18 @@ info:
   unpack_folder:
   compile_folder: 
 
+configure:
+  do: no
+
+make:
+  do: no
+  pre: "make headers_check && make INSTALL_HDR_PATH=dest headers_install >$LOGS/make_build-linux-2.6.35.4.out 2>&1"
+  post: "cp -rv dest/include/* $TOOLS/include >$LOGS/make_build-linux-2.6.35.4.out 2>&1"
+
+make_install:
+  do: no
+
 build:
-  options: 
-  do_configure: no
-  pre_make: "cd $WORK/linux-2.6.35.4 ; make headers_check && make INSTALL_HDR_PATH=dest headers_install  >$LOGS/make_build-linux-2.6.35.4.out 2>&1"
-  do_make: no
-  do_make_install: no
-  post_make: "cd $WORK/linux-2.6.35.4 ; cp -rv dest/include/* $TOOLS/include >$LOGS/make_build-linux-2.6.35.4.out 2>&1"
 
 dependencies:
   build: [ ]

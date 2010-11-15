@@ -17,5 +17,5 @@ info:
   compile_folder: 
   patches:  
             
-build:
-  options: " --prefix=/tools --with-shared --without-debug --without-ada --enable-overwrite"
+configure:
+  options: "--with-shared --without-debug --without-ada --enable-overwrite"

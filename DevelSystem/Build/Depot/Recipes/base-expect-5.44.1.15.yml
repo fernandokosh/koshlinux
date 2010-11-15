@@ -21,17 +21,20 @@ info:
       size: 4.4
       download: http://www.linuxfromscratch.org/patches/lfs/6.7/expect-5.44.1.15-no_tk-1.patch
       md5: ba1b2c5841eea6c62b7522dfde412e65
-            
-build:
+
+configure:
   options: "--with-tcl=$TOOLS/lib --with-tclinclude=$TOOLS/include --with-tk=no"
-  after_patch: 
-  do_configure: no
-  pre_configure: " cd $WORK/expect-5.44.1.15 ; wget -O- 'http://www.linuxfromscratch.org/patches/lfs/6.7/expect-5.44.1.15-no_tk-1.patch' | patch -Np1 ; cp -vf configure{,.orig} ; sed 's:/usr/local/bin:/bin:' configure.orig > configure ;   
-    ./configure --prefix=/tools --with-tcl=/tools/lib --with-tclinclude=/tools/include --with-tk=no"
-  pre_make: "cd $WORK/expect-5.44.1.15 ; make
-  post_make: "cd $WORK/expect-5.44.1.15 && make test"
-  post_make_install: "cd $WORK/expect-5.44.1.15 && make SCRIPTS='' install"
-  
+  pre: "
+    cp -vf configure{,.orig} ; sed 's:/usr/local/bin:/bin:' configure.orig > configure 
+  "
+make:
+  post: "make test"
+
+make_install: 
+  post: "make SCRIPTS='' install"
+
+build:
+
 dependencies:
 
 defaults:

@@ -16,7 +16,7 @@ info:
   unpack_folder:
   compile_folder:
   patches:
-    
-build:
-  options: "--prefix=/tools"
-  pre_make_install: "make check"  
+
+make_install:
+  pre: "make check"
+

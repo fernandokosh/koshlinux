@@ -21,20 +21,25 @@ info:
     size: 1.5
     download: http://www.linuxfromscratch.org/patches/lfs/6.7/gcc-4.5.1-startfiles_fix-1.patch
     md5: 799ef1971350d2e3c794f2123f247cc6
-      
-build:
-  options: 
+
+configure:
+  options: "--with-local-prefix=$TOOLS --enable-clocale=gnu \
+    --enable-shared --enable-threads=posix \
+    --enable-__cxa_atexit --enable-languages=c,c++ \
+    --disable-libstdcxx-pch --disable-multilib \
+    --disable-bootstrap --disable-libgomp \
+    --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs \
+    --without-ppl --without-cloog"
+  variables: "CC=\"$LFS_TGT-gcc -B/tools/lib/\" AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib"
   pre_configure: "
-    cd $WORK/gcc-4.5.1 ;
-    wget -O- http://www.linuxfromscratch.org/patches/lfs/6.7/gcc-4.5.1-startfiles_fix-1.patch | patch -Np1;
-    cp -v gcc/Makefile.in{,.orig} ;
-    sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in ;
-    cp -v gcc/Makefile.in{,.tmp} ;
-    sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp gcc/Makefile.in ;
+    cp -v gcc/Makefile.in{,.orig} &&
+    sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in &&
+    cp -v gcc/Makefile.in{,.tmp} &&
+    sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp gcc/Makefile.in &&
     
     for file in $(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
     do
-      cp -uv $file{,.orig}
+      cp -uv $file{,.orig} 
       sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
       -e 's@/usr@/tools@g' $file.orig > $file
       echo '
@@ -53,22 +58,12 @@ build:
       done
       ;;
     esac
-
-    CC="$LFS_TGT-gcc -B/tools/lib/" \
-    AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib \
-    ../gcc-4.5.1/configure --prefix=/tools \
-    --with-local-prefix=/tools --enable-clocale=gnu \
-    --enable-shared --enable-threads=posix \
-    --enable-__cxa_atexit --enable-languages=c,c++ \
-    --disable-libstdcxx-pch --disable-multilib \
-    --disable-bootstrap --disable-libgomp \
-    --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs \
-    --without-ppl --without-cloog
   "
-  pre_make: "make"
-  pre_make_install: "make install"
-  post_make_install: "ln -vfs gcc $TOOLS/bin/cc"
-  
+  make_install:
+    post: "ln -vfs gcc $TOOLS/bin/cc"
+
+build:
+
 dependencies:
   source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]
 

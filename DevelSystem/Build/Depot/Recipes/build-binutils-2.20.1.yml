@@ -15,10 +15,13 @@ info:
   pack_folder: binutils-2.20.1
   compile_folder: binutils-2.20.1_build
 
-build:
+configure:
   options: --disable-nls --disable-werror
-  pre_make_install: "
+  variables:
+
+make_install:
+  pre: "
     case $(uname -m) in
-      x86_64) mkdir -pv $TOOLS/lib ; ln -sfv lib $TOOLS/lib64 ;;
-    esac ;
+      x86_64) mkdir -v /tools/lib && ln -sv lib /tools/lib64 ;;
+    esac
   "

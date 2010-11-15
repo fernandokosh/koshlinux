@@ -16,8 +16,12 @@ info:
   unpack_folder:
   compile_folder: 
   patches:
-    
+
+configure:
+  options: "--prefix=$TOOLS --enable-install-program=hostname"
+
+make_install:
+  pre: "make RUN_EXPENSIVE_TESTS=yes check"
+  post: "cp -v src/su $TOOLS/bin/su-tools"
+
 build:
-  options: "--prefix=/tools --enable-install-program=hostname"
-  pre_make_install: "make RUN_EXPENSIVE_TESTS=yes check"
-  post_make_install: "cd $WORK/coreutils-8.5; cp -v src/su /tools/bin/su-tools"

@@ -16,9 +16,13 @@ info:
   unpack_folder:
   compile_folder: 
   patches:
-    
+
+configure:
+  do: no
+
+make_install:
+  do: no
+  options: "PREFIX=$TOOLS"
+
 build:
-  options: 
-  do_configure: no
-  do_make_install: no
-  post_make_install: "cd $WORK/bzip2-1.0.5; make PREFIX=/tools install"
+

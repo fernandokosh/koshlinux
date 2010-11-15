@@ -21,14 +21,11 @@ info:
       size: 6
       download: http://www.linuxfromscratch.org/patches/lfs/6.7/dejagnu-1.4.4-consolidated-1.patch
       md5: b9949a8abcc210d1dc9cdda06821c199
-      
+
+make_install:
+  post: "make check"
+
 build:
-  options: 
-  do_configure: no
-  do_make: no
-  pre_configure: "cd $WORK/dejagnu-1.4.4; wget -O- 'http://www.linuxfromscratch.org/patches/lfs/6.7/dejagnu-1.4.4-consolidated-1.patch' | patch -Np1 ; ./configure --prefix=/tools"  
-  pre_make_install: "cd $WORK/dejagnu-1.4.4;make install"
-  post_make_install: "cd $WORK/dejagnu-1.4.4;make check"
   
 dependencies:
 

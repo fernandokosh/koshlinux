@@ -16,7 +16,7 @@ info:
   unpack_folder:
   compile_folder: gcc-4.5.1_build
 
-build:
+configure:
   options: "--disable-nls --disable-shared --disable-multilib 
     --disable-decimal-float --disable-threads 
     --disable-libmudflap --disable-libssp 
@@ -24,11 +24,14 @@ build:
     --without-ppl --without-cloog
     --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs
   "
-  post_make_install: "
+make_install: 
+  post: "
     ln -vsf libgcc.a `$LFS_TGT-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'` &&
     ln -vsf gcc/x86_64-pc-linux-gnu/4.5.1/libgcc_eh.a $TOOLS/lib/ ; ## dont work without that on my system. 
   "
 
+build:
+  
 dependencies:
 #  build: # build dependecies from host system if none especified build::options
   build: [ ]

@@ -19,11 +19,16 @@ info:
       download: http://www.linuxfromscratch.org/patches/lfs/6.7/bash-4.1-fixes-2.patch
       md5: 7813f0e42d41dc4443dc3d161ad24987
 
-build:
+configure:
   options: "--prefix=/tools --without-bash-malloc"
-  pre_configure: "cd $WORK/bash-4.1; wget -O- 'http://www.linuxfromscratch.org/patches/lfs/6.7/bash-4.1-fixes-2.patch' | patch -Np1"
-  post_make: "cd $WORK/bash-4.1; make tests"
-  post_make_install: "cd $WORK/bash-4.1; ln -vsf bash /tools/bin/sh"
+
+make:
+  post: "make tests"
+
+make_install:
+  post: "ln -vsf bash /tools/bin/sh"
+
+build:
 
 defaults:
   

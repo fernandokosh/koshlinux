@@ -1,6 +1,5 @@
 
 variables:
-  lfs: $WORK
   lc_all: POSIX
   arch: x86_64
   linux_target: x86_64-pc-linux-gnu

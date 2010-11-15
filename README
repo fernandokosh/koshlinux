@@ -1,19 +1,19 @@
 KoshLinux
 
-A Linux from scratch built-in with tools written in ruby language.
+A Linux From Scratch built-in with tools written in Ruby language.
 
 Its currently in development of tool chain build system, that will be used to build a linux system it self.
 
-Some of major changes will be implemented in init and run levels systems.
+Some of major changes will be implemented in init and run levels systems and base system.
 
-In an second redesign, I plan to redefine the linux file system, using an modern and intuitive fs layout, like GoboLinux, but I have no plans to maintain any compatibility or standards.
+In an second redesign, I plan to redefine the linux file system, using an modern and intuitive FS layout, like GoboLinux, but I have no plans to maintain any compatibility or standards.
 
 
 My modifications will includes:
 
-- RubyInitd, a intelligent init and monitoring system
+- RubyInitd, a intelligent init and monitoring system.
 
-- KoshLinux package manager system, based on YML recipes to build and tar bz files for compiled packages.
+- KoshLinux package manager system, based on YML or pure Ruby recipes to build and tar bz files for compiled packages.
 
 - Ruby Web Interface to system admin and user preferences.
 
@@ -21,16 +21,38 @@ My modifications will includes:
 
 - And also managed by command line tools.
 
-features: 
+Features: 
   - Compile source code for package from a Recipe
   - Really Simple Stupid dependency system implemented current Recipe
-  - create a complete bootstrap system for compile a base system GNU
+  - Create a complete bootstrap system for compile a base system GNU based on Linux From Scratch Howtos
   ...
 
-requirements:
+Requirements:
   You need somes packages installed on your system for start build a KoshLinux systems
+
+  - bash
+  - binutils
+  - bison
+  - yacc
+  - readlink
+  - bzip2
+  - coreutils
+  - diff
+  - find
+  - gawk
+  - gcc
+  - libc6
+  - grep
+  - gzip
+  - cat
+  - m4
+  - make
+  - patch
+  - perl
+  - sed
+  - tar
+  - texinfo
   - git
   - ruby
-  - some other packages
 
 [WIP]

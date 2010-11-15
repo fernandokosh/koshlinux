@@ -1,0 +1,25 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Adjusting the Toolchain
+  version: 1
+  homepage: http://www.linuxfromscratch.org/lfs/view/stable/chapter05/adjusting.html
+  description: "The cross-compiler's specs file needs to be adjusted to point to the new dynamic linker in /tools. This is done by dumping the compiler's “specs” file to a location where it will look for it by default. A simple sed substitution then alters the dynamic linker that GCC will use. The principle here is to find all references to the dynamic linker file in /lib or possibly /lib64 if the host system is 64-bit capable, and adjust them to point to the new location in /tools."
+
+fetch:
+  do: no
+  
+unpack:
+  do: no
+
+configure:
+  do: no
+
+make_install:
+  do: no
+  post: "source $BUILD/build-adjusts_toolchain.sh"
+
+build:
+  do: no
+

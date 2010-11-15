@@ -321,6 +321,7 @@ class Packager
   def patch_package
     info = @package['info']
     patches = info['patches']
+    return if patches.nil?
     options = info['patches_options']
     puts "Appling #{patches.count} patch(es)"
     patches.each do |patch|

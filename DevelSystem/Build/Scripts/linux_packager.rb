@@ -34,7 +34,9 @@ class Packager
     unless package['build']['do_unpack'] == false
       unpack_file(package)
     end
-    
+
+    patch_package
+
     unless package['build']['do_dependency'] == false
       check_dependencies(package)
     end
@@ -290,6 +292,53 @@ class Packager
       result = environment_box(current_hook)
       puts "_== End hook(#{hook}) ==__"
       abort("Exiting hook(#{hook})") if result.nil?
+    end
+  end
+
+  def check_for_checksum(file_path)
+    Digest::MD5.hexdigest(File.read(file_path))
+  end
+
+  def fetch_file_patch(patch)
+    url_for_download = patch['download']
+    uri = URI.parse(url_for_download)
+    filename = File.basename(uri.path)
+    filepath = "#{KoshLinux::SOURCES}/#{filename}"
+
+    require 'open-uri'
+    unless File.exist?(filepath)
+      puts "Downloading patch: #{url_for_download}"
+      if open(filepath, 'w').write(uri.read)
+        filepath
+      else
+        nil
+      end
+    else
+      filepath
+    end
+  end
+
+  def patch_package
+    info = @package['info']
+    patches = info['patches']
+    options = info['patches_options']
+    puts "Appling #{patches.count} patch(es)"
+    patches.each do |patch|
+      patch_info = patch[1]
+      filepath = fetch_file_patch(patch_info)
+      if filepath
+        work_folder = "#{KoshLinux::WORK}/#{pack_unpack_folder(@package)}"
+        FileUtils.cd(work_folder)
+        unless File.exist?("#{patch[0]}")
+          options = patch_info['options'] unless patch_info['options'].nil?
+          puts "__== Appling patch: #{patch_info['name']} ==__"
+          log_file = "#{KoshLinux::LOGS}/patch_#{@package['name']}.out"
+          command_for_patch = "patch #{options} -i #{filepath} >#{log_file} 2>&1 && echo 'patched' > #{patch[0]}"
+          patch_command = environment_box(command_for_patch)
+        end
+      else
+        abort("Erro with downloading: #{patch['name']}")
+      end
     end
   end
 

@@ -20,10 +20,11 @@ END_OF_DESCRIPTION
     options[:debug] = true
   end
 
-  opts.on("-k", "--keep", "--keep-work", "Keep the Work") do
-    options[:keep_work] = true
+  options[:keep_work] = true # Default for keep work folder
+  opts.on("--no-keep", "--no-keep-work", "Remove unpacked folder before compile") do |k|
+    options[:keep_work] = false
   end
-
+  
   opts.on("-c [TYPE]", "--clear [TYPE]", clear_description) do |clear|
     options[:clear] = clear
   end

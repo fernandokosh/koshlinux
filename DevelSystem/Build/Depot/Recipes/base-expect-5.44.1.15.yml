@@ -3,7 +3,6 @@
 
 info:
   name: Expect
-  type: normal_system
   version: 5.44.1.15
   filename: expect-5.44.1.15.tar.bz2
   size: "534"
@@ -32,13 +31,4 @@ make:
 
 make_install: 
   post: "make SCRIPTS='' install"
-
-build:
-
-dependencies:
-
-defaults:
-  
-file_list:
-
 

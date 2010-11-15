@@ -3,7 +3,6 @@
 
 info:
   name: Tcl
-  type: normal_system
   version: 8.5.8
   filename: tcl8.5.8-src.tar.gz
   size: "4,348"
@@ -27,3 +26,4 @@ make:
       TZ=UTC make install-private-headers &&
       ln -sv tclsh8.5 $TOOLS/bin/tclsh
     "
+

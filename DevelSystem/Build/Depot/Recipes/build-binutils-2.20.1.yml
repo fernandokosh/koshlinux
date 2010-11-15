@@ -3,7 +3,6 @@
 
 info:
   name: Binutils
-  type: normal_system
   version: 2.20.1
   filename: binutils-2.20.1.tar.bz2
   size: "17,091"
@@ -25,3 +24,4 @@ make_install:
       x86_64) mkdir -v /tools/lib && ln -sv lib /tools/lib64 ;;
     esac
   "
+

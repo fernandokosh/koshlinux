@@ -3,7 +3,6 @@
 
 info:
   name: Bash
-  type: normal_system
   version: 4.1
   filename: bash-4.1.tar.gz
   size: 6,444
@@ -12,24 +11,4 @@ info:
   md5: 9800d8724815fd84994d9be65ab5e7b8
   packer: tar.gz
   pack_folder: bash-4.1
-  patches:
-    name_of_path:
-      name: 
-      size:
-      download: 
-      md5: 
-    name_of_other_path:
-      name: 
-      size:
-      download: 
-      md5: 
-
-build:
-  options:
-
-defaults:
-  
-file_list:
-  
-  
 

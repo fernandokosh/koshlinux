@@ -3,7 +3,6 @@
 
 info:
   name: Coreutils
-  type: normal_system
   version: 8.5
   filename: coreutils-8.5.tar.gz
   size: 10,489
@@ -24,4 +23,3 @@ make_install:
   pre: "make RUN_EXPENSIVE_TESTS=yes check"
   post: "cp -v src/su $TOOLS/bin/su-tools"
 
-build:

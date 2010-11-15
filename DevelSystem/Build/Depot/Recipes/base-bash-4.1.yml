@@ -3,7 +3,6 @@
 
 info:
   name: Bash
-  type: normal_system
   version: 4.1
   filename: bash-4.1.tar.gz
   size: 6,444
@@ -29,10 +28,4 @@ make_install:
   post: "ln -vsf bash /tools/bin/sh"
 
 build:
-
-defaults:
-  
-file_list:
-  
-  
 

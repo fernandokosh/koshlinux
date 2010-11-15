@@ -3,7 +3,6 @@
 
 info:
   name: Binutils
-  type: normal_system
   version: 2.20.1
   filename: binutils-2.20.1.tar.bz2
   size: "17,091"
@@ -13,6 +12,7 @@ info:
   md5: 9cdfb9d6ec0578c166d3beae5e15c4e5
   packer: tar.bz2
   pack_folder: binutils-2.20.1
+  unpack_folder: binutils-2.20.1_base_source
   compile_folder: binutils-2.20.1_base
 
 configure:

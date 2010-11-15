@@ -3,7 +3,6 @@
 
 info:
   name: GCC
-  type: normal_system
   version: 4.5.1
   filename: gcc-4.5.1.tar.bz2
   size: "64,572"
@@ -62,12 +61,6 @@ configure:
   make_install:
     post: "ln -vfs gcc $TOOLS/bin/cc"
 
-build:
-
 dependencies:
   source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]
-
-defaults:
-  
-file_list:
 

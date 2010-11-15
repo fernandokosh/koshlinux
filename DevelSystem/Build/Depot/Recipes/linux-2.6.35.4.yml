@@ -3,7 +3,6 @@
 
 info:
   name: Linux
-  type: normal_system
   version: 2.6.35.4
   filename: linux-2.6.35.4.tar.bz2
   size: 67,636
@@ -15,17 +14,6 @@ info:
   pack_folder: linux-2.6.35.4
   unpack_folder:
   compile_folder: 
-  patches:
-    name_of_path:
-      name: 
-      size:
-      download: 
-      md5: 
-    name_of_other_path:
-      name: 
-      size:
-      download: 
-      md5: 
 
 build:
   options: 
@@ -41,8 +29,4 @@ dependencies:
   build: [ ]
   source_only: [ ]
   run:
-  
-defaults:
-  
-file_list:
 

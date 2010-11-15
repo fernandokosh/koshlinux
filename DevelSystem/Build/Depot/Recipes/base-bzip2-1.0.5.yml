@@ -3,7 +3,6 @@
 
 info:
   name: Bzip2
-  type: normal_system
   version: 1.0.5
   filename: bzip2-1.0.5.tar.gz
   size: 822
@@ -23,6 +22,4 @@ configure:
 make_install:
   do: no
   options: "PREFIX=$TOOLS"
-
-build:
 

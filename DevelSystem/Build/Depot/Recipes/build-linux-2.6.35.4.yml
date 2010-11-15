@@ -33,8 +33,4 @@ dependencies:
   build: [ ]
   source_only: [ ]
   run:
-  
-defaults:
-  
-file_list:
 

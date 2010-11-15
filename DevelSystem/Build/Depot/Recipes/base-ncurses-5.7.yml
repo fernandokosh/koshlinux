@@ -3,7 +3,6 @@
 
 info:
   name: Ncurses
-  type: normal_system
   version: 5.7
   filename: ncurses-5.7.tar.gz
   size: "2,388"
@@ -19,3 +18,4 @@ info:
             
 configure:
   options: "--with-shared --without-debug --without-ada --enable-overwrite"
+

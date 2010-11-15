@@ -3,7 +3,6 @@
 
 info:
   name: Glibc
-  type: normal_system
   version: 2.12.1
   filename: glibc-2.12.1.tar.bz2
   size: "15,300"
@@ -33,18 +32,4 @@ configure:
   options: "--host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.35.4 --with-headers=$TOOLS/include libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
   variables: "CFLAGS='-O2 -U_FORTIFY_SOURCE -fno-stack-protector'"
   pre_disabled: "case `uname -m` in i?86) echo 'CFLAGS += -march=i486 -mtune=native' > configparms ;; esac;"
-  post_disabled: " ./config.status --recheck  > $LOGS/configure_build-glibc-2.12.1.out 2>&1"
 
-make_install:
-  post: "
-  SPECS=`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/specs && 
-  $LFS_TGT-gcc -dumpspecs | sed \
-  -e 's@/lib\(64\)\?/ld@/tools&@g' \
-  -e \"/^\*cpp:$/{n;s,$, -isystem /tools/include,}\" > $SPECS &&
-  echo \"New specs file is: $SPECS\" &&
-  unset SPECS
-"
-
-build:
-
-dependencies:

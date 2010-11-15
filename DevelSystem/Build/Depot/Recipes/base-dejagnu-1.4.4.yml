@@ -3,7 +3,6 @@
 
 info:
   name: DejaGNU
-  type: normal_system
   version: 1.4.4
   filename: dejagnu-1.4.4.tar.gz
   size: 1,055
@@ -24,13 +23,4 @@ info:
 
 make_install:
   post: "make check"
-
-build:
-  
-dependencies:
-
-defaults:
-  
-file_list:
-
 

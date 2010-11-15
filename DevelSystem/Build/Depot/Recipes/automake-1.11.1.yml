@@ -3,7 +3,6 @@
 
 info:
   name: Automake
-  type: normal_system
   version: 1.11.1
   filename: automake-1.11.1.tar.bz2
   size: 1,042
@@ -13,24 +12,4 @@ info:
   packer: tar.bz2
   pack_folder: automake-1.11.1
   unpack_folder:
-  patches:
-    name_of_path:
-      name: 
-      size:
-      download: 
-      md5: 
-    name_of_other_path:
-      name: 
-      size:
-      download: 
-      md5: 
-
-build:
-  options:
-
-defaults:
-  
-file_list:
-  
-  
 

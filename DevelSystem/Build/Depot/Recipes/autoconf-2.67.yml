@@ -3,7 +3,6 @@
 
 info:
   name: Autoconf
-  type: normal_system
   version: 2.67
   filename: autoconf-2.67.tar.bz2
   size: 1,338
@@ -12,25 +11,4 @@ info:
   md5: 3fbf92eb8eaca1e0d33dff9710edb5f0
   packer: tar.bz2
   pack_folder: autoconf-2.67
-  unpack_folder: 
-  patches:
-    name_of_path:
-      name: 
-      size:
-      download: 
-      md5: 
-    name_of_other_path:
-      name: 
-      size:
-      download: 
-      md5: 
-
-build:
-  options:
-
-defaults:
-  
-file_list:
-  
-  
 

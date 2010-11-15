@@ -35,6 +35,13 @@ class Cleaner
     end
   end
 
+  def Cleaner.clean_ccache
+    folder = "#{KoshLinux::WORK}/.ccache"
+    puts "Cleaning up .ccache: #{folder}"
+    FileUtils.rm_rf(folder) if File.exist?(folder)
+    exit(0)
+  end
+  
   def Cleaner.clean_all
     clean_tools
     clean_logs

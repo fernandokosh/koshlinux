@@ -11,6 +11,7 @@ OptionParser.new do |opts|
           tools: Clear builder tools folder
           logs: Clear build logs
           work: Clear work folder (default)
+          ccache: Clear .ccache if exists and exit
           sources: Clear the sources files
           all: Clear all except the sources
           all_sources: Clear all files and source. with this, you got a clean repository

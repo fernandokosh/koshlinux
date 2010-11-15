@@ -295,8 +295,8 @@ class Packager
     end
   end
 
-  def check_for_checksum(file_path)
-    Digest::MD5.hexdigest(File.read(file_path))
+  def check_for_checksum(file_path, checksum)
+    Digest::MD5.hexdigest(File.read(file_path)) == checksum
   end
 
   def fetch_file_patch(patch)
@@ -306,7 +306,7 @@ class Packager
     filepath = "#{KoshLinux::SOURCES}/#{filename}"
 
     require 'open-uri'
-    unless File.exist?(filepath)
+    unless File.exist?(filepath) && check_for_checksum(filepath, patch['md5'])
       puts "Downloading patch: #{url_for_download}"
       if open(filepath, 'w').write(uri.read)
         filepath

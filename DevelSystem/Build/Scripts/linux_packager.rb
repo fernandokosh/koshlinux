@@ -299,6 +299,7 @@ class Packager
     ENV['BUILD'] = KoshLinux::KOSH_LINUX_ROOT
     ENV['WORK']  = KoshLinux::WORK
     ENV['TOOLS'] = KoshLinux::TOOLS
+    ENV['LOGS']  = KoshLinux::LOGS
     ENV['PATH']  = "/usr/lib/ccache:#{KoshLinux::TOOLS}/bin:/bin:/usr/bin"
 
     file_path = "#{KoshLinux::PROFILES}/LinuxBasic.yml"

@@ -17,6 +17,5 @@ info:
 
 build:
   options: "--disable-nls --with-lib-path=$TOOLS/lib"
-  post_configure: "
-  CC=\"$LFS_TGT-gcc -B/tools/lib/\" AR=\"$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib\" ./config.status --recheck "
+  post_configure: "CC=\"$LFS_TGT-gcc -B/tools/lib/\" AR=\"$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib\" ./config.status --recheck"
   post_make_install: "make -C ld clean && make -C ld LIB_PATH=/usr/lib:/lib && cp -v ld/ld-new $TOOLS/bin"

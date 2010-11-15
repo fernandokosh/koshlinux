@@ -30,12 +30,4 @@ build:
   "
 
 dependencies:
-#  build: # build dependecies from host system if none especified build::options
-  build: [ ]
   source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]
-  run:
-  
-defaults:
-  
-file_list:
-

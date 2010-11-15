@@ -16,12 +16,7 @@ info:
   compile_folder: binutils-2.20.1_base
 
 build:
-  options: ""
-  do_configure: no
-  do_make: no
-  do_make_install: no  
-  post_configure: "cd $WORK/binutils-2.20.1_base; 
-  CC=\"$LFS_TGT-gcc -B/tools/lib/\" AR=\"$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib\" ../binutils-2.20.1/configure --prefix=$TOOLS --disable-nls --with-lib-path=$TOOLS/lib"
-  pre_make: "cd $WORK/binutils-2.20.1_base; make"
-  pre_make_install: "cd $WORK/binutils-2.20.1_base; make install"
-  post_make_install: "cd $WORK/binutils-2.20.1_base; make -C ld clean && make -C ld LIB_PATH=/usr/lib:/lib && cp -v ld/ld-new $TOOLS/bin"
+  options: "--disable-nls --with-lib-path=$TOOLS/lib"
+  post_configure: "
+  CC=\"$LFS_TGT-gcc -B/tools/lib/\" AR=\"$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib\" ./config.status --recheck "
+  post_make_install: "make -C ld clean && make -C ld LIB_PATH=/usr/lib:/lib && cp -v ld/ld-new $TOOLS/bin"

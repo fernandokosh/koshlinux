@@ -206,10 +206,10 @@ class Packager
     case packer
       when 'tar.bz2' then
         puts "Archive type: tar.bz2"
-        unpack_tar_bz2(archive_path) if FileUtils.rm_rf(unpack_folder)
+        unpack_tar_bz2(archive_path)
       when 'tar.gz' then
         puts "Archive type: tar.gz"
-        unpack_tar_gz(archive_path) if FileUtils.rm_rf(unpack_folder)
+        unpack_tar_gz(archive_path)
       else
        abort("Error: Unreconized packer type: #{packer}")
     end
@@ -224,13 +224,13 @@ class Packager
 
   def unpack_tar_bz2(file_path)
     FileUtils.cd(KoshLinux::WORK)
-    system("tar -xjf #{file_path}")
+    system("tar --recursive-unlink -xjUf #{file_path}")
     FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
   end
 
   def unpack_tar_gz(file_path)
     FileUtils.cd(KoshLinux::WORK)
-    system("tar -xzf #{file_path}")
+    system("tar --recursive-unlink -xzUf #{file_path}")
     FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
   end
 
@@ -329,12 +329,14 @@ class Packager
       if filepath
         work_folder = "#{KoshLinux::WORK}/#{pack_unpack_folder(@package)}"
         FileUtils.cd(work_folder)
-        unless File.exist?("#{patch[0]}")
+        unless File.exist?(patch[0])
           options = patch_info['options'] unless patch_info['options'].nil?
           puts "__== Appling patch: #{patch_info['name']} ==__"
           log_file = "#{KoshLinux::LOGS}/patch_#{@package['name']}.out"
           command_for_patch = "patch #{options} -i #{filepath} >#{log_file} 2>&1 && echo 'patched' > #{patch[0]}"
           patch_command = environment_box(command_for_patch)
+        else
+          puts "No needed patch: #{patch_info['name']}"
         end
       else
         abort("Erro with downloading: #{patch['name']}")

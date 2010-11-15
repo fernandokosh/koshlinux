@@ -22,7 +22,7 @@ build:
     --disable-libmudflap --disable-libssp 
     --disable-libgomp --enable-languages=c 
     --without-ppl --without-cloog
-    --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs \
+    --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs
   "
   post_make_install: "
     ln -vsf libgcc.a `$LFS_TGT-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'` ;

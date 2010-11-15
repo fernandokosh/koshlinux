@@ -21,61 +21,70 @@ class Packager
     @packages.each do | file_name |
       @package = load_package(file_name)
       build_package(@package)
-    end      
+    end
   end
-  
+
   def build_package(package, operation="run")
-  
-    unless package['build']['do_fetch'] == false
+
+    hook_package('fetch', 'pre')
+    unless package['fetch'].nil?
+      fetch_file(package) unless package['fetch']['do'] == false
+    else
       fetch_file(package)
     end
-    
-    hook_package('pre_unpack')
-    unless package['build']['do_unpack'] == false
+    hook_package('fetch', 'post')
+
+    hook_package('unpack', 'pre')
+    unless package['unpack'].nil?
+      unpack_file(package) unless package['unpack']['do'] == false
+    else
       unpack_file(package)
     end
+    hook_package('unpack', 'post')
 
+    hook_package('patch', 'pre')
     patch_package
+    hook_package('patch', 'post')
 
-    unless package['build']['do_dependency'] == false
+    unless package['dependencies'] == false
       check_dependencies(package)
     end
 
     if operation == "build" || operation == "run"
-      hook_package('pre_configure')
-      unless package['build']['do_configure'] == false
+      hook_package('configure', 'pre')
+      unless package['configure'].nil?
         puts "build_package: configure start ::.#{package['info']['name']}.:: "
-        configure_package(package)
+        configure_package(package) unless package['configure']['do'] == false
         puts "build_package: configure end ::.#{package['info']['name']}.:: "
-        sleep(3)
+      else
+        configure_package(package)
       end
-      hook_package('post_configure')
-      
-      hook_package('pre_make')
-      unless package['build']['do_make'] == false
+      hook_package('configure', 'post')
+
+      hook_package('make', 'pre')
+      unless package['make'].nil?
         puts "build_package:make_package: start... ::.#{package['info']['name']}.:: "
-        sleep(2)
-        make_package(package)
+        make_package(package) unless package['make']['do'] == false
         puts "build_package:make_package: end... ::.#{package['info']['name']}.:: "
-        sleep(3)
+      else
+        make_package(package)
       end
-      hook_package('post_make')
-    end
-    
-    unless operation=="source_only"
-      hook_package('pre_make_install')
-      unless package['build']['do_make_install'] == false
-        puts "build_package:make_install_package: start... ::.#{package['info']['name']}.::"
-        sleep(2)
-        make_install_package(package)
-        puts "build_package:make_install_package: end... ::.#{package['info']['name']}.::"
-        sleep(3)
-      end
-      hook_package('post_make_install')
+      hook_package('make', 'post')
     end
 
+    unless operation=="source_only"
+      hook_package('make_install', 'pre')
+      unless package['make_install'].nil?
+        puts "build_package:make_install_package: start... ::.#{package['info']['name']}.::"
+        make_install_package(package) unless package['make_install']['do'] == false
+        puts "build_package:make_install_package: end... ::.#{package['info']['name']}.::"
+      else
+        make_install_package(package)
+      end
+      hook_package('make_install', 'post')
+    end
   end
-  
+
   def check_dependencies(source_package)
     puts "Checking Dependency for: #{source_package['info']['name']} "
     puts "Recipe Dependencies: #{source_package['dependencies'].inspect}" unless source_package['dependencies'].nil? 
@@ -102,10 +111,10 @@ class Packager
     end
   end
 
-  def build_target(package)
-    if package['build']['target'].nil? || package['build']['target'] == 'yes'
+  def build_target
+    if @package['target'].nil? || @package['target'] == 'yes'
       "--target=$LINUX_TARGET"
-    elsif package['build']['target'] == 'no'
+    elsif @package['target'] == 'no'
       ""
     end
   end
@@ -125,15 +134,17 @@ class Packager
       puts "== configure_package: running on unpack_path:{#{unpack_path}} with ."
       compile_path = "."
     end
-
-    options = package['build']['options']
-    target = build_target(package)
+    unless package['configure'].nil?
+      options = "#{package['configure']['options']}"
+      variables = "#{package['configure']['variables']}"
+    end
+    
+    target = build_target
     prefix = "--prefix=$TOOLS"
-    log_file = "#{KoshLinux::LOGS}/configure_#{@package['name']}.out"
-    configure_line = "#{compile_path}/configure #{prefix} #{target} #{options} >#{log_file} 2>&1"
+    log_file = "#{KoshLinux::LOGS}/configure_#{package['name']}.out"
+    configure_line = "#{variables} #{compile_path}/configure #{prefix} #{target} #{options} >#{log_file} 2>&1"
     puts "== Configure line: #{configure_line}"
     puts "Output command configure => #{log_file}"
-    sleep(2)
     configure = environment_box(configure_line)
     abort("Exiting on configure: #{package['name']}") if configure.nil?
     FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
@@ -154,8 +165,12 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_package: running on unpack_folder: #{unpack_path}"
     end
-    log_file = "#{KoshLinux::WORK}/logs/make_#{@package['name']}.out"
-    make_line = "make >#{log_file} 2>&1"
+    unless package['make'].nil?
+      options = "#{package['make']['options']}"
+      variables = "#{package['make']['variables']}"
+    end
+    log_file = "#{KoshLinux::WORK}/logs/make_#{package['name']}.out"
+    make_line = "#{variables} make #{options} >#{log_file} 2>&1"
     puts "== Line of make: #{make_line}"
     puts "Output command make => #{log_file}"
     make = environment_box(make_line)
@@ -177,8 +192,12 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_install_package: running on unpack_folder: #{unpack_path}"
     end
-    log_file = "#{KoshLinux::LOGS}/make_install_#{@package['name']}.out"
-    make_install_line = "make install >#{log_file} 2>&1 "
+    unless package['make_install'].nil?
+      options = "#{package['make_install']['options']}"
+      variables = "#{package['make_install']['variables']}"
+    end
+    log_file = "#{KoshLinux::LOGS}/make_install_#{package['name']}.out"
+    make_install_line = "#{variables} make #{options} install >#{log_file} 2>&1 "
     puts "== Line of make_install: #{make_install_line}"
     puts "Output command make install => #{log_file}"
     make_install = environment_box(make_install_line)
@@ -196,7 +215,7 @@ class Packager
     unpack_path = "#{KoshLinux::WORK}/#{unpack_folder}"
     compile_folder = "#{KoshLinux::WORK}/#{package['info']['compile_folder']}"
     packer = package['info']['packer']
-
+    puts "Unpack path: #{unpack_path}"
     if options[:keep_work] && File.exists?(unpack_path)
       puts "Using previously unpacked: #{unpack_path}"
       check_compile_path
@@ -237,6 +256,7 @@ class Packager
   def check_compile_path
     compile_folder = @package['info']['compile_folder']
     compile_path   = "#{KoshLinux::WORK}/#{compile_folder}"
+    puts compile_folder
     unless compile_folder.nil?
       puts "Creating compile folder: #{compile_folder} on: #{compile_path}"
       FileUtils.mkdir_p(compile_path)
@@ -258,7 +278,7 @@ class Packager
 
     unless File.exists?(file_path) && Digest::MD5.hexdigest(File.read(file_path)) == package['info']['md5']
       puts "Downloading archive #{file_name}... "
-      self.download_source(file_name, download_url)
+      download_source(file_name, download_url)
     else
       puts "Skip download, using previously downloaded archive #{file_name}..."
     end
@@ -279,11 +299,11 @@ class Packager
         source_file_name.close()
       end
     end
-      
   end
-  
-  def hook_package(hook)
-    current_hook = @package['build'][hook]
+
+  def hook_package(action, hook)
+    return if @package[action].nil?
+    current_hook = @package[action][hook]
     unless current_hook.nil? || current_hook.empty?
       puts "_== Running hook(#{hook}): #{current_hook}"
       compile_path = @package['info']['compile_folder']
@@ -354,20 +374,24 @@ class Packager
     ENV['LOGS']  = KoshLinux::LOGS
     ENV['PATH']  = "/usr/lib/ccache:#{KoshLinux::TOOLS}/bin:/bin:/usr/bin"
 
+    environment = "env -i HOME='#{ENV['HOME']}' TERM='#{ENV['TERM']}' BUILD='#{ENV['BUILD']}' WORK='#{ENV['WORK']}' TOOLS='#{ENV['TOOLS']}' LOGS='#{ENV['LOGS']}' PATH='#{ENV['PATH']}'"
+
     file_path = "#{KoshLinux::PROFILES}/LinuxBasic.yml"
     variables = YAML::load( File.open( file_path ))['variables']
     variables.inject("") do |vars, variable|
       ENV[variable[0].upcase] = variable[1]
+      environment += " #{variable[0].upcase}='#{variable[1]}'"
     end
+
     extra_options = ""
     extra_options += "set -x && " if @options[:debug]
     extra_options += "set +h && "
     extra_options += "umask 022 && "
-    command_line = "#{extra_options} #{which_command}"
+    command_line = "\"#{extra_options} #{which_command}\""
     echo_start = '   echo "Starting at folder: $(pwd) " && '
     echo_leave = '&& echo "Leaving at folder: $(pwd) "'
     puts "Command Line: #{extra_options} #{which_command}"
-    system("bash", "-c", command_line, "\n")
+    %x[#{environment} bash -c #{command_line} ]
     command_status = $?.exitstatus
     puts "Command exitstatus(#{command_status})"
     if command_status > 0

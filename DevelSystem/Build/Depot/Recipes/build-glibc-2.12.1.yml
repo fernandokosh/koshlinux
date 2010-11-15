@@ -36,11 +36,11 @@ build:
   post_configure: "
     CFLAGS='-O2 -U_FORTIFY_SOURCE -fno-stack-protector' ./config.status --recheck  > $LOGS/configure_build-glibc-2.12.1.out 2>&1"
   post_make_install: "
-  SPECS=`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/specs
+  SPECS=`dirname $($LFS_TGT-gcc -print-libgcc-file-name)`/specs && 
   $LFS_TGT-gcc -dumpspecs | sed \
   -e 's@/lib\(64\)\?/ld@/tools&@g' \
-  -e \"/^\*cpp:$/{n;s,$, -isystem /tools/include,}\" > $SPECS 
-  echo \"New specs file is: $SPECS\"
+  -e \"/^\*cpp:$/{n;s,$, -isystem /tools/include,}\" > $SPECS &&
+  echo \"New specs file is: $SPECS\" &&
   unset SPECS
 "
 

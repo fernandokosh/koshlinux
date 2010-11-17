@@ -17,8 +17,7 @@ info:
 
 configure:
   options: "--disable-nls --with-lib-path=$TOOLS/lib"
-  variables: "CC=\"$LFS_TGT-gcc -B/tools/lib/\" AR=\"$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib\""
-  do: yes
+  variables: 'CC=\"$LFS_TGT-gcc -B/tools/lib/\" AR=\"$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib\"'
   pre:
   post:
 

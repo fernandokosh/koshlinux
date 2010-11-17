@@ -16,10 +16,12 @@ unpack:
 configure:
   do: no
 
+make:
+  do: no
+
 make_install:
   do: no
   post: "source $BUILD/build-adjusts_toolchain.sh"
 
 build:
-  do: no
 

@@ -305,13 +305,13 @@ class Packager
     return if @package[action].nil?
     current_hook = @package[action][hook]
     unless current_hook.nil? || current_hook.empty?
-      puts "_== Running hook(#{hook}): #{current_hook}"
+      puts "_== Running hook(#{@package['name']}:#{action}.#{hook}): #{current_hook}"
       compile_path = @package['info']['compile_folder']
       compile_path = pack_unpack_folder(@package) if compile_path.nil?
       FileUtils.cd("#{KoshLinux::WORK}/#{compile_path}")
       result = environment_box(current_hook)
-      puts "_== End hook(#{hook}) ==__"
-      abort("Exiting hook(#{hook})") if result.nil?
+      puts "_== End hook(#{action}.#{hook}) ==__"
+      abort("Exiting hook(#{@package['name']}:#{action}.#{hook})") if result.nil?
     end
   end
 

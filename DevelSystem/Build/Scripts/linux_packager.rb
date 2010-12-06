@@ -309,7 +309,8 @@ class Packager
       compile_path = @package['info']['compile_folder']
       compile_path = pack_unpack_folder(@package) if compile_path.nil?
       FileUtils.cd("#{KoshLinux::WORK}/#{compile_path}")
-      result = environment_box(current_hook)
+      output_log = " >$LOGS/#{action}-#{hook}_#{@package['name']}.out 2>&1"
+      result = environment_box(current_hook + output_log)
       puts "_== End hook(#{action}.#{hook}) ==__"
       abort("Exiting hook(#{@package['name']}:#{action}.#{hook})") if result.nil?
     end

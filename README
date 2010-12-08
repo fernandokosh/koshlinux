@@ -55,6 +55,10 @@ Requirements:
   - git
   - ruby
 
+Note Host Requirements:
+  - We are build a system based on linux kernel 2.6.35, the system can not be built with Linux kernel version < 2.6.35. :(
+  - Why? The recomendation of LFS http://www.linuxfromscratch.org/lfs/view/stable/prologue/hostreqs.html, the kernel should be > 2.6.22 I don't know why my kernel 2.6.32 can't compile glibc, show me the message: KERNEL TOO OLD.
+
 Usage:
 
 It's simple. Justo do:

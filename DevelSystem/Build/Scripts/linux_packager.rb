@@ -26,32 +26,32 @@ class Packager
 
   def build_package(package, operation="run")
 
-    hook_package('fetch', 'pre')
+    hook_package('fetch', 'pre', package)
     unless package['fetch'].nil?
       fetch_file(package) unless package['fetch']['do'] == false
     else
       fetch_file(package)
     end
-    hook_package('fetch', 'post')
+    hook_package('fetch', 'post', package)
 
-    hook_package('unpack', 'pre')
+    hook_package('unpack', 'pre', package)
     unless package['unpack'].nil?
       unpack_file(package) unless package['unpack']['do'] == false
     else
       unpack_file(package)
     end
-    hook_package('unpack', 'post')
+    hook_package('unpack', 'post', package)
 
-    hook_package('patch', 'pre')
-    patch_package
-    hook_package('patch', 'post')
+    hook_package('patch', 'pre', package)
+    patch_package(package)
+    hook_package('patch', 'post', package)
 
     unless package['dependencies'] == false
       check_dependencies(package)
     end
 
     if operation == "build" || operation == "run"
-      hook_package('configure', 'pre')
+      hook_package('configure', 'pre', package)
       unless package['configure'].nil?
         puts "build_package: configure start ::.#{package['info']['name']}.:: "
         configure_package(package) unless package['configure']['do'] == false
@@ -59,9 +59,9 @@ class Packager
       else
         configure_package(package)
       end
-      hook_package('configure', 'post')
+      hook_package('configure', 'post', package)
 
-      hook_package('make', 'pre')
+      hook_package('make', 'pre', package)
       unless package['make'].nil?
         puts "build_package:make_package: start... ::.#{package['info']['name']}.:: "
         make_package(package) unless package['make']['do'] == false
@@ -69,11 +69,11 @@ class Packager
       else
         make_package(package)
       end
-      hook_package('make', 'post')
+      hook_package('make', 'post', package)
     end
 
     unless operation=="source_only"
-      hook_package('make_install', 'pre')
+      hook_package('make_install', 'pre', package)
       unless package['make_install'].nil?
         puts "build_package:make_install_package: start... ::.#{package['info']['name']}.::"
         make_install_package(package) unless package['make_install']['do'] == false
@@ -81,7 +81,7 @@ class Packager
       else
         make_install_package(package)
       end
-      hook_package('make_install', 'post')
+      hook_package('make_install', 'post', package)
     end
   end
 
@@ -301,18 +301,18 @@ class Packager
     end
   end
 
-  def hook_package(action, hook)
-    return if @package[action].nil?
-    current_hook = @package[action][hook]
+  def hook_package(action, hook, package)
+    return if package[action].nil?
+    current_hook = package[action][hook]
     unless current_hook.nil? || current_hook.empty?
-      puts "_== Running hook(#{@package['name']}:#{action}.#{hook}): #{current_hook}"
-      compile_path = @package['info']['compile_folder']
-      compile_path = pack_unpack_folder(@package) if compile_path.nil?
+      puts "_== Running hook(#{package['name']}:#{action}.#{hook}): #{current_hook}"
+      compile_path = package['info']['compile_folder']
+      compile_path = pack_unpack_folder(package) if compile_path.nil?
       FileUtils.cd("#{KoshLinux::WORK}/#{compile_path}")
-      output_log = " >$LOGS/#{action}-#{hook}_#{@package['name']}.out 2>&1"
+      output_log = " >$LOGS/#{action}-#{hook}_#{package['name']}.out 2>&1"
       result = environment_box(current_hook + output_log)
       puts "_== End hook(#{action}.#{hook}) ==__"
-      abort("Exiting hook(#{@package['name']}:#{action}.#{hook})") if result.nil?
+      abort("Exiting hook(#{package['name']}:#{action}.#{hook})") if result.nil?
     end
   end
 
@@ -339,8 +339,8 @@ class Packager
     end
   end
 
-  def patch_package
-    info = @package['info']
+  def patch_package(package)
+    info = package['info']
     patches = info['patches']
     return if patches.nil?
     options = info['patches_options']
@@ -349,12 +349,12 @@ class Packager
       patch_info = patch[1]
       filepath = fetch_file_patch(patch_info)
       if filepath
-        work_folder = "#{KoshLinux::WORK}/#{pack_unpack_folder(@package)}"
+        work_folder = "#{KoshLinux::WORK}/#{pack_unpack_folder(package)}"
         FileUtils.cd(work_folder)
         unless File.exist?(patch[0])
           options = patch_info['options'] unless patch_info['options'].nil?
           puts "__== Appling patch: #{patch_info['name']} ==__"
-          log_file = "#{KoshLinux::LOGS}/patch_#{@package['name']}.out"
+          log_file = "#{KoshLinux::LOGS}/patch_#{package['name']}.out"
           command_for_patch = "patch #{options} -i #{filepath} >#{log_file} 2>&1 && echo 'patched' > #{patch[0]}"
           patch_command = environment_box(command_for_patch)
         else

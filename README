@@ -65,13 +65,13 @@ It's simple. Just do:
 
  git clone git@github.com:KoshTech/Kosh-Linux.git
 
-If you want to use a development branch, do:
-
- git checkout devel
-
 Then cd into Build folder:
 
  cd Kosh-Linux/DevelSystem/Build
+
+If you want to use a development branch, do:
+
+ git checkout devel
 
 You can use a lite script to check the Build dependence on you host machine:
 

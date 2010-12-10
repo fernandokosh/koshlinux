@@ -16,13 +16,14 @@ info:
   compile_folder: binutils-2.20.1_base
 
 configure:
-  options: --disable-nls --with-lib-path=/tools/lib
-  variables: CC='$LFS_TGT-gcc -B/tools/lib/' AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib
+  options: --disable-nls --prefix=/tools --with-lib-path=/tools/lib
+  variables: CC="$LFS_TGT-gcc -B/tools/lib/" AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib
   pre:
   post:
 
 make_install:
   post: "make -C ld clean && make -C ld LIB_PATH=/usr/lib:/lib && cp -v ld/ld-new $TOOLS/bin"
 
-build:
+dependencies:
+  build: [ 'build-adjusts_toolchain' ]
 

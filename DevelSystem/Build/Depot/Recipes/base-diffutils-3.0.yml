@@ -17,5 +17,5 @@ info:
   patches:
 
 make_install:
-  pre: "make check"
-
+  pre: >-
+    make check

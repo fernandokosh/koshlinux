@@ -17,9 +17,12 @@ info:
   patches:
 
 configure:
-  options: "--prefix=$TOOLS --enable-install-program=hostname"
+  options: >-
+    --enable-install-program=hostname
 
 make_install:
-  pre: "make RUN_EXPENSIVE_TESTS=yes check"
-  post: "cp -v src/su $TOOLS/bin/su-tools"
+  pre: >-
+    make RUN_EXPENSIVE_TESTS=yes check
+  post: >-
+    cp -v src/su $TOOLS/bin/su-tools
 

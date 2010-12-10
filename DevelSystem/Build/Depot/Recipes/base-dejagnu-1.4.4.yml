@@ -14,6 +14,7 @@ info:
   pack_folder: dejagnu-1.4.4
   unpack_folder:
   compile_folder: 
+  patches_options: "-Np1"
   patches:
     dejagnu_1_4_4_consolidated_1:
       name: Dejagnu Consolidated Patch

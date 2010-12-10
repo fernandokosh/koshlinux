@@ -16,18 +16,19 @@ info:
   compile_folder: gcc-4.5.1_build
 
 configure:
-  options: "--disable-nls --disable-shared --disable-multilib 
+  options: >+
+    --target=$LFS_TGT --disable-nls --disable-shared --disable-multilib 
     --disable-decimal-float --disable-threads 
     --disable-libmudflap --disable-libssp 
     --disable-libgomp --enable-languages=c 
     --without-ppl --without-cloog
     --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs
-  "
+
 make_install: 
-  post: "
+  post: >+    
     ln -vsf libgcc.a `$LFS_TGT-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'` &&
     ln -vsf gcc/x86_64-pc-linux-gnu/4.5.1/libgcc_eh.a $TOOLS/lib/ ; ## dont work without that on my system. 
-  "
+
 dependencies:
   source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]
 

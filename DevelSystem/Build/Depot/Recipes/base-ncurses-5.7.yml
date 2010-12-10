@@ -17,5 +17,6 @@ info:
   patches:  
             
 configure:
-  options: "--with-shared --without-debug --without-ada --enable-overwrite"
+  options: >-
+    --with-shared --without-debug --without-ada --enable-overwrite
 

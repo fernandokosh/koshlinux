@@ -29,7 +29,15 @@ info:
       md5: 0ef634ac78e582f45d0e7643bfda7505
 
 configure:
-  options: "--host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile --enable-add-ons --enable-kernel=2.6.35.4 --with-headers=$TOOLS/include libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes"
-  variables: "CFLAGS='-O2 -U_FORTIFY_SOURCE -fno-stack-protector'"
-  pre_disabled: "case `uname -m` in i?86) echo 'CFLAGS += -march=i486 -mtune=native' > configparms ;; esac;"
+  options: >-
+    --host=$LFS_TGT --build=$(../glibc-2.12.1/scripts/config.guess) --disable-profile 
+    --enable-add-ons --enable-kernel=2.6.35.4 
+    --with-headers=/tools/include libc_cv_forced_unwind=yes libc_cv_c_cleanup=yes
+
+  variables: unset LD_LIBRARY_PATH; CC=$LFS_TGT-gcc CFLAGS='-O2 -U_FORTIFY_SOURCE -fno-stack-protector'
+  pre: >-
+    case `uname -m`
+      in i?86) 
+      echo 'CFLAGS += -march=i486 -mtune=native' > configparms ;; 
+    esac;
 

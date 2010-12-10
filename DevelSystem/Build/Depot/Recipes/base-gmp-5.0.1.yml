@@ -1,0 +1,19 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: GMP
+  version: 5.0.1
+  filename: gmp-5.0.1.tar.bz2
+  size: "1,959"
+  homepage: http://www.gnu.org/software/gmp/
+  description: "GNU MP is a portable library written in C for arbitrary precision arithmetic on integers, rational numbers, and floating-point numbers. It aims to provide the fastest possible arithmetic for all applications that need higher precision than is directly supported by the basic C types."
+  download: http://ftp.gnu.org/gnu/gmp/gmp-5.0.1.tar.bz2
+  md5: 6bac6df75c192a13419dfd71d19240a7
+  packer: tar.bz2
+  pack_folder: gmp-5.0.1
+  unpack_folder: gcc-4.5.1_base_source/gmp
+
+build:
+  target: no
+

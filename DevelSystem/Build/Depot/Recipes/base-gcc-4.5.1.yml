@@ -12,55 +12,54 @@ info:
   md5: 48231a8e33ed6e058a341c53b819de1a
   packer: tar.bz2
   pack_folder: gcc-4.5.1
-  unpack_folder:
+  unpack_folder: gcc-4.5.1_base_source
   compile_folder: gcc-4.5.1_base
-  patches:
-   gcc_4_5_1_startfiles_fix_1:
-    name: GCC Startfiles Fix Patch
-    size: 1.5
-    download: http://www.linuxfromscratch.org/patches/lfs/6.7/gcc-4.5.1-startfiles_fix-1.patch
-    md5: 799ef1971350d2e3c794f2123f247cc6
+
+unpack:
+  post_disabled: source $BUILD/base-pre_gcc.sh
+  post_disabled: >-
+    echo $(pwd)
+
+    cp -v gcc/Makefile.in{,.orig} && 
+    sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in;
+
+    cp -v gcc/Makefile.in{,.tmp} && 
+    sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
+      > gcc/Makefile.in;
+
+    for file in \
+      $(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
+    do
+      cp -uv '$file'{,.orig} && 
+      sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
+          -e 's@/usr@/tools@g' $file.orig > $file &&
+      echo '
+    #undef STANDARD_INCLUDE_DIR
+    #define STANDARD_INCLUDE_DIR 0
+    #define STANDARD_STARTFILE_PREFIX_1 ""
+    #define STANDARD_STARTFILE_PREFIX_2 ""' >> $file &&
+      touch $file.orig;
+    done
 
 configure:
-  options: "--with-local-prefix=$TOOLS --enable-clocale=gnu \
-    --enable-shared --enable-threads=posix \
-    --enable-__cxa_atexit --enable-languages=c,c++ \
-    --disable-libstdcxx-pch --disable-multilib \
-    --disable-bootstrap --disable-libgomp \
-    --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs \
-    --without-ppl --without-cloog"
-  variables: "CC=\"$LFS_TGT-gcc -B/tools/lib/\" AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib"
-  pre_configure: "
-    cp -v gcc/Makefile.in{,.orig} &&
-    sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in &&
-    cp -v gcc/Makefile.in{,.tmp} &&
-    sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp gcc/Makefile.in &&
-    
-    for file in $(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h)
-    do
-      cp -uv $file{,.orig} 
-      sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' \
-      -e 's@/usr@/tools@g' $file.orig > $file
-      echo '
-        #undef STANDARD_INCLUDE_DIR
-        #define STANDARD_INCLUDE_DIR 0
-        #define STANDARD_STARTFILE_PREFIX_1 \"\"
-        #define STANDARD_STARTFILE_PREFIX_2 \"\"' >> $file
-      touch $file.orig
-    done
-    
-    case $(uname -m) in
-      x86_64)
-        for file in $(find gcc/config -name t-linux64) ; do \
-        cp -v $file{,.orig}
-        sed '/MULTILIB_OSDIRNAMES/d' $file.orig > $file
-      done
-      ;;
-    esac
-  "
-  make_install:
-    post: "ln -vfs gcc $TOOLS/bin/cc"
+  variables: CC="$LFS_TGT-gcc -B/tools/lib/" AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib
+  options: >+
+    --prefix=/tools
+    --with-local-prefix=/tools --enable-clocale=gnu 
+    --enable-shared --enable-threads=posix 
+    --enable-__cxa_atexit --enable-languages=c,c++ 
+    --disable-libstdcxx-pch --disable-multilib 
+    --disable-bootstrap --disable-libgomp 
+    --with-gmp-include=$(pwd)/gmp --with-gmp-lib=$(pwd)/gmp/.libs 
+    --without-ppl --without-cloog
+
+make_install:
+  post: >+
+    ln -vfs gcc $TOOLS/bin/cc &&
+    echo 'main(){}' > dummy.c && (cc dummy.c && readelf -l a.out | grep ': /tools') || exit 1;
+    rm -v dummy.c a.out
 
 dependencies:
-  source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]
+  build: [ base-pre_gcc-4.5.1 ]
+  source_only: [ base-gmp-5.0.1, base-mpfr-3.0.0, base-mpc-0.8.2 ]
 

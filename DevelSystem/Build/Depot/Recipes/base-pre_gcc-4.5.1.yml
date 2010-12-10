@@ -1,0 +1,60 @@
+info:
+  name: Pre GCC
+  version: 4.5.1
+  filename: pregcc-4.5.1.tar.bz2
+  size: 0
+  homepage: http://gcc.gnu.org/
+  description: "GCC pre build script."
+  md5: 48231a8e33ed6e058a341c53b819de1a
+  packer: tar.bz2
+  pack_folder: gcc-4.5.1
+  unpack_folder: gcc-4.5.1_base_source
+  patches_options: -Np1 
+  patches:
+   gcc_4_5_1_startfiles_fix_1:
+    name: GCC Startfiles Fix Patch
+    size: 1.5
+    download: http://www.linuxfromscratch.org/patches/lfs/6.7/gcc-4.5.1-startfiles_fix-1.patch
+    md5: 799ef1971350d2e3c794f2123f247cc6
+
+fetch:
+  do: no
+
+unpack:
+  do: no
+  post_disabled: >+
+    echo `pwd`
+
+    cp -v gcc/Makefile.in{,.orig} && 
+    sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in;
+
+    cp -v gcc/Makefile.in{,.tmp} && 
+    sed 's/^T_CFLAGS =$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
+      > gcc/Makefile.in;
+
+configure:
+  do: no
+  pre_disabled: >+
+
+    for file in $(find gcc/config -name 'linux64.h' -o -name 'linux.h' -o -name 'sysv4.h');
+
+    do
+      cp -uv $file{,.orig}; 
+      sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' -e 's@/usr@/tools@g' $file.orig > $file; 
+      echo '
+    #undef STANDARD_INCLUDE_DIR
+    #define STANDARD_INCLUDE_DIR 0
+    #define STANDARD_STARTFILE_PREFIX_1 ""
+    #define STANDARD_STARTFILE_PREFIX_2 ""
+      ' >> $file 
+      touch $file.orig;
+    done
+
+  pre: source $BUILD/base-pre_gcc.sh
+
+make:
+  do: no
+
+make_install:
+  do: no
+

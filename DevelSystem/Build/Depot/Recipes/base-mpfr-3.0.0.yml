@@ -1,0 +1,20 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: MPFR
+  type: normal_system
+  version: 3.0.0
+  filename: mpfr-3.0.0.tar.bz2
+  size: 1,112
+  homepage: http://www.mpfr.org/
+  description: "The MPFR library is a C library for multiple-precision floating-point computations with correct rounding. MPFR has continuously been supported by the INRIA and the current main authors come from the Caramel and Arénaire project-teams at Loria (Nancy, France) and LIP (Lyon, France) respectively; see more on the credit page. MPFR is based on the GMP multiple-precision library."
+  download: http://www.mpfr.org/mpfr-3.0.0/mpfr-3.0.0.tar.bz2
+  md5: f45bac3584922c8004a10060ab1a8f9f
+  packer: tar.bz2
+  pack_folder: mpfr-3.0.0
+  unpack_folder: gcc-4.5.1_base_source/mpfr
+
+build:
+  options: --with-gmp=$TOOLS
+

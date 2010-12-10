@@ -12,18 +12,23 @@ info:
   md5: 7f123e53b3daaaba2478d3af5a0752e3
   packer: tar.gz
   pack_folder: tcl8.5.8
-  unpack_folder:
   compile_folder: tcl8.5.8/unix
-  patches:
-      
+
+configure:
+  do: no
+  pre: >
+    ./configure --prefix=$TOOLS
+
 make:
-  post: "cd unix && TZ=UTC make test"
-  make_install:
-    pre: "cd unix && TZ=UTC make install"
-  make_install:
-    post: "
-      cd unix && chmod -v u+w $TOOLS/lib/libtcl8.5.so &&
-      TZ=UTC make install-private-headers &&
-      ln -sv tclsh8.5 $TOOLS/bin/tclsh
-    "
+  post: >
+    TZ=UTC make test
+
+make_install:
+  pre: >
+    TZ=UTC make install
+
+  post: >
+    chmod -v u+w $TOOLS/lib/libtcl8.5.so &&
+    TZ=UTC make install-private-headers &&
+    ln -sv tclsh8.5 $TOOLS/bin/tclsh
 

@@ -1,4 +1,6 @@
-#!/usr/bin/ruby -IScripts -wv
+#!/usr/bin/env ruby
+$VERBOSE=true
+$: << 'Scripts'
 
 require 'optparse'
 options = {}

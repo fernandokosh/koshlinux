@@ -18,11 +18,22 @@ info:
 
 configure:
   do: no
+  pre: >
+    case `uname -m` 
+      in i?86)
+        ln -svf x86 arch/i686;;
+    esac;
+    make mrproper
+
+  post: >
+    make headers_check
 
 make:
   do: no
-  pre: "make headers_check && make INSTALL_HDR_PATH=dest headers_install >$LOGS/make_build-linux-2.6.35.4.out 2>&1"
-  post: "cp -rv dest/include/* $TOOLS/include >$LOGS/make_build-linux-2.6.35.4.out 2>&1"
+  pre: >
+    make INSTALL_HDR_PATH=dest headers_install
+  post: >
+    cp -rv dest/include/* $TOOLS/include 
 
 make_install:
   do: no

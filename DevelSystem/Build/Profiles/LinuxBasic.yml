@@ -1,9 +1,1 @@
-
-variables:
-  lc_all: POSIX
-  arch: x86_64
-  linux_target: x86_64-pc-linux-gnu
-  platform: i686-pc-linux-gnu
-  lfs_tgt: x86_64-pc-linux-gnu
-#  makeflags: -j2
-  
+LinuxBasic-x86.yml

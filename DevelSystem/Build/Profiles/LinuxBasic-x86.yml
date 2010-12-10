@@ -1,0 +1,9 @@
+
+variables:
+  lc_all: POSIX
+  arch: i686
+  linux_target: i686-lfs-linux-gnu
+  platform: i686-pc-linux-gnu
+  lfs_tgt: i686-lfs-linux-gnu
+#  makeflags: -j2
+  

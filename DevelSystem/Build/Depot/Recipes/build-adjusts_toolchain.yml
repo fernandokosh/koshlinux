@@ -21,7 +21,7 @@ make:
 
 make_install:
   do: no
-  post: "source $BUILD/build-adjusts_toolchain.sh"
+  post: source $BUILD/build-adjusts_toolchain.sh
 
 build:
 

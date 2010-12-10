@@ -8,3 +8,7 @@ $LFS_TGT-gcc -dumpspecs | sed \
 echo "New specs file is: $SPECS"
 unset SPECS
 
+echo 'main(){}' > dummy.c
+$LFS_TGT-gcc -B/tools/lib dummy.c
+(readelf -l a.out | grep ': /tools') || exit 1
+rm -v dummy.c a.out

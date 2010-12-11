@@ -1,0 +1,21 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Findutils
+  version: 4.4.2
+  filename: findutils-4.4.2.tar.gz
+  size: 607
+  homepage: http://www.gnu.org/software/findutils/
+  description: "The Findutils package contains programs to find files. These programs are provided to recursively search through a directory tree and to create, maintain, and search a database (often faster than the recursive find, but unreliable if the database has not been recently updated)."
+  download: http://ftp.gnu.org/gnu/findutils/findutils-4.4.2.tar.gz
+  md5: 351cc4adb07d54877fa15f75fb77d39f
+  packer: tar.gz
+  pack_folder: findutils-4.4.2
+  unpack_folder:
+  compile_folder:
+  patches:
+
+make_install:
+  pre: >-
+    make check

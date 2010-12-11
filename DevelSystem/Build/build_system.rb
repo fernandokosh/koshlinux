@@ -31,6 +31,11 @@ END_OF_DESCRIPTION
   opts.on("-c [TYPE]", "--clear [TYPE]", clear_description) do |clear|
     options[:clear] = clear
   end
+
+  options[:force_rebuild] = false # Default for not rebuild
+  opts.on("-f", "--force-rebuild", "Rebuild already built package") do |rebuild|
+    options[:force_rebuild] = true
+  end
 end.parse!
 
 require 'kosh_linux'

@@ -25,6 +25,10 @@ class Packager
   end
 
   def build_package(package, operation="run")
+    if package_status(package) && @options[:force_rebuild] == false
+      puts "Package #{package['name']} already built"
+      return true
+    end
 
     hook_package('fetch', 'pre', package)
     unless package['fetch'].nil?
@@ -83,6 +87,7 @@ class Packager
       end
       hook_package('make_install', 'post', package)
     end
+    package_status(package, 'ok', 'Package built!')
   end
 
   def check_dependencies(source_package)
@@ -393,4 +398,26 @@ class Packager
     end
     result
   end
+
+  def package_status(package, status=nil, message=nil)
+    filename=[KoshLinux::WORK,'.status', package['name'] , 'ok'].join('/')
+    dirname=File.dirname(filename)
+    statusdir=File.dirname(dirname)
+    FileUtils.mkdir(statusdir) unless File.exist?(statusdir)
+    FileUtils.mkdir(dirname) unless File.exist?(dirname)
+
+    if status.nil?
+      return true if File.exist?(filename)
+      return false
+    end
+    case status
+    when 'ok' then
+      ok_file = File.open(filename,'w').write(message)
+      return true
+    when 'clear' then
+      FileUtils.rm_f(filename)
+      return true
+    end
+  end
+
 end

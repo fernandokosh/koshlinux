@@ -33,6 +33,10 @@ class Cleaner
       puts "Removing folder: #{folder}"
       FileUtils.rm_rf(folder)
     end
+    Dir.glob([KoshLinux::WORK, '.status', '**', 'ok'].join('/')) do |file|
+      puts "Removing status: #{file}"
+      FileUtils.rm_rf(file)
+    end         
   end
 
   def Cleaner.clean_ccache

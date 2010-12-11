@@ -42,7 +42,7 @@ unpack:
     done
 
 configure:
-  variables: CC="$LFS_TGT-gcc -B/tools/lib/" AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib
+  variables: CC='$LFS_TGT-gcc -B/tools/lib/' AR=$LFS_TGT-ar RANLIB=$LFS_TGT-ranlib
   options: >+
     --prefix=/tools
     --with-local-prefix=/tools --enable-clocale=gnu 

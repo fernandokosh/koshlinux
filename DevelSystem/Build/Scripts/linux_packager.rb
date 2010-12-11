@@ -360,7 +360,7 @@ class Packager
 
   def environment_box(which_command)
     ENV['HOME']  = KoshLinux::WORK
-    ENV['TERM']  = 'ansi'
+#    ENV['TERM']  = 'ansi'
     ENV['BUILD'] = KoshLinux::KOSH_LINUX_ROOT
     ENV['WORK']  = KoshLinux::WORK
     ENV['TOOLS'] = KoshLinux::TOOLS

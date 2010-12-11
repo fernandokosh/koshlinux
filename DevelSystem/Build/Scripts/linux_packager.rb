@@ -356,7 +356,8 @@ class Packager
           puts "__== Appling patch: #{patch_info['name']} ==__"
           log_file = "#{KoshLinux::LOGS}/patch_#{package['name']}.out"
           command_for_patch = "patch #{options} -i #{filepath} >#{log_file} 2>&1 && echo 'patched' > #{patch[0]}"
-          patch_command = environment_box(command_for_patch)
+          result = environment_box(command_for_patch)
+          abort("Error appling patch (#{package['name']}:#{patch_info['name']})") if result.nil?
         else
           puts "No needed patch: #{patch_info['name']}"
         end

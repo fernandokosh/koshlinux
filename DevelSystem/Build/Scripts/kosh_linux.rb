@@ -4,7 +4,7 @@ class KoshLinux
   WORK = "#{KOSH_LINUX_ROOT}/Work"
   PACKAGES = "#{KOSH_LINUX_ROOT}/Depot/Recipes"
   SOURCES = "#{KOSH_LINUX_ROOT}/Depot/Sources"
-  TOOLS = "#{WORK}/tools"
+  TOOLS = "/tools"
   LOGS = "#{WORK}/logs"
   require 'linux_config'
   require 'linux_packager'

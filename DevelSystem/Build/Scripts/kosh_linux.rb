@@ -20,7 +20,10 @@ class KoshLinux
     [WORK, SOURCES, "#{WORK}/tools", LOGS].each do |folder|
       puts "Creating #{folder}" && FileUtils.mkdir_p(folder) unless File.exist?(folder)
     end
-    puts "Need create /tools symbolic links" && system("sudo ln -sv #{WORK}/tools /") unless File.exist?('/tools')
+    unless File.symlink?('/tools') && File.readlink('/tools') == File.join(WORK, 'tools')
+      puts "Need create /tools symbolic links"
+      system("sudo ln -sfv #{WORK}/tools /")
+    end
   end
 
   def cleaner

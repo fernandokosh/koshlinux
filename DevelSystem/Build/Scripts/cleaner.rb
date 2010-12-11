@@ -12,7 +12,7 @@ class Cleaner
   def Cleaner.clean_work
     puts "Cleaning up work: "
     Dir.glob("#{KoshLinux::WORK}/*") do |folder|
-      unless (folder == KoshLinux::TOOLS || folder == KoshLinux::LOGS)
+      unless (folder == "#{KoshLinux::WORK}/tools" || folder == KoshLinux::LOGS)
         puts "Removing folder: #{folder}"
         FileUtils.rm_rf(folder)
       end

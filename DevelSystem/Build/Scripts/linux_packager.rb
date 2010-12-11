@@ -370,7 +370,7 @@ class Packager
     ENV['WORK']  = KoshLinux::WORK
     ENV['TOOLS'] = KoshLinux::TOOLS
     ENV['LOGS']  = KoshLinux::LOGS
-    ENV['PATH']  = "/usr/lib/ccache:#{KoshLinux::TOOLS}/bin:/bin:/usr/bin"
+    ENV['PATH']  = "#{KoshLinux::TOOLS}/bin:/bin:/usr/bin"
 
     environment = "env -i HOME='#{ENV['HOME']}' TERM='#{ENV['TERM']}' BUILD='#{ENV['BUILD']}' WORK='#{ENV['WORK']}' TOOLS='#{ENV['TOOLS']}' LOGS='#{ENV['LOGS']}' PATH='#{ENV['PATH']}'"
 

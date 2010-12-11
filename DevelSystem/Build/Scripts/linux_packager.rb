@@ -385,9 +385,9 @@ class Packager
     extra_options += "set -x; " if @options[:debug]
     extra_options += "set +h; "
     extra_options += "umask 022; "
-    command_line = "#{extra_options}\n#{which_command}"
-    puts "Command Line: #{command_line}"
-    %x[#{environment} /bin/bash -c #{command_line} ]
+    command_line = "#{extra_options} #{which_command}"
+    puts "Command Line: #{command_line}" if @options[:debug]
+    %x[exec #{environment} bash -c "#{command_line}" ]
     command_status = $?.exitstatus
     puts "Command exitstatus(#{command_status})"
     if command_status > 0

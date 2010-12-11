@@ -111,14 +111,6 @@ class Packager
     end
   end
 
-  def build_target
-    if @package['target'].nil? || @package['target'] == 'yes'
-      "--target=$LINUX_TARGET"
-    elsif @package['target'] == 'no'
-      ""
-    end
-  end
-
   def configure_package(package)
     unpack_folder = pack_unpack_folder(package)
     unpack_path = "#{KoshLinux::WORK}/#{unpack_folder}"
@@ -139,10 +131,9 @@ class Packager
       variables = "#{package['configure']['variables']}"
     end
     
-    target = build_target
     prefix = "--prefix=$TOOLS"
     log_file = "#{KoshLinux::LOGS}/configure_#{package['name']}.out"
-    configure_line = "#{variables} #{compile_path}/configure #{prefix} #{target} #{options} >#{log_file} 2>&1"
+    configure_line = "#{variables} #{compile_path}/configure #{prefix} #{options} >#{log_file} 2>&1"
     puts "== Configure line: #{configure_line}"
     puts "Output command configure => #{log_file}"
     configure = environment_box(configure_line)

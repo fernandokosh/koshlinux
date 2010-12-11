@@ -252,7 +252,6 @@ class Packager
   def check_compile_path
     compile_folder = @package['info']['compile_folder']
     compile_path   = "#{KoshLinux::WORK}/#{compile_folder}"
-    puts compile_folder
     unless compile_folder.nil?
       puts "Creating compile folder: #{compile_folder} on: #{compile_path}"
       FileUtils.mkdir_p(compile_path)

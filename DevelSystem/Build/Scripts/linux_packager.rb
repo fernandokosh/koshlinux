@@ -137,8 +137,8 @@ class Packager
     end
     
     prefix = "--prefix=$TOOLS"
-    log_file = "#{KoshLinux::LOGS}/configure_#{package['name']}.out"
-    configure_line = "#{variables} #{compile_path}/configure #{prefix} #{options} >#{log_file} 2>&1"
+    log_file = "#{KoshLinux::LOGS}/configure_#{package['name']}"
+    configure_line = "#{variables} #{compile_path}/configure #{prefix} #{options} 2>#{log_file}.err 1>#{log_file}.out"
     puts "== Configure line: #{configure_line}"
     puts "Output command configure => #{log_file}"
     configure = environment_box(configure_line)
@@ -165,8 +165,8 @@ class Packager
       options = "#{package['make']['options']}"
       variables = "#{package['make']['variables']}"
     end
-    log_file = "#{KoshLinux::WORK}/logs/make_#{package['name']}.out"
-    make_line = "#{variables} make #{options} >#{log_file} 2>&1"
+    log_file = "#{KoshLinux::WORK}/logs/make_#{package['name']}"
+    make_line = "#{variables} make #{options} 2>#{log_file}.err 1>#{log_file}.out"
     puts "== Line of make: #{make_line}"
     puts "Output command make => #{log_file}"
     make = environment_box(make_line)
@@ -192,8 +192,8 @@ class Packager
       options = "#{package['make_install']['options']}"
       variables = "#{package['make_install']['variables']}"
     end
-    log_file = "#{KoshLinux::LOGS}/make_install_#{package['name']}.out"
-    make_install_line = "#{variables} make #{options} install >#{log_file} 2>&1 "
+    log_file = "#{KoshLinux::LOGS}/make_install_#{package['name']}"
+    make_install_line = "#{variables} make #{options} install 2>#{log_file}.err 1>#{log_file}.out "
     puts "== Line of make_install: #{make_install_line}"
     puts "Output command make install => #{log_file}"
     make_install = environment_box(make_install_line)
@@ -305,7 +305,8 @@ class Packager
       compile_path = package['info']['compile_folder']
       compile_path = pack_unpack_folder(package) if compile_path.nil?
       FileUtils.cd("#{KoshLinux::WORK}/#{compile_path}")
-      output_log = " >$LOGS/#{action}-#{hook}_#{package['name']}.out 2>&1"
+      log_file = "$LOGS/#{action}-#{hook}_#{package['name']}"
+      output_log = " 2>#{log_file}.err 1>#{log_file}.out" 
       result = environment_box(current_hook + output_log)
       puts "_== End hook(#{action}.#{hook}) ==__"
       abort("Exiting hook(#{package['name']}:#{action}.#{hook})") if result.nil?
@@ -350,8 +351,8 @@ class Packager
         unless File.exist?(patch[0])
           options = patch_info['options'] unless patch_info['options'].nil?
           puts "__== Appling patch: #{patch_info['name']} ==__"
-          log_file = "#{KoshLinux::LOGS}/patch_#{package['name']}.out"
-          command_for_patch = "patch #{options} -i #{filepath} >#{log_file} 2>&1 && echo 'patched' > #{patch[0]}"
+          log_file = "$LOGS/patch_#{package['name']}"
+          command_for_patch = "patch #{options} -i #{filepath} 2>#{log_file}.err 1>#{log_file}.out && echo 'patched' >#{patch[0]}"
           result = environment_box(command_for_patch)
           abort("Error appling patch (#{package['name']}:#{patch_info['name']})") if result.nil?
         else

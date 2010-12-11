@@ -17,7 +17,7 @@ class KoshLinux
     @packager.config = @config
     @packager.options = @options
 
-    [WORK, SOURCES, TOOLS, LOGS].each do |folder|
+    [WORK, SOURCES, "#{WORK}/tools", LOGS].each do |folder|
       puts "Creating #{folder}" && FileUtils.mkdir_p(folder) unless File.exist?(folder)
     end
     puts "Need create /tools symbolic links" && system("sudo ln -sv #{WORK}/tools /") unless File.exist?('/tools')

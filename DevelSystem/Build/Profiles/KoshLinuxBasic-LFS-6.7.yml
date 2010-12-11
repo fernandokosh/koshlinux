@@ -31,5 +31,6 @@ packages: [
   base-bash-4.1,
   base-bzip2-1.0.5,
   base-coreutils-8.5,
-  base-diffutils-3.0
+  base-diffutils-3.0,
+  base-file-5.04
 ]

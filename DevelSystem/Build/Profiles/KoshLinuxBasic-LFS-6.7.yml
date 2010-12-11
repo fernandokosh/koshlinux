@@ -33,3 +33,4 @@ packages:
   - base-coreutils-8.5
   - base-diffutils-3.0
   - base-file-5.04
+  - base-findutils-4.4.2

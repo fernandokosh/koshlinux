@@ -239,13 +239,13 @@ class Packager
 
   def unpack_tar_bz2(file_path)
     FileUtils.cd(KoshLinux::WORK)
-    system("tar --recursive-unlink -xjUf #{file_path}")
+    system("#{KoshLinux::KOSH_LINUX_ROOT}/Vendor/bar/bar #{file_path} | tar --recursive-unlink -xjUpf -")
     FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
   end
 
   def unpack_tar_gz(file_path)
     FileUtils.cd(KoshLinux::WORK)
-    system("tar --recursive-unlink -xzUf #{file_path}")
+    system("#{KoshLinux::KOSH_LINUX_ROOT}/Vendor/bar/bar #{file_path} | tar --recursive-unlink -xzUpf -")
     FileUtils.cd(KoshLinux::KOSH_LINUX_ROOT)
   end
 

@@ -1,0 +1,24 @@
+bar (c) Henrik Theiling
+=======================
+
+Project home page at:
+   http://www.theiling.de/projects/bar.html
+
+Main source code distribution site:
+   http://www.theiling.de/downloads/?name=bar
+
+Getting Started
+---------------
+
+Please invoke
+
+   $ ./bar -h
+
+for help.
+
+For using this, you can copy the shell function 'bar_cat' to your
+own install scripts.  To extract the function body, use:
+
+   $ ./bar -D > bar_cat.sh
+
+Enjoy! :-)

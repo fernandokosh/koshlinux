@@ -19,4 +19,4 @@ configure:
 
 make_install:
   pre: >-
-    make check
+    # make check

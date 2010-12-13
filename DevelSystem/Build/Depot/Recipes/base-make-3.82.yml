@@ -1,0 +1,21 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Make
+  version: 3.82
+  filename: make-3.82.tar.bz2
+  size: "1,213"
+  homepage: http://www.gnu.org/software/make/
+  description: "The Make package contains a program for compiling packages."
+  download: http://ftp.gnu.org/gnu/make/make-3.82.tar.bz2
+  md5: 1a11100f3c63fcf5753818e59d63088f
+  packer: tar.bz2
+  pack_folder: make-3.82
+  unpack_folder:
+  compile_folder:
+  patches:
+
+make_install:
+  pre: >-
+    make check

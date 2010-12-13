@@ -58,13 +58,7 @@ class Packager
 
     if operation == "build" || operation == "run"
       hook_package('configure', 'pre', package)
-      unless package['configure'].nil?
-        puts "build_package: configure start ::.#{package['info']['name']}.:: "
-        configure_package(package) unless package['configure']['do'] == false
-        puts "build_package: configure end ::.#{package['info']['name']}.:: "
-      else
-        configure_package(package)
-      end
+      configure_package(package)
       hook_package('configure', 'post', package)
 
       hook_package('make', 'pre', package)
@@ -123,6 +117,13 @@ class Packager
     unpack_path = "#{KoshLinux::WORK}/#{unpack_folder}"
     compile_folder = package['info']['compile_folder']
     compile_path = "#{KoshLinux::WORK}/#{compile_folder}"
+    unless package['configure'].nil?
+      options = package['configure']['options']
+      variables = package['configure']['variables']
+      configure_do = package['configure']['do'].nil? ? true : package['configure']['do']
+      configure_prefix = package['configure']['prefix'].nil? ? true : package['configure']['prefix']
+      return if configure_do === false
+    end
 
     unless compile_folder.nil?
       FileUtils.cd(compile_path)
@@ -133,14 +134,17 @@ class Packager
       puts "== configure_package: running on unpack_path:{#{unpack_path}} with ."
       compile_path = "."
     end
-    unless package['configure'].nil?
-      options = "#{package['configure']['options']}"
-      variables = "#{package['configure']['variables']}"
+
+    if configure_prefix 
+      prefix = "--prefix=$TOOLS"
+    elsif configure_prefix != false
+      prefix = configure_prefix
+    else
+      prefix = ""
     end
-    
-    prefix = "--prefix=$TOOLS"
     log_file = "#{KoshLinux::LOGS}/configure_#{package['name']}"
-    configure_line = "#{variables} #{compile_path}/configure #{prefix} #{options} 2>#{log_file}.err 1>#{log_file}.out"
+    configure_cmd = configure_do === true ? "#{compile_path}/configure" : configure_do
+    configure_line = "#{variables} #{configure_cmd} #{prefix} #{options} 2>#{log_file}.err 1>#{log_file}.out"
     puts "== Configure line: #{configure_line}"
     puts "Output command configure => #{log_file}"
     configure = environment_box(configure_line)

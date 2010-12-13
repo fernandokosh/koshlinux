@@ -34,3 +34,4 @@ packages:
   - base-diffutils-3.0
   - base-file-5.04
   - base-findutils-4.4.2
+  - base-gawk-3.1.8

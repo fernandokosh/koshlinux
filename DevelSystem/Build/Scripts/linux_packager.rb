@@ -62,13 +62,7 @@ class Packager
       hook_package('configure', 'post', package)
 
       hook_package('make', 'pre', package)
-      unless package['make'].nil?
-        puts "build_package:make_package: start... ::.#{package['info']['name']}.:: "
-        make_package(package) unless package['make']['do'] == false
-        puts "build_package:make_package: end... ::.#{package['info']['name']}.:: "
-      else
-        make_package(package)
-      end
+      make_package(package)
       hook_package('make', 'post', package)
     end
 
@@ -159,7 +153,13 @@ class Packager
     compile_folder = package['info']['compile_folder']
     compile_path = "#{KoshLinux::WORK}/#{compile_folder}"
 
-    puts "compile_folder: #{compile_path} & unpack_folder: #{unpack_path}"
+    unless package['make'].nil?
+      options = package['make']['options']
+      variables = package['make']['variables']
+      make_do = package['make']['do'].nil? ? true : package['make']['do']
+      return if make_do === false
+    end
+
     unless compile_folder.nil?
       FileUtils.cd(compile_path)
       puts "== make_package: running on compile_folder: #{compile_path}"
@@ -167,12 +167,10 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_package: running on unpack_folder: #{unpack_path}"
     end
-    unless package['make'].nil?
-      options = "#{package['make']['options']}"
-      variables = "#{package['make']['variables']}"
-    end
+
     log_file = "#{KoshLinux::WORK}/logs/make_#{package['name']}"
-    make_line = "#{variables} make #{options} 2>#{log_file}.err 1>#{log_file}.out"
+    make_cmd = make_do === true ? 'make' : make_do
+    make_line = "#{variables} #{make_cmd} #{options} 2>#{log_file}.err 1>#{log_file}.out"
     puts "== Line of make: #{make_line}"
     puts "Output command make => #{log_file}"
     make = environment_box(make_line)

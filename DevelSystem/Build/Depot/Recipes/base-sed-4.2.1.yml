@@ -1,0 +1,18 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Sed
+  version: 4.2.1
+  filename: sed-4.2.1.tar.bz2
+  size: "878"
+  homepage: http://www.gnu.org/software/sed/
+  description: "The Sed package contains a stream editor."
+  download: http://ftp.gnu.org/gnu/sed/sed-4.2.1.tar.bz2
+  md5: 7d310fbd76e01a01115075c1fd3f455a
+  packer: tar.bz2
+  pack_folder: sed-4.2.1
+
+make_install:
+  pre: >-
+    make check

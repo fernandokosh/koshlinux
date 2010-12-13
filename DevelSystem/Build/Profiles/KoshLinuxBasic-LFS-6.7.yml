@@ -42,4 +42,4 @@ packages:
   - base-make-3.82
   - base-patch-2.6.1
   - base-perl-5.12.1
-
+  - base-sed-4.2.1

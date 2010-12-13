@@ -39,6 +39,12 @@ class KoshLinux
     @@end = Time.now
     puts "Ended at: #{@@end}"
     @@elapsed = @@end - @@start
-    puts "Elapsed Time: #{@@elapsed}s #{@@elapsed / 60}m"
+    @@humanized_time = [[60, :seconds], [60, :minutes], [24, :hours], [1000, :days]].map{ |count, name|
+      if @@elapsed > 0
+        @@elapsed, n = @@elapsed.divmod(count)
+        "#{n.to_i} #{name}"
+      end
+    }.compact.reverse.join(' ')
+    puts "Elapsed Time: #{@@humanized_time}"
   end
 end

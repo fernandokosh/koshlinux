@@ -274,6 +274,10 @@ class Packager
     fetch_file_download(download_url, package['info']['md5'], file_name)
   end
 
+  def check_for_checksum(file_path, checksum)
+    Digest::MD5.hexdigest(File.read(file_path)) == checksum
+  end
+
   def fetch_file_download(url_for_download, checksum, file_name=nil)
     uri = URI.parse(url_for_download)
     filename = file_name.nil? ? File.basename(uri.path) : file_name
@@ -327,38 +331,15 @@ class Packager
     end
   end
 
-  def check_for_checksum(file_path, checksum)
-    Digest::MD5.hexdigest(File.read(file_path)) == checksum
-  end
-
-  def fetch_file_patch(patch)
-    url_for_download = patch['download']
-    uri = URI.parse(url_for_download)
-    filename = File.basename(uri.path)
-    filepath = "#{KoshLinux::SOURCES}/#{filename}"
-
-    require 'open-uri'
-    unless File.exist?(filepath) && check_for_checksum(filepath, patch['md5'])
-      puts "Downloading patch: #{url_for_download}"
-      if open(filepath, 'w').write(uri.read)
-        filepath
-      else
-        nil
-      end
-    else
-      filepath
-    end
-  end
-
   def patch_package(package)
     info = package['info']
     patches = info['patches']
     return if patches.nil?
     options = info['patches_options']
-    puts "Appling #{patches.count} patch(es)"
+    puts "Checking for #{patches.count} patch(es)"
     patches.each do |patch|
       patch_info = patch[1]
-      filepath = fetch_file_patch(patch_info)
+      filepath = fetch_file_download(patch_info['download'],patch_info['md5'])
       if filepath
         work_folder = "#{KoshLinux::WORK}/#{pack_unpack_folder(package)}"
         FileUtils.cd(work_folder)
@@ -373,7 +354,7 @@ class Packager
           puts "No needed patch: #{patch_info['name']}"
         end
       else
-        abort("Erro with downloading: #{patch['name']}")
+        abort("Erro with downloading: #{patch_info['name']}")
       end
     end
   end

@@ -1,0 +1,38 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Gettext
+  version: 0.18.1.1
+  filename: gettext-0.18.1.1.tar.gz
+  size: "14,785"
+  homepage: http://www.gnu.org/software/gettext/
+  description: "The Gettext package contains utilities for internationalization and localization. These allow programs to be compiled with NLS (Native Language Support), enabling them to output messages in the user's native language."
+  download: http://ftp.gnu.org/gnu/gettext/gettext-0.18.1.1.tar.gz
+  md5: 3dd55b952826d2b32f51308f2f91aa89
+  packer: tar.gz
+  pack_folder: gettext-0.18.1.1
+  unpack_folder:
+  compile_folder:
+  patches:
+
+configure:
+  do: no
+  post: >-
+    cd gettext-tools &&
+    ./configure --prefix=/tools --disable-shared
+
+make:
+  do: no
+  pre: >-
+    cd gettext-tools &&
+    make -C gnulib-lib
+  post: >-
+    cd gettext-tools &&
+    make -C src msgfmt
+
+make_install:
+  do: no
+  pre: >-
+    cd gettext-tools &&
+    cp -v src/msgfmt /tools/bin

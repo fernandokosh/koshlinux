@@ -8,7 +8,7 @@ info:
   size: "1,280"
   homepage: http://www.gnu.org/software/grep/
   description: "The Grep package contains programs for searching through files."
-  download: http://ftp.gnu.org/gnu/grep/grep-2.6.3.tar.bz2
+  download: http://ftp.gnu.org/gnu/grep/grep-2.6.3.tar.gz
   md5: 3095b57837b312f087c0680559de7f13
   packer: tar.gz
   pack_folder: grep-2.6.3

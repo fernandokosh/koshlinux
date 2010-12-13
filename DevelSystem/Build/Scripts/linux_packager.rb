@@ -426,4 +426,18 @@ class Packager
     end
   end
 
+  def spinner(locker)
+    chars = %w{ | / - \\ }
+    t = Thread.new{
+      while File.exist?(locker)
+        output = "Please wait (#{chars[0]})"
+        $stderr.print output
+        sleep 0.2
+        output.size.times do
+          $stderr.print "\b"
+        end
+        chars.push chars.shift
+      end
+    }
+  end
 end

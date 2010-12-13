@@ -1,0 +1,25 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Stripping
+  homepage: http://www.linuxfromscratch.org/lfs/view/stable/chapter05/stripping.html
+  description: "The steps in this section are optional, but if the LFS partition is rather small, it is beneficial to learn that unnecessary items can be removed."
+
+fetch:
+  do: no
+
+unpack:
+  do: no
+
+configure:
+  do: no
+
+make:
+  do: no
+
+make_install:
+  do: >-
+    strip --strip-debug /tools/lib/*
+    strip --strip-unneeded /tools/{,s}bin/*
+    rm -rf /tools/{,share}/{info,man}

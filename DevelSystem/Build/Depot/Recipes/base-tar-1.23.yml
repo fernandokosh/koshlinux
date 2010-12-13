@@ -1,0 +1,22 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Tar
+  version: 1.23
+  filename: tar-1.23.tar.bz2
+  size: "878"
+  homepage: http://www.gnu.org/software/tar/
+  description: "The Tar package contains an archiving program."
+  download: http://ftp.gnu.org/gnu/tar/tar-1.23.tar.bz2
+  md5: 41e2ca4b924ec7860e51b43ad06cdb7e
+  packer: tar.bz2
+  pack_folder: tar-1.23
+
+configure:
+  pre: >-
+    sed -i /SIGPIPE/d src/tar.c
+
+make_install:
+  pre: >-
+    make check

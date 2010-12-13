@@ -1,0 +1,18 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Texinfo
+  version: 4.13a
+  filename: texinfo-4.13a.tar.bz2
+  size: "878"
+  homepage: http://www.gnu.org/software/texinfo/
+  description: "The Texinfo package contains programs for reading, writing, and converting info pages."
+  download: http://ftp.gnu.org/gnu/texinfo/texinfo-4.13a.tar.bz2
+  md5: 71ba711519209b5fb583fed2b3d86fcb
+  packer: tar.bz2
+  pack_folder: texinfo-4.13a
+
+make_install:
+  pre: >-
+    make check

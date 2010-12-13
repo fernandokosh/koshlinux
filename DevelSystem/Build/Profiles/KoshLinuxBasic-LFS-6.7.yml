@@ -44,3 +44,4 @@ packages:
   - base-perl-5.12.1
   - base-sed-4.2.1
   - base-tar-1.23
+  - base-texinfo-4.13a

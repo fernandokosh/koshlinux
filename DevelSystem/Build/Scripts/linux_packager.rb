@@ -434,12 +434,13 @@ class Packager
   def spinner(locker)
     chars = %w{ | / - \\ }
     t = Thread.new{
+      sleep 3
       while File.exist?(locker)
         output = "Please wait (#{chars[0]})"
         $stderr.print output
         sleep 0.2
         output.size.times do
-          $stderr.print "\b"
+          $stderr.print "\r"
         end
         chars.push chars.shift
       end

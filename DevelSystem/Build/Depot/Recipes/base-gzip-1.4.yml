@@ -8,7 +8,7 @@ info:
   size: "886"
   homepage: http://www.gzip.org/
   description: "The Gzip package contains programs for compressing and decompressing files"
-  download: http://ftp.gnu.org/gnu/gzip/gzip-1.4.tar.bz2
+  download: http://ftp.gnu.org/gnu/gzip/gzip-1.4.tar.gz
   md5: e381b8506210c794278f5527cba0e765
   packer: tar.gz
   pack_folder: gzip-1.4

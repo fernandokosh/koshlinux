@@ -1,6 +1,8 @@
 require 'net/http'
 require 'md5'
 require 'fileutils'
+require 'open-uri'
+require File.join(KoshLinux::KOSH_LINUX_ROOT,'Vendor','ruby-progressbar','lib','progressbar')
 
 class Packager
   attr_accessor :config, :options
@@ -285,12 +287,20 @@ class Packager
     only_url = File.dirname(url_for_download)
     result = nil
 
-    require 'open-uri'
     unless File.exist?(filepath) && check_for_checksum(filepath, checksum)
-      puts "Trying to connect on #{uri.host} and download the file: #{filename}"
+      puts "Connecting on #{uri.host}, for download the file #{filename}"
       begin
-        uri.open do |file|
-          puts "Downloading file #{filename} from #{only_url} "
+        pbar = nil
+        uri.open(:content_length_proc => lambda {|t|
+                   if t && 0 < t;
+                     puts "Downloading file #{filename} from #{only_url} "
+                     pbar = ProgressBar.new(filename, t)
+                     pbar.file_transfer_mode
+                   end
+                 },
+                 :progress_proc => lambda {|s|
+                   pbar.set s if pbar
+                 }) do |file|
           open(filepath, 'wb') do |archive|
             archive.write(file.read)
             archive.close

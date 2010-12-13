@@ -271,29 +271,44 @@ class Packager
     file_path = "#{KoshLinux::SOURCES}/#{file_name}"
     download_url = package['info']['download']
 
-    unless File.exists?(file_path) && Digest::MD5.hexdigest(File.read(file_path)) == package['info']['md5']
-      puts "Downloading archive #{file_name}... "
-      download_source(file_name, download_url)
-    else
-      puts "Skip download, using previously downloaded archive #{file_name}..."
-    end
+    fetch_file_download(download_url, package['info']['md5'], file_name)
   end
 
-  def download_source(file_name, download_url)
-   
-    url = URI.parse(download_url)
-    res = Net::HTTP.start(url.host, url.port) do |http|
-      source_file_name = open("#{KoshLinux::SOURCES}/#{file_name}", "wb")
+  def fetch_file_download(url_for_download, checksum, file_name=nil)
+    uri = URI.parse(url_for_download)
+    filename = file_name.nil? ? File.basename(uri.path) : file_name
+    filepath = "#{KoshLinux::SOURCES}/#{filename}"
+    only_url = File.dirname(url_for_download)
+    result = nil
+
+    require 'open-uri'
+    unless File.exist?(filepath) && check_for_checksum(filepath, checksum)
+      puts "Trying to connect on #{uri.host} and download the file: #{filename}"
       begin
-        http.request_get(url.path) do |resp|
-          resp.read_body do |segment|
-            source_file_name.write(segment)
+        uri.open do |file|
+          puts "Downloading file #{filename} from #{only_url} "
+          open(filepath, 'wb') do |archive|
+            archive.write(file.read)
+            archive.close
+            result = filepath
           end
         end
-      ensure
-        source_file_name.close()
+      rescue Errno::ETIMEDOUT
+        puts "Timeout error, trying again in few seconds..."
+        sleep 3
+        result = fetch_file_download(url_for_download, checksum, file_name)
+      rescue SocketError
+        puts "I got error, is your network up? trying again in few seconds..."
+        sleep 5
+        result = fetch_file_download(url_for_download, checksum, file_name)
+      else
+        puts "Download complete."
       end
+    else
+      puts "Skip download, using previously downloaded archive #{file_name}..."
+      result = filepath
     end
+    return result
   end
 
   def hook_package(action, hook, package)

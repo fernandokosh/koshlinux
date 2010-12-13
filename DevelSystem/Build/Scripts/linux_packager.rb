@@ -106,11 +106,13 @@ class Packager
     compile_folder = package['info']['compile_folder']
     compile_path = "#{KoshLinux::WORK}/#{compile_folder}"
     unless package['configure'].nil?
-      options = package['configure']['options']
-      variables = package['configure']['variables']
       configure_do = package['configure']['do'].nil? ? true : package['configure']['do']
       configure_prefix = package['configure']['prefix'].nil? ? true : package['configure']['prefix']
       return if configure_do === false
+      options = package['configure']['options']
+      variables = package['configure']['variables']
+    else
+      configure_do = true
     end
 
     unless compile_folder.nil?
@@ -148,10 +150,12 @@ class Packager
     compile_path = "#{KoshLinux::WORK}/#{compile_folder}"
 
     unless package['make'].nil?
-      options = package['make']['options']
-      variables = package['make']['variables']
       make_do = package['make']['do'].nil? ? true : package['make']['do']
       return if make_do === false
+      options = package['make']['options']
+      variables = package['make']['variables']
+    else
+      make_do = true
     end
 
     unless compile_folder.nil?
@@ -180,10 +184,12 @@ class Packager
     compile_path = "#{KoshLinux::WORK}/#{compile_folder}"
 
     unless package['make_install'].nil?
-      options = "#{package['make_install']['options']}"
-      variables = "#{package['make_install']['variables']}"
       make_install_do = package['make_install']['do'].nil? ? true : package['make_install']['do']
       return if make_install_do === false
+      options = package['make_install']['options']
+      variables = package['make_install']['variables']
+    else
+      make_install = true
     end
 
     unless compile_folder.nil?

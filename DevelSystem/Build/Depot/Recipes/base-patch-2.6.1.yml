@@ -1,0 +1,21 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Patch
+  version: 2.6.1
+  filename: patch-2.6.1.tar.bz2
+  size: "248"
+  homepage: http://directory.fsf.org/project/patch/
+  description: "The Patch package contains a program for modifying or creating files by applying a “patch” file typically created by the diff program."
+  download: http://ftp.gnu.org/gnu/patch/patch-2.6.1.tar.bz2
+  md5: 0818d1763ae0c4281bcdc63cdac0b2c0
+  packer: tar.bz2
+  pack_folder: patch-2.6.1
+  unpack_folder:
+  compile_folder:
+  patches:
+
+make_install:
+  pre: >-
+    make check

@@ -40,3 +40,4 @@ packages:
   - base-gzip-1.4
   - base-m4-1.4.14
   - base-make-3.82
+  - base-patch-2.6.1

@@ -1,0 +1,21 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Gzip
+  version: 1.4
+  filename: gzip-1.4.tar.gz
+  size: "886"
+  homepage: http://www.gzip.org/
+  description: "The Gzip package contains programs for compressing and decompressing files"
+  download: http://ftp.gnu.org/gnu/gzip/gzip-1.4.tar.bz2
+  md5: e381b8506210c794278f5527cba0e765
+  packer: tar.gz
+  pack_folder: gzip-1.4
+  unpack_folder:
+  compile_folder:
+  patches:
+
+make_install:
+  pre: >-
+    make check

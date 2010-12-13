@@ -37,3 +37,4 @@ packages:
   - base-gawk-3.1.8
   - base-gettext-0.18.1.1
   - base-grep-2.6.3
+  - base-gzip-1.4

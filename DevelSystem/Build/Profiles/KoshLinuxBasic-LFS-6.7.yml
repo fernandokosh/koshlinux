@@ -41,3 +41,5 @@ packages:
   - base-m4-1.4.14
   - base-make-3.82
   - base-patch-2.6.1
+  - base-perl-5.12.1
+

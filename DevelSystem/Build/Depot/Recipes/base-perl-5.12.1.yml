@@ -1,0 +1,38 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Perl
+  version: 5.12.1
+  filename: perl-5.12.1.tar.bz2
+  size: "12,008"
+  homepage: http://cpan.org/
+  description: "The Perl package contains the Practical Extraction and Report Language."
+  download: http://cpan.org/src/5.0/perl-5.12.1.tar.bz2
+  md5: f7f2d7f5aaac15a75028381b159a560f
+  packer: tar.bz2
+  pack_folder: perl-5.12.1
+  unpack_folder:
+  compile_folder:
+  patches:
+    perl_5_12_1_libc_1:
+      name: Perl Libc Patch
+      size: 1
+      download: http://www.linuxfromscratch.org/patches/lfs/6.7/perl-5.12.1-libc-1.patch
+      md5: 800dfd3c9618731ee5cf57f77a7942b4
+      options: "-Np1"
+
+configure:
+  prefix: no
+  do: sh Configure
+  options: -des -Dprefix=/tools -Dstatic_ext='Data/Dumper Fcntl IO'
+
+make:
+  options: perl utilities ext/Errno/pm_to_blib
+
+make_install:
+  do: no
+  pre: >-
+    (cp -v perl pod/pod2man /tools/bin &&
+    mkdir -pv /tools/lib/perl5/5.12.1 &&
+    cp -Rv lib/* /tools/lib/perl5/5.12.1) || exit 1

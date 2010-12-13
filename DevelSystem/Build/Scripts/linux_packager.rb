@@ -68,13 +68,7 @@ class Packager
 
     unless operation=="source_only"
       hook_package('make_install', 'pre', package)
-      unless package['make_install'].nil?
-        puts "build_package:make_install_package: start... ::.#{package['info']['name']}.::"
-        make_install_package(package) unless package['make_install']['do'] == false
-        puts "build_package:make_install_package: end... ::.#{package['info']['name']}.::"
-      else
-        make_install_package(package)
-      end
+      make_install_package(package)
       hook_package('make_install', 'post', package)
     end
     package_status(package, 'ok', 'Package built!')
@@ -185,6 +179,13 @@ class Packager
     compile_folder = package['info']['compile_folder']
     compile_path = "#{KoshLinux::WORK}/#{compile_folder}"
 
+    unless package['make_install'].nil?
+      options = "#{package['make_install']['options']}"
+      variables = "#{package['make_install']['variables']}"
+      make_install_do = package['make_install']['do'].nil? ? true : package['make_install']['do']
+      return if make_install_do === false
+    end
+
     unless compile_folder.nil?
       FileUtils.cd(compile_path)
       puts "== make_install_package: running on compile_folder: #{compile_path}"
@@ -192,12 +193,10 @@ class Packager
       FileUtils.cd(unpack_path)
       puts "== make_install_package: running on unpack_folder: #{unpack_path}"
     end
-    unless package['make_install'].nil?
-      options = "#{package['make_install']['options']}"
-      variables = "#{package['make_install']['variables']}"
-    end
+
     log_file = "#{KoshLinux::LOGS}/make_install_#{package['name']}"
-    make_install_line = "#{variables} make #{options} install 2>#{log_file}.err 1>#{log_file}.out "
+    make_install_cmd = make_install_do === true ? "make #{options} install" : "#{make_install_do} #{options} "
+    make_install_line = "#{variables} #{make_install_cmd} 2>#{log_file}.err 1>#{log_file}.out "
     puts "== Line of make_install: #{make_install_line}"
     puts "Output command make install => #{log_file}"
     make_install = environment_box(make_install_line)

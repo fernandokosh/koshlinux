@@ -38,3 +38,4 @@ packages:
   - base-gettext-0.18.1.1
   - base-grep-2.6.3
   - base-gzip-1.4
+  - base-m4-1.4.14

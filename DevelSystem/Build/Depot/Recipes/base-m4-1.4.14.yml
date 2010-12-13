@@ -1,0 +1,26 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: M4
+  version: 1.4.14
+  filename: m4-1.4.14.tar.bz2
+  size: "1,099"
+  homepage: http://www.gnu.org/software/m4/
+  description: "The M4 package contains a macro processor."
+  download: http://ftp.gnu.org/gnu/m4/m4-1.4.14.tar.bz2
+  md5: e6fb7d08d50d87e796069cff12a52a93
+  packer: tar.bz2
+  pack_folder: m4-1.4.14
+  unpack_folder:
+  compile_folder:
+  patches:
+
+configure:
+  pre: >-
+    sed -i -e '/"m4.h"/a\
+    #include <sys/stat.h>' src/path.c
+
+make_install:
+  pre: >-
+    make check

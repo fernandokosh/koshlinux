@@ -32,13 +32,7 @@ class Packager
       return true
     end
 
-    hook_package('fetch', 'pre', package)
-    unless package['fetch'].nil?
-      fetch_file(package) unless package['fetch']['do'] == false
-    else
-      fetch_file(package)
-    end
-    hook_package('fetch', 'post', package)
+    fetch_file(package)
 
     hook_package('unpack', 'pre', package)
     unless package['unpack'].nil?
@@ -277,11 +271,21 @@ class Packager
   end
 
   def fetch_file(package)
+    hook_package('fetch', 'pre', package)
+
     file_name = package['info']['filename']
-    file_path = "#{KoshLinux::SOURCES}/#{file_name}"
     download_url = package['info']['download']
 
-    fetch_file_download(download_url, package['info']['md5'], file_name)
+    if download_url.nil?
+      puts "We need a url for download"
+      exit
+    end
+
+    unless package['fetch'].nil?
+      fetch_file_download(download_url, package['info']['md5'], file_name) unless package['fetch']['do'] == false
+    end
+
+    hook_package('fetch', 'post', package)
   end
 
   def check_for_checksum(file_path, checksum)

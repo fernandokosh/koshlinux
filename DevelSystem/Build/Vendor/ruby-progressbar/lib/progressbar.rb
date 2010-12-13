@@ -17,13 +17,16 @@ class ProgressBar
     @total = total
     @out = out
     @terminal_width = 80
-    @bar_mark = "o"
+    @bar_mark = "#"
+    @bar_unmark = "."
+    @bar_start = "["
+    @bar_end = "]"
     @current = 0
     @previous = 0
     @finished_p = false
     @start_time = Time.now
     @previous_time = @start_time
-    @title_width = 14
+    @title_width = title.size
     @format = "%-#{@title_width}s %3d%% %s %s"
     @format_arguments = [:title, :percentage, :bar, :stat]
     clear
@@ -33,14 +36,15 @@ class ProgressBar
   attr_reader   :current
   attr_reader   :total
   attr_accessor :start_time
-  attr_writer   :bar_mark
+  attr_writer   :bar_mark, :bar_unmark, :bar_start, :bar_end
 
   private
   def fmt_bar
     bar_width = do_percentage * @terminal_width / 100
-    sprintf("|%s%s|", 
+    sprintf("%s%s%s%s", @bar_start, 
             @bar_mark * bar_width, 
-            " " *  (@terminal_width - bar_width))
+            @bar_unmark *  (@terminal_width - bar_width),
+            @bar_end)
   end
 
   def fmt_percentage

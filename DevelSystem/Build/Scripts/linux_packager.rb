@@ -393,8 +393,12 @@ class Packager
     extra_options += "umask 022; "
     command_line = "#{extra_options} #{which_command}"
     puts "Command Line: #{command_line}" if @options[:debug]
+    file_locker = "/tmp/environment_box_wating_#{Process.pid}"
+    FileUtils.touch(file_locker)
+    spinner(file_locker)
     %x[exec #{environment} bash -c "#{command_line}" ]
     command_status = $?.exitstatus
+    FileUtils.rm(file_locker)
     puts "Command exitstatus(#{command_status})"
     if command_status > 0
       puts "Command line was: #{command_line}"

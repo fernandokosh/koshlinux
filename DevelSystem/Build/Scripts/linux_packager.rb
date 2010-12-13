@@ -113,6 +113,7 @@ class Packager
       variables = package['configure']['variables']
     else
       configure_do = true
+      configure_prefix = true
     end
 
     unless compile_folder.nil?

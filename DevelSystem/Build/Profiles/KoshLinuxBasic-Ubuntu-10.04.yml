@@ -8,7 +8,7 @@ system:
   name: Kosh Linux
   codename: RubyDesktop
   logo:
-  homepage: http://koshlinux.com/rubydesktop
+  homepage: http://koshlinux.com/
   release: Desktop
   version: 0.0.1
   lsb_release: 4.0

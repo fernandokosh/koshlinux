@@ -1,4 +1,4 @@
-class BuildGlibc
+class Glibc < Package
 
   attr_reader :name, :version, :filename, :size, :homepage
 
@@ -18,6 +18,30 @@ class BuildGlibc
     @pack_folder = 'glibc-2.12.1'
     @unpack_folder = ''
     @compile_folder = 'glibc-build'
+  end
+
+end
+
+class BuildGlibc < Glibc
+
+  def initialize
+    @name = 'Build Glibc'
+    @patches_options = "-Np1"
+    @patches = {
+      :glibc_2_12_1_gcc_fix_1 => {
+        :name => 'Glibc GCC Build Fix Patch',
+        :size => '2.5',
+        :download => 'http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-gcc_fix-1.patch',
+        :md5 => 'd1f28cb98acb9417fe52596908bbb9fd',
+        :options => "-Np1",
+      },
+    :glibc_2_12_1_makefile_fix_1 => {
+      :name => 'Glibc Makefile Fix Patch',
+      :size => '1',
+      :download => 'http://www.linuxfromscratch.org/patches/lfs/6.7/glibc-2.12.1-makefile_fix-1.patch',
+      :md5 => '0ef634ac78e582f45d0e7643bfda7505',
+      }
+    }
   end
 
 end

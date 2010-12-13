@@ -1,0 +1,57 @@
+
+
+Kosh Linux
+Linux Basic Protype 
+Studing Release Vorlon
+2010, end of october, Vila da Penha, Rio de Janeiro/BR 
+December, 12, 2010
+
+By Fernando Kosh & Rui Andrada, The Shingonoide
+
+
+Is a Gnu/Linux based from Linux From Scratch with tools writen in Ruby Language,
+using bash wrappers for some execute some tasks. We are learning Ruby and would 
+like to make some tools for test old theories to build a GNU/Linux System. 
+
+We has made a first stage of temporary system and working on stage two for 
+build a full bootable and usable Linux System.
+
+We have done these Recipies and its dependencies:
+
+  - build-binutils-2.20.1
+  - build-gcc-4.5.1
+  - build-linux-2.6.35.4
+  - build-glibc-2.12.1
+  - base-binutils-2.20.1
+  - base-gcc-4.5.1
+  - base-tcl-8.5.8
+  - base-expect-5.44.1.15
+  - base-dejagnu-1.4.4
+  - base-ncurses-5.7
+  - base-bash-4.1
+  - base-bzip2-1.0.5
+  - base-coreutils-8.5
+  - base-diffutils-3.0
+  - base-file-5.04
+
+
+We are working to create last recipes for complete the build of temporary system. 
+
+Do a linux_package.rb refactoring. 
+
+Do a chroot and follow the LSF book
+
+
+Migrate all Recipe system from YML based file to a pure Ruby Language based 
+recipes.
+
+
+
+
+
+
+
+
+
+
+

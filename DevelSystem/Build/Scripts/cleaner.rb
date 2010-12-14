@@ -21,7 +21,7 @@ class Cleaner
 
   def Cleaner.clean_logs
     puts "Cleaning up logs: "
-    Dir.glob("#{KoshLinux::LOGS}/*.out") do |file|
+    Dir.glob("#{KoshLinux::LOGS}/*") do |file|
       puts "Removing file: #{file}"
       FileUtils.rm_rf(file)
     end

@@ -184,7 +184,7 @@ class Packager
       options = package['make_install']['options']
       variables = package['make_install']['variables']
     else
-      make_install = true
+      make_install_do = true
     end
 
     unless compile_folder.nil?
@@ -275,11 +275,6 @@ class Packager
 
     file_name = package['info']['filename']
     download_url = package['info']['download']
-
-    if download_url.nil?
-      puts "We need a url for download"
-      exit
-    end
 
     unless package['fetch'].nil?
       fetch_file_download(download_url, package['info']['md5'], file_name) unless package['fetch']['do'] == false

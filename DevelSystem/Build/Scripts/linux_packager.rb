@@ -17,6 +17,8 @@ class Packager
   def initialize
     @config = Config.create
     @packages = @config.profile_settings['packages']
+    @spinner_thr = nil
+    @spinner = false
   end
 
   def build_all
@@ -401,11 +403,10 @@ class Packager
     command_line = "#{extra_options} #{which_command}"
     puts "Command Line: #{command_line}" if @options[:debug]
     file_locker = "/tmp/environment_box_wating_#{Process.pid}"
-    FileUtils.touch(file_locker)
-    spinner(file_locker)
+    spinner true
     %x[exec #{environment} bash -c "#{command_line}" ]
     command_status = $?.exitstatus
-    FileUtils.rm(file_locker)
+    spinner false
     puts "Command exitstatus(#{command_status})"
     if command_status > 0
       puts "Command line was: #{command_line}"
@@ -437,17 +438,20 @@ class Packager
     end
   end
 
-  def spinner(locker)
+  def spinner(action)
+    unless @spinner_thr.nil?
+      @spinner_thr.kill if @spinner_thr.alive?
+    end
+    @spinner = action
+
     chars = %w{ | / - \\ }
-    t = Thread.new{
+    @spinner_thr = Thread.new{
       sleep 3
-      while File.exist?(locker)
+      while @spinner
         output = "Please wait (#{chars[0]})"
         $stderr.print output
         sleep 0.2
-        output.size.times do
-          $stderr.print "\r"
-        end
+        $stderr.print "\r"
         chars.push chars.shift
       end
     }

@@ -1,0 +1,25 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Changing Ownership
+  homepage: http://www.linuxfromscratch.org/lfs/view/stable/chapter05/stripping.html
+  description: "Currently, the $LFS/tools directory is owned by the user lfs, a user that exists only on the host system. If the $LFS/tools directory is kept as is, the files are owned by a user ID without a corresponding account. This is dangerous because a user account created later could get this same user ID and would own the $LFS/tools directory and all the files therein, thus exposing these files to possible malicious manipulation."
+
+fetch:
+  do: no
+
+unpack:
+  do: no
+
+configure:
+  do: no
+
+make:
+  do: no
+
+make_install:
+  do: >-
+    sudo chown -R root:root $WORK/tools
+    
+    [ -z $(find /tools/ -user $USER) ] || exit 1

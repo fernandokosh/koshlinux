@@ -46,3 +46,4 @@ packages:
   - base-tar-1.23
   - base-texinfo-4.13a
   # - base-stripping
+  - base-changing_ownership

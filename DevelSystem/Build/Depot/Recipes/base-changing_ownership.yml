@@ -3,7 +3,7 @@
 
 info:
   name: Changing Ownership
-  homepage: http://www.linuxfromscratch.org/lfs/view/stable/chapter05/stripping.html
+  homepage: http://www.linuxfromscratch.org/lfs/view/6.7/chapter05/changingowner.html
   description: "Currently, the $LFS/tools directory is owned by the user lfs, a user that exists only on the host system. If the $LFS/tools directory is kept as is, the files are owned by a user ID without a corresponding account. This is dangerous because a user account created later could get this same user ID and would own the $LFS/tools directory and all the files therein, thus exposing these files to possible malicious manipulation."
 
 fetch:

@@ -1,0 +1,37 @@
+# Kosh Linux Package File
+# Specification at: http://koshlinux.com/
+
+info:
+  name: Backup System
+  homepage: http://koshlinux.org/
+  description: "Recipe for backup the new built system."
+
+fetch:
+  do: no
+
+unpack:
+  do: no
+
+configure:
+  do: no
+
+make:
+  do: no
+
+make_install:
+  do: >-
+    SYSTEM_BUILD=\$(cat built_*);
+    BACKUP_FOLDER="\$BUILD/Depot/Backup/\$SYSTEM_BUILD";
+    if [ ! -d "\$BACKUP_FOLDER" ]; then
+      echo 'Fazendo backup';
+      sudo mkdir -p \$BACKUP_FOLDER
+      sudo cp -a /tools/* \$BACKUP_FOLDER/ || exit 1;
+    fi;
+
+  pre: >-
+    if [ ! -f "built_*" ]; then 
+      echo 'Ajustar o backup';
+      SYSTEM_BUILD=\$(date -u +%Y%m%d%H%M%S);
+      echo "\$SYSTEM_BUILD";
+      echo "\$SYSTEM_BUILD"> "built_utc_\$SYSTEM_BUILD";
+    fi

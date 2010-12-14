@@ -47,3 +47,4 @@ packages:
   - base-texinfo-4.13a
   # - base-stripping
   - base-changing_ownership
+  - base-backup_system

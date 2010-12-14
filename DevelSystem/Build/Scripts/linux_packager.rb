@@ -407,11 +407,15 @@ class Packager
     command_status = $?.exitstatus
     spinner false
     puts "Command exitstatus(#{command_status})"
-    if command_status > 0
-      puts "Command line was: #{command_line}"
-      result = nil
+    unless command_status.nil?
+      if command_status > 0
+        puts "Command line was: #{command_line}"
+        result = nil
+      else
+        result = true
+      end
     else
-      result = true
+      result = nil
     end
     result
   end

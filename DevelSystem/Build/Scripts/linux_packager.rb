@@ -442,21 +442,32 @@ class Packager
   end
 
   def spinner(action)
-    unless @spinner_thr.nil?
-      @spinner_thr.kill if @spinner_thr.alive?
-    end
+    theme = {
+      'greater' => %W{ #{""} [ [= [=] [==] [===] [====] [=====] [======] [=======] [========] [=========] [==========] [=========] [========] [=======] [======] [=====] [====] [===] [==] [=] [= [ #{""} },
+      'chars' => %w{ (|) (/) (-) (\\) },
+      'chars_inv' => %w{ (\\) (-) (/) (|) },
+      'signs' => %w{ [>---] [->--] [-->-] [--->] [----] [---<] [--<-] [-<--] [<---] [----] },
+      'ball' => %w{ o___ _o__ __o_ ___o ___O __O_ _O__ O___ },
+    }
+    
     @spinner = action
-
-    chars = %w{ | / - \\ }
     @spinner_thr = Thread.new{
       sleep 3
       while @spinner
-        output = "Please wait (#{chars[0]})"
+        output = "#{theme['chars'][0]}#{theme['ball'][0]}#{theme['chars_inv'][0]}#{theme['signs'][0]}#{theme['greater'][0]}"
+        columns = 76
+        times = columns - output.size
+        times.times do
+          output += "\s"
+        end
+
         $stderr.print output
         sleep 0.2
         $stderr.print "\r"
-        chars.push chars.shift
-      end
+        theme.each do |item|
+          item[1].push item[1].shift
+        end
+      end unless @spinner_thr.alive?
     }
   end
 end

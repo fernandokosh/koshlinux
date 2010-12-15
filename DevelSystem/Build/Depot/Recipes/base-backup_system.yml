@@ -25,7 +25,7 @@ make_install:
     if [ ! -d "\$BACKUP_FOLDER" ]; then
       echo 'Fazendo backup';
       sudo mkdir -p \$BACKUP_FOLDER
-      sudo cp -a /tools/* \$BACKUP_FOLDER/ || exit 1;
+      sudo cp -va /tools/* \$BACKUP_FOLDER/ || exit 1;
     fi;
 
   pre: >-

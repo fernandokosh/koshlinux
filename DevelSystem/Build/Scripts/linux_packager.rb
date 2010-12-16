@@ -467,7 +467,7 @@ class Packager
         theme.each do |item|
           item[1].push item[1].shift
         end
-      end unless @spinner_thr.alive?
-    }
+      end
+    } if @spinner_thr.nil? or not @spinner_thr.alive?
   end
 end

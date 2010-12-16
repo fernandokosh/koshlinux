@@ -449,12 +449,14 @@ class Packager
       'signs' => %w{ [>---] [->--] [-->-] [--->] [----] [---<] [--<-] [-<--] [<---] [----] },
       'ball' => %w{ o___ _o__ __o_ ___o ___O __O_ _O__ O___ },
     }
-    
+
     @spinner = action
     @spinner_thr = Thread.new{
       sleep 3
+      cursor_off=`tput civis`
+      cursor_on =`tput cnorm`
       while @spinner
-        output = "#{theme['chars'][0]}#{theme['ball'][0]}#{theme['chars_inv'][0]}#{theme['signs'][0]}#{theme['greater'][0]}"
+        output = "#{theme['chars'][0]}#{theme['ball'][0]}#{theme['chars_inv'][0]}#{theme['signs'][0]}#{theme['greater'][0]}#{cursor_off}"
         columns = 76
         times = columns - output.size
         times.times do
@@ -462,12 +464,14 @@ class Packager
         end
 
         $stderr.print output
-        sleep 0.2
+        sleep 0.1
         $stderr.print "\r"
         theme.each do |item|
           item[1].push item[1].shift
         end
       end
+      $stderr.print "\r#{cursor_on}"
     } if @spinner_thr.nil? or not @spinner_thr.alive?
+    @spinner_thr.join unless @spinner
   end
 end

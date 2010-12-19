@@ -279,8 +279,11 @@ class Packager
     download_url = package['info']['download']
 
     unless package['fetch'].nil?
-      fetch_file_download(download_url, package['info']['md5'], file_name) unless package['fetch']['do'] == false
+      fetch_file = fetch_file_download(download_url, package['info']['md5'], file_name)
+    else
+      fetch_file = fetch_file_download(download_url, package['info']['md5'], file_name) unless package['fetch']['do'] == false
     end
+    abort("Error fetching package file.") if fetch_file.nil?
 
     hook_package('fetch', 'post', package)
   end

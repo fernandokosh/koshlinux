@@ -21,6 +21,4 @@ make:
 make_install:
   do: >+
     sudo chown -R root:root /tools/
-    
-    [ -z `find /tools/ -user $USER` ] || exit 1
 

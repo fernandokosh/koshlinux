@@ -19,7 +19,8 @@ make:
   do: no
 
 make_install:
-  do: >-
-    sudo chown -R root:root $WORK/tools
+  do: >+
+    sudo chown -R root:root /tools/
     
-    [ -z $(find /tools/ -user $USER) ] || exit 1
+    [ -z `find /tools/ -user $USER` ] || exit 1
+

@@ -26,8 +26,7 @@ configure:
 
 make_install: 
   post: >+    
-    ln -vsf libgcc.a `$LFS_TGT-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'` &&
-    ln -vsf gcc/x86_64-pc-linux-gnu/4.5.1/libgcc_eh.a $TOOLS/lib/ ; ## dont work without that on my system. 
+    ln -vsf libgcc.a `$LFS_TGT-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'`
 
 dependencies:
   source_only: [ build-gmp-5.0.1, build-mpfr-3.0.0, build-mpc-0.8.2 ]
